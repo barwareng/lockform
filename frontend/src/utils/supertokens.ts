@@ -16,7 +16,7 @@ import ThirdPartyEmailPassword, {
 import {
 	SUPERTOKENS_COOKIE_DOMAIN,
 	VITE_API_BASE_URL,
-	// VITE_APP_BASE_URL,
+	VITE_APP_BASE_URL,
 	VITE_SUPERTOKENS_APP_NAME
 } from '$lib/env';
 import { goto, invalidateAll } from '$app/navigation';
@@ -125,9 +125,9 @@ export const oauthLogin = async (thirdPartyId: 'google' | 'github') => {
 	try {
 		const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
 			thirdPartyId,
-			frontendRedirectURI: `${VITE_API_BASE_URL}/oauth-callback/${thirdPartyId}`
+			frontendRedirectURI: `${VITE_APP_BASE_URL}/oauth-callback/${thirdPartyId}`
 		});
-		goto(authUrl);
+		window.location = authUrl;
 	} catch (err: any) {
 		// toastError(err);
 		console.log(err);
@@ -141,7 +141,7 @@ export const handleOauthCallback = async () => {
 		if (response.status === 'OK') {
 			if (response.createdNewRecipeUser) {
 				// Add user to DB
-				goto('/email-confirmed');
+				goto('/verify-email/success');
 			} else {
 				// Go to onboarding if not onboarded, otherwise go to home page
 				goto('/', { invalidateAll: true });

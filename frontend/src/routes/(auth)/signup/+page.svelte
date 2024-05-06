@@ -4,8 +4,8 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
-	import { GithubIcon } from 'lucide-svelte';
-	import { signupWithEmailAndPassword } from '$utils/supertokens';
+	import { oauthLogin, signupWithEmailAndPassword } from '$utils/supertokens';
+	import Google from '$lib/icons/Google.svelte';
 	let email: string;
 	let password: string;
 	$: console.log(email, password);
@@ -18,16 +18,10 @@
 			<Card.Description>Enter your email below to create your account</Card.Description>
 		</Card.Header>
 		<Card.Content class="grid gap-4">
-			<div class="grid grid-cols-2 gap-6">
-				<Button variant="outline">
-					<GithubIcon class="mr-2 h-4 w-4" />
-					GitHub
-				</Button>
-				<Button variant="outline">
-					<!-- <Icons.google class="mr-2 h-4 w-4" /> -->
-					Google
-				</Button>
-			</div>
+			<Button variant="outline" on:click={() => oauthLogin('google')}>
+				<Google class="mr-2 h-4 w-4" />
+				Google
+			</Button>
 			<div class="relative">
 				<div class="absolute inset-0 flex items-center">
 					<span class="w-full border-t" />

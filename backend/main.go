@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-	"github.com/acme-corp/pkg/config"
-	"github.com/acme-corp/pkg/database"
-	"github.com/acme-corp/pkg/middleware"
-	"github.com/acme-corp/pkg/routes"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/veriform/pkg/config"
+	"github.com/veriform/pkg/database"
+	"github.com/veriform/pkg/middleware"
+	"github.com/veriform/pkg/routes"
 )
 
 func main() {

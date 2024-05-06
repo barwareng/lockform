@@ -1,4 +1,4 @@
-module github.com/acme-corp
+module github.com/veriform
 
 go 1.19
 

@@ -33,7 +33,7 @@
 			<div class="space-y-4 py-2 pb-4">
 				<div class="space-y-2">
 					<Label for="name">Team name</Label>
-					<Input id="name" placeholder="Acme Realty." bind:value={name} />
+					<Input id="name" placeholder="Acme LLC." bind:value={name} />
 				</div>
 				<div class="space-y-2">
 					<Label for="description">Description</Label>

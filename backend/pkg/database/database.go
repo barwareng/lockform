@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/acme-corp/app/models"
+	"github.com/veriform/app/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

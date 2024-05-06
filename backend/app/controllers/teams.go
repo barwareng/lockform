@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"github.com/acme-corp/app/models"
-	"github.com/acme-corp/pkg/database"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
+	"github.com/veriform/app/models"
+	"github.com/veriform/pkg/database"
 )
 
 func AddTeam(c *fiber.Ctx) error {

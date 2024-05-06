@@ -93,13 +93,13 @@
 		<div class="pt-2">
 			<Button
 				variant="link"
-				href="https://acme-corp.com"
+				href="https://veriform.com"
 				target="_blank"
 				class="flex items-center justify-start gap-x-2"
 			>
-				<img src="/images/png/logo.png" alt="acme-corp-logo" class="aspect-square h-6" />
+				<img src="/images/png/logo.png" alt="veriform-logo" class="aspect-square h-6" />
 
-				<h1 class="text-base font-bold text-[#5179A7]">AcmeCorp</h1>
+				<h1 class="text-base font-bold text-[#5179A7]">Veriform</h1>
 				<p class="text-[10px]">&copy; {new Date().getFullYear()} All rights reserved</p>
 			</Button>
 		</div>

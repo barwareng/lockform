@@ -2,19 +2,19 @@ version: "3.9"
 services:
   postgres:
     image: postgres:16
-    container_name: acme-corp-postgres
+    container_name: veriform-postgres
     ports:
       - "5432:5432"
     restart: always
     env_file:
       - ../.env
     volumes:
-      - acme-corp-postgres:/var/lib/postgresql/data
+      - veriform-postgres:/var/lib/postgresql/data
     networks:
-      - acme-corp
+      - veriform
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql:9.0
-    container_name: acme-corp-supertokens
+    container_name: veriform-supertokens
     depends_on:
       - postgres
     ports:
@@ -22,7 +22,7 @@ services:
     env_file:
       - ../.env
     networks:
-      - acme-corp
+      - veriform
     restart: always
     healthcheck:
       test: >
@@ -31,6 +31,6 @@ services:
       timeout: 5s
       retries: 5
 volumes:
-  acme-corp-postgres:
+  veriform-postgres:
 networks:
-  acme-corp:
+  veriform:

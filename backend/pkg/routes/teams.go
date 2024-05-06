@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"github.com/acme-corp/app/controllers"
-	"github.com/acme-corp/pkg/middleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
+	"github.com/veriform/app/controllers"
+	"github.com/veriform/pkg/middleware"
 )
 
 func teamRoutes(app *fiber.App) {

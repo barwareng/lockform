@@ -1,8 +1,9 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/reusable/PageHeader.svelte';
+	import { MetaTags } from 'svelte-meta-tags';
 	import type { PageData } from './$types';
+	import { VITE_APP_NAME } from '$lib/env';
 
 	export let data: PageData;
 </script>
 
-<PageHeader title="Dashboard" />
+<MetaTags title="{VITE_APP_NAME} | Dashboard" />

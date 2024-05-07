@@ -129,14 +129,32 @@ func SupertokensInit() {
 						return originalImplementation
 					},
 				},
+				EmailDelivery: &emaildelivery.TypeInput{
+					Override: func(originalImplementation emaildelivery.EmailDeliveryInterface) emaildelivery.EmailDeliveryInterface {
+						ogSendEmail := *originalImplementation.SendEmail
+
+						(*originalImplementation.SendEmail) = func(input emaildelivery.EmailType, userContext supertokens.UserContext) error {
+							// You can change the path, domain of the reset password link,
+							// or even deep link it to your mobile app
+							// This is: `${websiteDomain}${websiteBasePath}/reset-password`
+							input.PasswordReset.PasswordResetLink = strings.Replace(
+								input.PasswordReset.PasswordResetLink,
+								"auth/reset-password",
+								"reset-password/new", 1,
+							)
+							return ogSendEmail(input, userContext)
+						}
+						return originalImplementation
+					},
+				},
 				Providers: []tpmodels.ProviderInput{
 					{
 						Config: tpmodels.ProviderConfig{
 							ThirdPartyId: "google",
 							Clients: []tpmodels.ProviderClientConfig{
 								{
-									ClientID:     "1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com",
-									ClientSecret: "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",
+									ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+									ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 								},
 							},
 						},

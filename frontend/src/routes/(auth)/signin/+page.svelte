@@ -62,6 +62,11 @@
 					{/each}
 				{/if}
 			</div>
+			<div class="flex justify-end">
+				<Button href="/reset-password" variant="link" class="-my-6 text-right text-xs"
+					>Forgot password?</Button
+				>
+			</div>
 		</Card.Content>
 		<Card.Footer class="flex flex-col gap-2">
 			<Button disabled={!password || !email} class="w-full" on:click={signIn}>Sign in</Button>

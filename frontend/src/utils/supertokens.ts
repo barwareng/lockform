@@ -21,7 +21,7 @@ import {
 } from '$lib/env';
 import { goto, invalidateAll } from '$app/navigation';
 import { deleteTeamCookie } from '$utils';
-import { toastError } from './toasts';
+import { toastError, toastSuccess } from './toasts';
 export const supertokensInit = () => {
 	SuperTokens.init({
 		appInfo: {
@@ -138,7 +138,7 @@ export const handleOauthCallback = async () => {
 		if (response.status === 'OK') {
 			if (response.createdNewRecipeUser) {
 				// Add user to DB
-				goto('/verify-email/success');
+				goto('/verify-email/success', { invalidateAll: true });
 			} else {
 				// Go to onboarding if not onboarded, otherwise go to home page
 				goto('/', { invalidateAll: true });
@@ -150,11 +150,11 @@ export const handleOauthCallback = async () => {
 
 			// As a hack to solve this, you can override the backend functions to create a fake email for the user.
 			console.log('No email provided by social login. Please use another form of login');
-			goto('/signin');
+			goto('/signin', { invalidateAll: true });
 		}
 	} catch (err: any) {
 		toastError(err);
-		goto('/signin');
+		goto('/signin', { invalidateAll: true });
 	}
 };
 
@@ -162,9 +162,9 @@ export const sendEmailVerificationLink = async () => {
 	try {
 		const response = await sendVerificationEmail();
 		if (response.status === 'EMAIL_ALREADY_VERIFIED_ERROR') {
-			goto('/');
+			goto('/', { invalidateAll: true });
 		} else {
-			goto('/verify-email');
+			goto('/verify-email', { invalidateAll: true });
 		}
 	} catch (err: any) {
 		toastError(err);
@@ -174,11 +174,11 @@ export const sendEmailVerificationLink = async () => {
 
 export const consumeVerificationCode = async () => {
 	try {
-		let response = await verifyEmail();
+		const response = await verifyEmail();
 		if (response.status === 'EMAIL_VERIFICATION_INVALID_TOKEN_ERROR') {
 			// toastError('The verification link is expired or invalid. Please try again.');
 			if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
-			goto('/verify-email/failed');
+			goto('/verify-email/failed', { invalidateAll: true });
 		} else {
 			goto('/verify-email/success');
 		}
@@ -235,11 +235,11 @@ export const newPasswordEntered = async (newPassword: string) => {
 			});
 			return passwordErrors;
 		} else if (response.status === 'RESET_PASSWORD_INVALID_TOKEN_ERROR') {
-			// TODO display invalid token error
-			console.log('Invalid token');
-			goto('/signin');
+			toastError('The password reset token is ivalid or expired.');
+			goto('/signin', { invalidateAll: true });
 		} else {
-			goto('/reset-password/success');
+			toastSuccess('Password updated successfully');
+			goto('/', { invalidateAll: true });
 		}
 	} catch (err: any) {
 		toastError(err);

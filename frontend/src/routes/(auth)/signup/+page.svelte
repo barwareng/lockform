@@ -6,9 +6,16 @@
 	import { Input } from '$lib/components/ui/input';
 	import { oauthLogin, signupWithEmailAndPassword } from '$utils/supertokens';
 	import Google from '$lib/icons/Google.svelte';
+	import { TriangleAlertIcon } from 'lucide-svelte';
 	let email: string;
 	let password: string;
-	$: console.log(email, password);
+	let emailErrors: string[] = [];
+	let passwordErrors: string[] = [];
+	const signUp = async () => {
+		const res = await signupWithEmailAndPassword(email, password);
+		emailErrors = res.emailErrors;
+		passwordErrors = res.passwordErrors;
+	};
 </script>
 
 <div class="mx-auto flex h-screen max-w-sm items-center justify-center">
@@ -33,20 +40,32 @@
 			<div class="grid gap-2">
 				<Label for="email">Email</Label>
 				<Input id="email" type="email" bind:value={email} placeholder="m@example.com" />
+				{#if emailErrors.length}
+					{#each emailErrors as error}
+						<div class="text-destructive flex items-center gap-x-1 text-xs">
+							<TriangleAlertIcon class="h-3 w-3" />
+							<p class="">{error}</p>
+						</div>
+					{/each}
+				{/if}
 			</div>
 			<div class="grid gap-2">
 				<Label for="password">Password</Label>
 				<Input id="password" type="password" bind:value={password} />
+				{#if passwordErrors.length}
+					{#each passwordErrors as error}
+						<div class="text-destructive flex items-center gap-x-1 text-xs">
+							<TriangleAlertIcon class="h-3 w-3" />
+							<p class="">{error}</p>
+						</div>
+					{/each}
+				{/if}
 			</div>
 		</Card.Content>
-		<Card.Footer>
-			<Button
-				disabled={!password || !email}
-				class="w-full"
-				on:click={() => {
-					signupWithEmailAndPassword(email, password);
-				}}>Create account</Button
+		<Card.Footer class="flex flex-col gap-2">
+			<Button disabled={!password || !email} class="w-full" on:click={signUp}>Create account</Button
 			>
+			<Button href="/signin" variant="link">Or Sign In</Button>
 		</Card.Footer>
 	</Card.Root>
 </div>

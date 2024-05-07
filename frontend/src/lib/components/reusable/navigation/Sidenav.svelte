@@ -20,30 +20,7 @@
 			path: `/`,
 			position: 'top'
 		},
-		{
-			icon: Building,
-			name: 'Properties',
-			path: `/properties`,
-			position: 'top'
-		},
-		{
-			icon: HomeIcon,
-			name: 'Units',
-			path: `/units`,
-			position: 'top'
-		},
-		{
-			icon: User,
-			name: 'Tenants',
-			path: `/tenants`,
-			position: 'top'
-		},
-		{
-			icon: ConstructionIcon,
-			name: 'Maintenance',
-			path: `/maintenance`,
-			position: 'top'
-		},
+
 		{
 			icon: Cog,
 			name: 'Settings',

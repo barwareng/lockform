@@ -21,6 +21,7 @@ import {
 } from '$lib/env';
 import { goto, invalidateAll } from '$app/navigation';
 import { deleteTeamCookie } from '$utils';
+import { toastError } from './toasts';
 export const supertokensInit = () => {
 	SuperTokens.init({
 		appInfo: {
@@ -72,9 +73,7 @@ export const signupWithEmailAndPassword = async (email: string, password: string
 			await sendEmailVerificationLink();
 		}
 	} catch (err: any) {
-		// toastError(err);
-		// TODO toast error
-		console.log(err);
+		toastError(err);
 		if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 	}
 
@@ -115,8 +114,7 @@ export const signinWithEmailAndPassword = async (email: string, password: string
 		}
 		return { emailErrors, passwordErrors };
 	} catch (err: any) {
-		// toastError(err);
-		console.log(err);
+		toastError(err);
 		if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 	}
 };
@@ -129,8 +127,7 @@ export const oauthLogin = async (thirdPartyId: 'google' | 'github') => {
 		});
 		window.location = authUrl;
 	} catch (err: any) {
-		// toastError(err);
-		console.log(err);
+		toastError(err);
 	}
 };
 
@@ -156,8 +153,7 @@ export const handleOauthCallback = async () => {
 			goto('/signin');
 		}
 	} catch (err: any) {
-		// toastError(err);
-		console.log(err);
+		toastError(err);
 		goto('/signin');
 	}
 };
@@ -171,8 +167,7 @@ export const sendEmailVerificationLink = async () => {
 			goto('/verify-email');
 		}
 	} catch (err: any) {
-		// toastError(err);
-		console.log(err);
+		toastError(err);
 		if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 	}
 };
@@ -182,15 +177,13 @@ export const consumeVerificationCode = async () => {
 		let response = await verifyEmail();
 		if (response.status === 'EMAIL_VERIFICATION_INVALID_TOKEN_ERROR') {
 			// toastError('The verification link is expired or invalid. Please try again.');
-			console.log(err);
 			if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 			goto('/verify-email/failed');
 		} else {
 			goto('/verify-email/success');
 		}
 	} catch (err: any) {
-		// toastError(err);
-		console.log(err);
+		toastError(err);
 		if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 	}
 };
@@ -217,8 +210,7 @@ export const sendResetPasswordLink = async (email: string) => {
 			goto('/reset-password/link-sent');
 		}
 	} catch (err: any) {
-		// toastError(err);
-		console.log(err);
+		toastError(err);
 		if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 	}
 };
@@ -250,8 +242,7 @@ export const newPasswordEntered = async (newPassword: string) => {
 			goto('/reset-password/success');
 		}
 	} catch (err: any) {
-		// toastError(err);
-		console.log(err);
+		toastError(err);
 		if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 	}
 };

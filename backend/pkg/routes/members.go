@@ -16,6 +16,7 @@ func protectedMemberRoutes(router fiber.Router) {
 	route.Get("/", controllers.GetMembers)
 }
 func memberRoutes(router fiber.Router) {
-	adminMemberRoutes(router)
+	// Order of the routes matters. Begin with most accessible
 	protectedMemberRoutes(router)
+	adminMemberRoutes(router)
 }

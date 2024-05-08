@@ -6,11 +6,11 @@ export const ROLES: { name: string; value: ROLE_VALUES; description: string }[] 
 		value: ROLE_VALUES.VIEWER,
 		description: 'Can view and comment.'
 	},
-	{
-		name: 'Developer',
-		value: ROLE_VALUES.DEVELOPER,
-		description: 'Can view, comment and edit.'
-	},
+	// {
+	// 	name: 'Developer',
+	// 	value: ROLE_VALUES.DEVELOPER,
+	// 	description: 'Can view, comment and edit.'
+	// },
 	{
 		name: 'Billing',
 		value: ROLE_VALUES.BILLING,

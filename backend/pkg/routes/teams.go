@@ -8,7 +8,7 @@ import (
 )
 
 func adminTeamRoutes(router fiber.Router) {
-	route := router.Group("/teams/admin", adaptor.HTTPMiddleware(middleware.VerifyAdmin))
+	route := router.Group("/teams", adaptor.HTTPMiddleware(middleware.VerifyAdmin))
 	route.Delete("/", func(c *fiber.Ctx) error { return nil })
 }
 func protectedTeamRoutes(router fiber.Router) {
@@ -18,6 +18,7 @@ func protectedTeamRoutes(router fiber.Router) {
 }
 
 func teamRoutes(router fiber.Router) {
-	adminTeamRoutes(router)
+	// Order of the routes matters. Begin with most accessible
 	protectedTeamRoutes(router)
+	adminTeamRoutes(router)
 }

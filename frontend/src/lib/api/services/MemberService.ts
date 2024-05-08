@@ -1,5 +1,5 @@
 import { BaseService } from '$lib/api/services/utils/BaseService';
-import type { IUser } from '$utils/interfaces/users.interfaces';
+import type { IMember } from '$utils/interfaces/users.interfaces';
 
 export class MemberService extends BaseService {
 	create(query: { email: string; role: string }) {
@@ -8,7 +8,7 @@ export class MemberService extends BaseService {
 			query
 		});
 	}
-	getAll(): Promise<IUser[]> {
+	getAll(): Promise<IMember[]> {
 		return this.client.send('/api/members', {
 			method: 'GET'
 		});

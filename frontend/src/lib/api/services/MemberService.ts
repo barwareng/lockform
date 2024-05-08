@@ -8,6 +8,12 @@ export class MemberService extends BaseService {
 			query
 		});
 	}
+	updateRole(query: { userId: string; role: string }) {
+		return this.client.send('/api/members', {
+			method: 'PUT',
+			query
+		});
+	}
 	getAll(): Promise<IMember[]> {
 		return this.client.send('/api/members', {
 			method: 'GET'

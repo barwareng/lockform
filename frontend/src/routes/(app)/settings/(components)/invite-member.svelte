@@ -55,14 +55,17 @@
 									<Command.Empty>No roles found.</Command.Empty>
 									<Command.Group>
 										{#each ROLES.filter((r) => r.value !== 'owner') as role}
-											<Command.Item
-												class="flex flex-col items-start space-y-1 px-4 py-2"
-												on:click={() => (selectedRole = role)}
-											>
-												<p>{role.name}</p>
-												<p class="text-muted-foreground text-sm">
-													{role.description}
-												</p>
+											<Command.Item>
+												<button
+													type="button"
+													class="flex flex-col items-start space-y-1 px-4 py-2"
+													on:click={() => (selectedRole = role)}
+												>
+													<p>{role.name}</p>
+													<p class="text-muted-foreground text-left text-sm">
+														{role.description}
+													</p>
+												</button>
 											</Command.Item>
 										{/each}
 									</Command.Group>

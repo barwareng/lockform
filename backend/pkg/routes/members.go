@@ -10,6 +10,7 @@ import (
 func adminMemberRoutes(router fiber.Router) {
 	route := router.Group("/members", adaptor.HTTPMiddleware(middleware.VerifyAdmin))
 	route.Post("/", controllers.AddMember)
+	route.Put("/", controllers.ChangeMemberRole)
 }
 func protectedMemberRoutes(router fiber.Router) {
 	route := router.Group("/members", adaptor.HTTPMiddleware(middleware.VerifySession))

@@ -3,7 +3,7 @@
 	import * as Command from '$lib/components/ui//command';
 	import * as Popover from '$lib/components/ui//popover';
 	import { Button } from '$lib/components/ui/button';
-	import { ChevronDownIcon } from 'lucide-svelte';
+	import { ChevronDownIcon, LoaderCircle } from 'lucide-svelte';
 	import Avatar from '$lib/components/reusable/images/Avatar.svelte';
 	import InviteMember from './(components)/invite-member.svelte';
 	import { requireRoles } from '$utils/guards';
@@ -12,9 +12,24 @@
 	import type { PageData } from '../$types';
 	import LoadingSpinner from '$lib/components/reusable/LoadingSpinner.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import { ROLES } from '$utils/constants/roles.constants';
+	import { toastError } from '$utils/toasts';
+	import { client } from '$lib/api/Client';
 	export let data: PageData;
 	$: ({ members } = data);
 	$: loadingMembers = data?.loadingMembers ?? true;
+	let updatingRole = false;
+	const updateRole = async (userId: string, role: string) => {
+		try {
+			updatingRole = true;
+			await client.members.updateRole({ userId, role });
+			updatingRole = false;
+		} catch (error) {
+			updatingRole = false;
+			console.log(error);
+			toastError(error);
+		}
+	};
 </script>
 
 <Card.Root>
@@ -51,9 +66,18 @@
 					{#if requireRoles([ROLE_VALUES.ADMIN, ROLE_VALUES.OWNER])}
 						<Popover.Root>
 							<Popover.Trigger asChild let:builder>
-								<Button builders={[builder]} variant="outline" class="ml-auto capitalize">
+								<Button
+									builders={[builder]}
+									variant="outline"
+									disabled={updatingRole}
+									class="ml-auto capitalize"
+								>
 									{member.role}
-									<ChevronDownIcon class="text-muted-foreground ml-2 h-4 w-4" />
+									{#if updatingRole}
+										<LoaderCircle class="h-4 w-4 animate-spin" />
+									{:else}
+										<ChevronDownIcon class="text-muted-foreground ml-2 h-4 w-4" />
+									{/if}
 								</Button>
 							</Popover.Trigger>
 							<Popover.Content class="p-0" align="end">
@@ -62,26 +86,20 @@
 									<Command.List>
 										<Command.Empty>No roles found.</Command.Empty>
 										<Command.Group>
-											<Command.Item class="flex flex-col items-start space-y-1 px-4 py-2">
-												<p>Viewer</p>
-												<p class="text-muted-foreground text-sm">Can view and comment.</p>
-											</Command.Item>
-											<Command.Item class="flex flex-col items-start space-y-1 px-4 py-2">
-												<p>Developer</p>
-												<p class="text-muted-foreground text-sm">Can view, comment, and edit.</p>
-											</Command.Item>
-											<Command.Item class="flex flex-col items-start space-y-1 px-4 py-2">
-												<p>Billing</p>
-												<p class="text-muted-foreground text-sm">
-													Can view, comment and manage billing.
-												</p>
-											</Command.Item>
-											<Command.Item class="flex flex-col items-start space-y-1 px-4 py-2">
-												<p>Owner</p>
-												<p class="text-muted-foreground text-sm">
-													Admin-level access to all resources.
-												</p>
-											</Command.Item>
+											{#each ROLES.filter((r) => r.value !== 'owner') as role}
+												<Command.Item>
+													<button
+														type="button"
+														class="flex flex-col items-start space-y-1 px-4 py-2"
+														on:click={() => updateRole(member.id, role.value)}
+													>
+														<p>{role.name}</p>
+														<p class="text-muted-foreground text-left text-sm">
+															{role.description}
+														</p>
+													</button>
+												</Command.Item>
+											{/each}
 										</Command.Group>
 									</Command.List>
 								</Command.Root>

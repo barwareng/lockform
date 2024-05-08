@@ -8,4 +8,9 @@ export class MemberService extends BaseService {
 			query
 		});
 	}
+	getAll(): Promise<IUser[]> {
+		return this.client.send('/api/members', {
+			method: 'GET'
+		});
+	}
 }

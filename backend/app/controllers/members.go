@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"os"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/supertokens/supertokens-golang/recipe/thirdpartyemailpassword"
@@ -14,6 +15,10 @@ import (
 type AddMemberParams struct {
 	Email string `json:"email"`
 	Role  string `json:"role"`
+}
+type Members struct {
+	models.User
+	Role string `json:"role"`
 }
 
 func AddMember(c *fiber.Ctx) error {
@@ -81,38 +86,33 @@ func AddMember(c *fiber.Ctx) error {
 	})
 }
 func GetMembers(c *fiber.Ctx) error {
-	roles, err := userroles.GetAllRoles(nil)
-	if err != nil {
+	teamId := c.Cookies("teamId")
+	team := &models.Team{ID: teamId}
+	if err := database.DB.Preload("Users").Find(&team).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	var userIds []string
-	for _, role := range roles.OK.Roles {
-		response, err := userroles.GetUsersThatHaveRole("public", role, nil)
+	var members []Members
+	for _, user := range team.Users {
+		response, err := userroles.GetRolesForUser("public", user.ID, nil)
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"error": true,
 				"msg":   err.Error(),
 			})
 		}
-
-		if response.UnknownRoleError != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": true,
-				"msg":   "Tried to get users from a non-existent team role",
-			})
+		for _, role := range response.OK.Roles {
+			if strings.HasPrefix(role, teamId+"_") {
+				member := &Members{User: user, Role: strings.Replace(role, teamId+"_", "", 1)}
+				members = append(members, *member)
+			}
 		}
-		userIds = append(userIds, response.OK.Users...)
 	}
-	users := []models.User{}
-	result := database.DB.Find(&users, userIds)
-	if result.Error != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   result.Error.Error(),
-		})
-	}
-	return c.JSON(users)
+	return c.JSON(fiber.Map{
+		"error": false,
+		"msg":   nil,
+		"data":  members,
+	})
 }

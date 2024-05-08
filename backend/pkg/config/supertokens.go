@@ -121,6 +121,8 @@ func SupertokensInit() {
 										return tpepmodels.SignInUpResponse{}, err
 									}
 									resp.OK.User.ID = externalUserId
+									user := models.User{ID: externalUserId, Email: email}
+									database.DB.Create(&user)
 								}
 							}
 

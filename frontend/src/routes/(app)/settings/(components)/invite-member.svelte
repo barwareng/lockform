@@ -24,7 +24,7 @@
 		}
 	};
 
-	let open = true;
+	let open = false;
 </script>
 
 <Dialog.Root bind:open>

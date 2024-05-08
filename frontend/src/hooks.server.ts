@@ -38,7 +38,6 @@ export const handle = (async ({ event, resolve }) => {
 		}
 		throw err;
 	});
-	console.log(payload);
 	if (payload && typeof payload === 'object') {
 		// Prevent access until email verification is complete
 		const isEmailVerified = (payload as any)['st-ev'].v;

@@ -31,8 +31,7 @@ func AddTeam(c *fiber.Ctx) error {
 	}
 	roles := []string{"owner", "admin", "member", "customer"}
 	for _, role := range roles {
-		log.Info("Creating roles")
-		res, err := userroles.CreateNewRoleOrAddPermissions(team.ID+"_"+role, []string{
+		_, err := userroles.CreateNewRoleOrAddPermissions(team.ID+"_"+role, []string{
 			"read",
 		}, nil)
 		if err != nil {
@@ -41,7 +40,6 @@ func AddTeam(c *fiber.Ctx) error {
 				"msg":   err.Error(),
 			})
 		}
-		log.Info(res.OK.CreatedNewRole)
 	}
 	userID := c.GetReqHeaders()["X-User"][0]
 	err := database.DB.Model(&team).Association("Users").Append(&models.User{ID: userID})
@@ -73,8 +71,7 @@ func AddTeam(c *fiber.Ctx) error {
 	teams := accessTokenPayload["teams"].([]interface{})
 	newTeam := map[string]interface{}{"id": team.ID, "name": team.Name}
 	teams = append(teams, newTeam)
-	accessTokenPayload["teams"] = teams
-	if err := sessionContainer.MergeIntoAccessTokenPayload(accessTokenPayload); err != nil {
+	if err := sessionContainer.MergeIntoAccessTokenPayload(map[string]interface{}{"teams": teams}); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),

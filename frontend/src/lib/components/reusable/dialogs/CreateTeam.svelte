@@ -7,6 +7,7 @@
 	import { client } from '$lib/api/Client';
 	import { showCreateTeamDialog } from '$stores';
 	import { goto } from '$app/navigation';
+	import { toastError } from '$utils/toasts';
 
 	let name: string;
 	let description: string;
@@ -18,7 +19,8 @@
 			$showCreateTeamDialog = false;
 			goto('/', { invalidateAll: true });
 		} catch (error) {
-			// TODO catch error
+			console.log(error);
+			toastError(error);
 		}
 	};
 </script>

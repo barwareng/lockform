@@ -3,6 +3,7 @@ package middleware
 import (
 	"net/http"
 
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/session/claims"
 	"github.com/supertokens/supertokens-golang/recipe/session/sessmodels"
@@ -22,8 +23,12 @@ func VerifyAdmin(handler http.Handler) http.Handler {
 	return session.VerifySession(&sessmodels.VerifySessionOptions{
 		OverrideGlobalClaimValidators: func(globalClaimValidators []claims.SessionClaimValidator, sessionContainer sessmodels.SessionContainer, userContext supertokens.UserContext) ([]claims.SessionClaimValidator, error) {
 			request := supertokens.GetRequestFromUserContext(userContext)
-			teamID := request.Header.Get("X-Team")
-			globalClaimValidators = append(globalClaimValidators, userrolesclaims.UserRoleClaimValidators.Includes(teamID+"_owner", nil, nil))
+			teamID, err := request.Cookie("teamId")
+			if err != nil {
+				log.Info("Err", err)
+				return nil, err
+			}
+			globalClaimValidators = append(globalClaimValidators, userrolesclaims.UserRoleClaimValidators.Includes(teamID.Value+"_owner", nil, nil))
 			return globalClaimValidators, nil
 		},
 	}, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

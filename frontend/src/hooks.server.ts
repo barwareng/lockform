@@ -20,7 +20,6 @@ export const handle = (async ({ event, resolve }) => {
 	if (!jwt) {
 		// Allow public routes and shareables (e.g. /posts/123)
 		if (!isPublicRoute(event.url.pathname)) {
-			console.log('NOT FOUND JWT');
 			throw redirect(302, '/signin');
 		} else {
 			const response = await resolve(event);
@@ -39,11 +38,12 @@ export const handle = (async ({ event, resolve }) => {
 		}
 		throw err;
 	});
+	console.log(payload);
 	if (payload && typeof payload === 'object') {
 		// Prevent access until email verification is complete
 		const isEmailVerified = (payload as any)['st-ev'].v;
 		if (!isEmailVerified) {
-			throw redirect(302, '/verify-email');
+			throw redirect(302, '/verify-email/request-verification');
 		}
 
 		// TODO handle onboarding

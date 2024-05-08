@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"os"
 	"strings"
 
@@ -194,4 +195,22 @@ func SupertokensInit() {
 	if err != nil {
 		panic(err.Error()) //TODO resolve this. Use Fiber recover
 	}
+}
+
+func AddUserToRole(userID string, role string) error {
+	response, err := userroles.AddRoleToUser("public", userID, role, nil)
+	if err != nil {
+		// TODO: Handle error
+		return err
+	}
+
+	if response.UnknownRoleError != nil {
+		// No such role exists
+		return errors.New("uknown error assigning role to user")
+	}
+
+	if response.OK.DidUserAlreadyHaveRole {
+		return errors.New("user already exists for this role")
+	}
+	return nil
 }

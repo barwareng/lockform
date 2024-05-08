@@ -5,17 +5,27 @@
 	import { Button } from '$lib/components/ui/button';
 	import { ChevronDownIcon } from 'lucide-svelte';
 	import Avatar from '$lib/components/reusable/images/Avatar.svelte';
+	import InviteMember from './(components)/invite-member.svelte';
+	import { page } from '$app/stores';
+	import { requireRoles } from '$utils/guards';
+	import { ROLE_VALUES } from '$utils/interfaces/roles.interface';
 </script>
 
-<!-- <div class="lg:w/2/3 mx-auto w-full max-w-xl md:w-3/4"> -->
 <Card.Root>
-	<Card.Header>
-		<Card.Title>Team Members</Card.Title>
-		<Card.Description>Invite your team members to collaborate</Card.Description>
+	<Card.Header class="mb-3 flex justify-between gap-3 md:flex-row md:items-center">
+		<div>
+			<Card.Title>Team Members</Card.Title>
+			<Card.Description>Invite your team members to collaborate</Card.Description>
+		</div>
+		{#if requireRoles([ROLE_VALUES.ADMIN, ROLE_VALUES.OWNER], $page.data.roles)}
+			<InviteMember />
+		{/if}
 	</Card.Header>
 	<Card.Content class="grid gap-6">
 		{#each Array(5) as _}
-			<div class="hover:bg-muted flex items-center justify-between space-x-4 rounded p-1">
+			<div
+				class="hover:bg-muted flex flex-col justify-between gap-3 space-x-4 rounded p-1 md:flex-row md:items-center"
+			>
 				<div class="flex items-center space-x-4">
 					<Avatar />
 					<div>

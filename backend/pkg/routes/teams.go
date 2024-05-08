@@ -7,8 +7,17 @@ import (
 	"github.com/veriform/pkg/middleware"
 )
 
-func teamRoutes(app *fiber.App) {
-	route := app.Group("/teams", adaptor.HTTPMiddleware(middleware.VerifySession))
-	route.Post("/create", controllers.AddTeam)
+func adminTeamRoutes(router fiber.Router) {
+	route := router.Group("/teams/admin", adaptor.HTTPMiddleware(middleware.VerifyAdmin))
+	route.Delete("/", func(c *fiber.Ctx) error { return nil })
+}
+func protectedTeamRoutes(router fiber.Router) {
+	route := router.Group("/teams", adaptor.HTTPMiddleware(middleware.VerifySession))
+	route.Post("/", controllers.AddTeam)
 	route.Get("/", controllers.GetTeams)
+}
+
+func teamRoutes(router fiber.Router) {
+	adminTeamRoutes(router)
+	protectedTeamRoutes(router)
 }

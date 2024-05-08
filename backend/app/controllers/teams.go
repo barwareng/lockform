@@ -29,7 +29,7 @@ func AddTeam(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	roles := []string{"owner", "admin", "member", "customer"}
+	roles := []string{"owner", "admin", "developer", "billing", "viewer"}
 	for _, role := range roles {
 		_, err := userroles.CreateNewRoleOrAddPermissions(team.ID+"_"+role, []string{
 			"read",

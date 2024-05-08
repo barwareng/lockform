@@ -7,6 +7,7 @@
 	import TeamMembers from './(components)/team-members.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { slide } from 'svelte/transition';
 
 	export let data: PageData;
 	const settingsRoutes = [
@@ -54,6 +55,8 @@
 				{/each}
 			</Tabs.List>
 		</Tabs.Root>
-		<slot />
+		<div transition:slide class="mt-10">
+			<slot />
+		</div>
 	</div>
 </div>

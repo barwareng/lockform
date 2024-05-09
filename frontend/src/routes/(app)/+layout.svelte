@@ -9,7 +9,8 @@
 		<Sidenav />
 	</aside>
 	<Separator orientation="vertical" />
-	<section class="min-h-screen flex-1 overflow-y-scroll p-10">
+	<section class="min-h-screen flex-1 overflow-y-scroll px-10 pb-10">
+		<div class="bg-background h-10"></div>
 		<slot />
 	</section>
 </main>

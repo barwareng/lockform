@@ -8,7 +8,7 @@ export class MemberService extends BaseService {
 			query
 		});
 	}
-	updateRole(query: { userId: string; role: string }) {
+	updateRole(query: { userId: string; email: string; role: string }) {
 		return this.client.send('/api/members', {
 			method: 'PUT',
 			query

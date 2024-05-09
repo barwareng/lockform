@@ -10,13 +10,14 @@ import (
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/recipe/userroles/userrolesclaims"
 	"github.com/veriform/app/models"
+	"github.com/veriform/app/services"
 	"github.com/veriform/pkg/config"
 	"github.com/veriform/pkg/database"
 )
 
 type AddMemberParams struct {
-	UserID string `json:"userId"`
-	Email  string `json:"email"`
+	UserID string `json:"userId:omit_empty"`
+	Email  string `json:"email:omit_empty"`
 	Role   string `json:"role"`
 }
 type Members struct {
@@ -81,7 +82,12 @@ func AddMember(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	// TODO send the user an email letting them know they have been added as ROLE to this TEAM.
+	if err := services.SendTeamInvitationEmail(params.Email); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
 	return c.JSON(fiber.Map{
 		"error":  false,
 		"msg":    nil,
@@ -90,7 +96,6 @@ func AddMember(c *fiber.Ctx) error {
 }
 func ChangeMemberRole(c *fiber.Ctx) error {
 	params := &AddMemberParams{}
-	// Check, if received JSON data is valid.
 	if err := c.QueryParser(params); err != nil {
 		// Return status 400 and error message.
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -98,7 +103,6 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	// Save the user in the DB
 	teamId := c.Cookies("teamId")
 	currentRolesResp, err := userroles.GetRolesForUser("public", params.UserID, nil)
 	if err != nil {
@@ -114,7 +118,7 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 		}
 	}
 	sessionContainer := session.GetSessionFromRequestContext(c.Context())
-	deleteRoleResp, err := userroles.RemoveUserRole(sessionContainer.GetTenantId(), sessionContainer.GetUserID(), currentRole, nil)
+	deleteRoleResp, err := userroles.RemoveUserRole("public", params.UserID, currentRole, nil)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
@@ -128,9 +132,6 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 		})
 	}
 
-	sessionContainer.FetchAndSetClaim(userrolesclaims.UserRoleClaim)
-	sessionContainer.FetchAndSetClaim(userrolesclaims.PermissionClaim)
-
 	if err := config.AddUserToRole(params.UserID, teamId+"_"+params.Role); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
@@ -139,7 +140,13 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 	}
 	sessionContainer.FetchAndSetClaim(userrolesclaims.UserRoleClaim)
 	sessionContainer.FetchAndSetClaim(userrolesclaims.PermissionClaim)
-	// TODO send the user an email letting them know they have been added as ROLE to this TEAM.
+
+	if err := services.SendTeamInvitationEmail(params.Email); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,

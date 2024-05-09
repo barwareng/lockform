@@ -180,6 +180,7 @@ func SupertokensInit() {
 								return nil, err
 							}
 							accessTokenPayload["teams"] = userTeams
+							accessTokenPayload["userId"] = userID
 							return originalCreateNewSession(userID, accessTokenPayload, sessionDataInDatabase, disableAntiCsrf, tenantId, userContext)
 						}
 

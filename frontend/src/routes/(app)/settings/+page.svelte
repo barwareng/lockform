@@ -1,35 +1,16 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import * as Command from '$lib/components/ui//command';
-	import * as Popover from '$lib/components/ui//popover';
-	import { Button } from '$lib/components/ui/button';
-	import { ChevronDownIcon, LoaderCircle } from 'lucide-svelte';
-	import Avatar from '$lib/components/reusable/images/Avatar.svelte';
 	import InviteMember from './(components)/invite-member.svelte';
 	import { requireRoles } from '$utils/guards';
 	import { ROLE_VALUES } from '$utils/interfaces/roles.interface';
-	import { Badge } from '$lib/components/ui/badge';
 	import type { PageData } from '../$types';
 	import LoadingSpinner from '$lib/components/reusable/LoadingSpinner.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
-	import { ROLES } from '$utils/constants/roles.constants';
-	import { toastError } from '$utils/toasts';
-	import { client } from '$lib/api/Client';
+
+	import MemberRow from './(components)/member-row.svelte';
 	export let data: PageData;
 	$: ({ members } = data);
 	$: loadingMembers = data?.loadingMembers ?? true;
-	let updatingRole = false;
-	const updateRole = async (userId: string, role: string) => {
-		try {
-			updatingRole = true;
-			await client.members.updateRole({ userId, role });
-			updatingRole = false;
-		} catch (error) {
-			updatingRole = false;
-			console.log(error);
-			toastError(error);
-		}
-	};
 </script>
 
 <Card.Root>
@@ -46,69 +27,9 @@
 	{#if loadingMembers}
 		<LoadingSpinner />
 	{:else if members?.length}
-		<Card.Content class="grid gap-2">
+		<Card.Content class="grid gap-2 p-0 sm:p-4">
 			{#each members as member}
-				<div
-					class="hover:bg-muted flex flex-col justify-between gap-1 space-x-4 rounded p-2 md:flex-row md:items-center"
-				>
-					<div class="flex items-center space-x-4">
-						<Avatar seed={member.id} />
-						<div>
-							{#if member?.firstName || member?.lastName}
-								<p class="text-sm font-medium leading-none">
-									{member.firstName ?? ''}
-									{member.lastName ?? ''}
-								</p>
-							{/if}
-							<p class="text-muted-foreground text-sm">{member.email ?? ''}</p>
-						</div>
-					</div>
-					{#if requireRoles([ROLE_VALUES.ADMIN, ROLE_VALUES.OWNER])}
-						<Popover.Root>
-							<Popover.Trigger asChild let:builder>
-								<Button
-									builders={[builder]}
-									variant="outline"
-									disabled={updatingRole}
-									class="ml-auto capitalize"
-								>
-									{member.role}
-									{#if updatingRole}
-										<LoaderCircle class="h-4 w-4 animate-spin" />
-									{:else}
-										<ChevronDownIcon class="text-muted-foreground ml-2 h-4 w-4" />
-									{/if}
-								</Button>
-							</Popover.Trigger>
-							<Popover.Content class="p-0" align="end">
-								<Command.Root>
-									<Command.Input placeholder="Select new role..." />
-									<Command.List>
-										<Command.Empty>No roles found.</Command.Empty>
-										<Command.Group>
-											{#each ROLES.filter((r) => r.value !== 'owner') as role}
-												<Command.Item>
-													<button
-														type="button"
-														class="flex flex-col items-start space-y-1 px-4 py-2"
-														on:click={() => updateRole(member.id, role.value)}
-													>
-														<p>{role.name}</p>
-														<p class="text-muted-foreground text-left text-sm">
-															{role.description}
-														</p>
-													</button>
-												</Command.Item>
-											{/each}
-										</Command.Group>
-									</Command.List>
-								</Command.Root>
-							</Popover.Content>
-						</Popover.Root>
-					{:else}
-						<Badge variant="outline" class="px-4 py-2 capitalize">{member.role}</Badge>
-					{/if}
-				</div>
+				<MemberRow bind:member />
 			{/each}
 		</Card.Content>
 	{/if}

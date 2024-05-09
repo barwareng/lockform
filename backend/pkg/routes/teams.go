@@ -8,7 +8,7 @@ import (
 )
 
 func adminTeamRoutes(router fiber.Router) {
-	route := router.Group("/teams", adaptor.HTTPMiddleware(middleware.VerifyAdmin))
+	route := router.Group("/teams", middleware.ValidateRoles([]string{"owner", "admin"}))
 	route.Delete("/", func(c *fiber.Ctx) error { return nil })
 }
 func protectedTeamRoutes(router fiber.Router) {

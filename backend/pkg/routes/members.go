@@ -8,7 +8,7 @@ import (
 )
 
 func adminMemberRoutes(router fiber.Router) {
-	route := router.Group("/members", adaptor.HTTPMiddleware(middleware.VerifyAdmin))
+	route := router.Group("/members", middleware.ValidateRoles([]string{"admin"}))
 	route.Post("/", controllers.AddMember)
 	route.Put("/", controllers.ChangeMemberRole)
 }

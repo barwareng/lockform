@@ -64,8 +64,6 @@ func AddTeam(c *fiber.Ctx) error {
 		})
 
 	}
-
-	sessionContainer := session.GetSessionFromRequestContext(c.Context())
 	accessTokenPayload := sessionContainer.GetAccessTokenPayload()
 	teams := accessTokenPayload["teams"].([]interface{})
 	newTeam := map[string]interface{}{"id": team.ID, "name": team.Name}

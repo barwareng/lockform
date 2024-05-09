@@ -9,8 +9,8 @@ export const load = (async () => {
 	try {
 		members = await client.members.getAll();
 		loadingMembers = false;
+		return { loadingMembers, members };
 	} catch (error) {
 		toastError(error);
 	}
-	return { loadingMembers, members };
 }) satisfies PageLoad;

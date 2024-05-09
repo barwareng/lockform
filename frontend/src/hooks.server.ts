@@ -48,7 +48,7 @@ export const handle = (async ({ event, resolve }) => {
 		// TODO handle onboarding
 		const isOnboarded = !!(payload as any)['isOnboarded'];
 		if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
-			throw redirect(302, '/settings');
+			throw redirect(302, '/settings/profile');
 		}
 	}
 	const response = await resolve(event);

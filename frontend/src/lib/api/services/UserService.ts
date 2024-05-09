@@ -1,17 +1,15 @@
 import { BaseService } from '$lib/api/services/utils/BaseService';
 
 export class UserService extends BaseService {
-	create(body: any) {
+	update(body) {
 		return this.client.send('/api/users', {
-			method: 'POST',
+			method: 'PUT',
 			body
 		});
 	}
-	update(query, body) {
+	getProfile() {
 		return this.client.send('/api/users', {
-			method: 'PUT',
-			body,
-			query
+			method: 'GET'
 		});
 	}
 }

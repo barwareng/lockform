@@ -2,7 +2,6 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/veriform/app/controllers"
 	"github.com/veriform/pkg/middleware"
 )
@@ -12,7 +11,7 @@ func adminTeamRoutes(router fiber.Router) {
 	route.Delete("/", func(c *fiber.Ctx) error { return nil })
 }
 func protectedTeamRoutes(router fiber.Router) {
-	route := router.Group("/teams", adaptor.HTTPMiddleware(middleware.VerifySession))
+	route := router.Group("/teams")
 	route.Post("/", controllers.AddTeam)
 	route.Get("/", controllers.GetTeams)
 }

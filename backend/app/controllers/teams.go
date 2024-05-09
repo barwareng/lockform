@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
@@ -11,6 +10,8 @@ import (
 )
 
 func AddTeam(c *fiber.Ctx) error {
+	sessionContainer := session.GetSessionFromRequestContext(c.Context())
+	userID := sessionContainer.GetUserID()
 	team := &models.Team{}
 	// Check, if received JSON data is valid.
 	if err := c.BodyParser(team); err != nil {
@@ -23,7 +24,6 @@ func AddTeam(c *fiber.Ctx) error {
 
 	team.ID = xid.New().String()
 	if err := database.DB.Create(&team).Error; err != nil {
-		log.Info("Creating team failed: ", err.Error())
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
@@ -41,7 +41,7 @@ func AddTeam(c *fiber.Ctx) error {
 			})
 		}
 	}
-	userID := c.GetReqHeaders()["X-User"][0]
+
 	err := database.DB.Model(&team).Association("Users").Append(&models.User{ID: userID})
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -83,7 +83,6 @@ func AddTeam(c *fiber.Ctx) error {
 	})
 }
 func GetTeams(c *fiber.Ctx) error {
-	log.Info(c.GetReqHeaders()["X-User"])
 	teams := []models.Team{}
 	database.DB.Preload("Users").Find(&teams)
 	return c.JSON(fiber.Map{

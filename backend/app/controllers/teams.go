@@ -67,7 +67,6 @@ func AddTeam(c *fiber.Ctx) error {
 
 	sessionContainer := session.GetSessionFromRequestContext(c.Context())
 	accessTokenPayload := sessionContainer.GetAccessTokenPayload()
-	// var teams []models.AccessTokenTeamPayload
 	teams := accessTokenPayload["teams"].([]interface{})
 	newTeam := map[string]interface{}{"id": team.ID, "name": team.Name}
 	teams = append(teams, newTeam)

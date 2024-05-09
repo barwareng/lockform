@@ -1,6 +1,6 @@
 import { client } from '$lib/api/Client';
 import { VITE_API_BASE_URL } from '$lib/env';
-import { isPublicRoute } from '$utils/routing';
+import { isPublicRoute, onboardingAllowedRoutes } from '$utils/routing';
 import { redirect, type Handle } from '@sveltejs/kit';
 import * as jose from 'jose';
 
@@ -46,10 +46,10 @@ export const handle = (async ({ event, resolve }) => {
 		}
 
 		// TODO handle onboarding
-		// const isOnboarded = !!(payload as any)['onboarded'];
-		// if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
-		// 	throw redirect(302, '/settings');
-		// }
+		const isOnboarded = !!(payload as any)['isOnboarded'];
+		if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
+			throw redirect(302, '/settings');
+		}
 	}
 	const response = await resolve(event);
 	return response;

@@ -9,4 +9,5 @@ type User struct {
 	MiddleName  string `json:"middleName"`
 	LastName    string `json:"lastName"`
 	Teams       []Team `gorm:"many2many:user_teams;"`
+	IsOnboarded bool   `json:"isOnboarded"`
 }

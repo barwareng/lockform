@@ -172,14 +172,19 @@ func SupertokensInit() {
 						originalCreateNewSession := *originalImplementation.CreateNewSession
 
 						(*originalImplementation.CreateNewSession) = func(userID string, accessTokenPayload, sessionDataInDatabase map[string]interface{}, disableAntiCsrf *bool, tenantId string, userContext supertokens.UserContext) (sessmodels.SessionContainer, error) {
-
+							user := &models.User{ID: userID}
 							var userTeams []models.AccessTokenTeamPayload
-							err := database.DB.Model(&models.User{ID: userID}).Association("Teams").Find(&userTeams)
-							if err != nil {
+							if err := database.DB.Preload("Teams").Find(&user).Error; err != nil {
 								return nil, err
+							}
+							if len(user.Teams) > 0 {
+								for _, team := range user.Teams {
+									userTeams = append(userTeams, models.AccessTokenTeamPayload{ID: team.ID, Name: team.Name})
+								}
 							}
 							accessTokenPayload["teams"] = userTeams
 							accessTokenPayload["userId"] = userID
+							accessTokenPayload["isOnboarded"] = user.IsOnboarded
 							return originalCreateNewSession(userID, accessTokenPayload, sessionDataInDatabase, disableAntiCsrf, tenantId, userContext)
 						}
 

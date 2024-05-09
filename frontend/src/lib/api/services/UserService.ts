@@ -7,4 +7,11 @@ export class UserService extends BaseService {
 			body
 		});
 	}
+	update(query, body) {
+		return this.client.send('/api/users', {
+			method: 'PUT',
+			body,
+			query
+		});
+	}
 }

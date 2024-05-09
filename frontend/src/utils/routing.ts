@@ -20,4 +20,4 @@ export const isPublicRoute = (route: string) => {
 	return publicRoutes.has(route);
 };
 
-export const onboardingAllowedRoutes = new Set(['/settings', '/support', '/onboarding']);
+export const onboardingAllowedRoutes = new Set(['/settings/profile', '/support']);

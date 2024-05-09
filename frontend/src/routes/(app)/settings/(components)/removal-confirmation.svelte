@@ -2,7 +2,7 @@
 	import { client } from '$lib/api/Client';
 	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
-	import Button from '$lib/components/ui/button/button.svelte';
+	import { invalidateAll } from '$app/navigation';
 	import { toastError } from '$utils/toasts';
 	export let open = false;
 	export let id: string;
@@ -12,6 +12,7 @@
 			removingMember = true;
 			await client.members.delete({ userId: id });
 			removingMember = false;
+			invalidateAll();
 		} catch (error) {
 			removingMember = false;
 			toastError(error);

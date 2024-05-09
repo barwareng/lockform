@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"errors"
 	"os"
 	"strings"
 
@@ -11,7 +12,6 @@ import (
 	"github.com/supertokens/supertokens-golang/recipe/userroles/userrolesclaims"
 	"github.com/veriform/app/models"
 	"github.com/veriform/app/services"
-	"github.com/veriform/pkg/config"
 	"github.com/veriform/pkg/database"
 )
 
@@ -25,8 +25,9 @@ type Members struct {
 	Role string `json:"role"`
 }
 
+// TODO cuser transactions
 func AddMember(c *fiber.Ctx) error {
-	user := &models.User{}
+	var user models.User
 	params := &AddMemberParams{}
 	// Check, if received JSON data is valid.
 	if err := c.QueryParser(params); err != nil {
@@ -36,23 +37,8 @@ func AddMember(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	user.Email = params.Email
-	signUpResult, err := thirdpartyemailpassword.EmailPasswordSignUp("public", user.Email, os.Getenv("FAKE_PASSWORD"))
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-	// TODO if user already exists just assign team instead of creating new user
-	if signUpResult.EmailAlreadyExistsError != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": true,
-			"msg":   signUpResult.EmailAlreadyExistsError,
-		})
-	}
-	// we successfully created the user. Now we should send them their invite link
-	_, err = thirdpartyemailpassword.SendResetPasswordEmail("public", signUpResult.OK.User.ID)
+	// Check if user already exists
+	getUsersResult, err := thirdpartyemailpassword.GetUsersByEmail("public", params.Email)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
@@ -61,13 +47,36 @@ func AddMember(c *fiber.Ctx) error {
 	}
 	// Save the user in the DB
 	teamID := c.Cookies("teamId")
-	user.ID = signUpResult.OK.User.ID
-	if err := database.DB.Save(&user).Error; err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
+	user.Email = params.Email
+	if len(getUsersResult) == 0 {
+		signUpResult, err := thirdpartyemailpassword.EmailPasswordSignUp("public", params.Email, os.Getenv("FAKE_PASSWORD"))
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": true,
+				"msg":   err.Error(),
+			})
+		}
+
+		// we successfully created the user. Now we should send them their invite link
+		_, err = thirdpartyemailpassword.SendResetPasswordEmail("public", signUpResult.OK.User.ID)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": true,
+				"msg":   err.Error(),
+			})
+		}
+		user.ID = signUpResult.OK.User.ID
+		if err := database.DB.Save(&user).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": true,
+				"msg":   err.Error(),
+			})
+		}
+	} else {
+		user.ID = getUsersResult[0].ID
+
 	}
+
 	// Associate the use with a team
 	if err = database.DB.Model(&user).Association("Teams").Append(&models.Team{ID: teamID}); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -75,8 +84,8 @@ func AddMember(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	// TODO Add actual role
-	if err = config.AddUserToRole(user.ID, teamID+"_"+params.Role); err != nil {
+	// Add actual role
+	if err = addUserToRole(user.ID, teamID+"_"+params.Role); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
@@ -104,40 +113,19 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 		})
 	}
 	teamId := c.Cookies("teamId")
-	currentRolesResp, err := userroles.GetRolesForUser("public", params.UserID, nil)
-	if err != nil {
+	if err := removeUserRole(params.UserID, teamId); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	var currentRole string
-	for _, role := range currentRolesResp.OK.Roles {
-		if strings.HasPrefix(role, teamId+"_") {
-			currentRole = role
-		}
+	if err := addUserToRole(params.UserID, teamId+"_"+params.Role); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
 	}
 	sessionContainer := session.GetSessionFromRequestContext(c.Context())
-	deleteRoleResp, err := userroles.RemoveUserRole("public", params.UserID, currentRole, nil)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-	if deleteRoleResp.UnknownRoleError != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   deleteRoleResp.UnknownRoleError,
-		})
-	}
-
-	if err := config.AddUserToRole(params.UserID, teamId+"_"+params.Role); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
 	sessionContainer.FetchAndSetClaim(userrolesclaims.UserRoleClaim)
 	sessionContainer.FetchAndSetClaim(userrolesclaims.PermissionClaim)
 
@@ -182,4 +170,76 @@ func GetMembers(c *fiber.Ctx) error {
 		"msg":   nil,
 		"data":  members,
 	})
+}
+
+func RemoveMember(c *fiber.Ctx) error {
+	// delete role
+	params := &AddMemberParams{}
+	if err := c.QueryParser(params); err != nil {
+		// Return status 400 and error message.
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	teamId := c.Cookies("teamId")
+	if err := removeUserRole(params.UserID, teamId); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	// remove association
+	team := &models.Team{ID: teamId}
+	if err := database.DB.Model(&team).Association("Users").Delete(&models.User{ID: params.UserID}); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	return c.JSON(fiber.Map{
+		"error": false,
+		"msg":   nil,
+		"data":  "Member removed successfully",
+	})
+}
+
+func removeUserRole(userId string, teamId string) error {
+	currentRolesResp, err := userroles.GetRolesForUser("public", userId, nil)
+	if err != nil {
+		return err
+	}
+	var currentRole string
+	for _, role := range currentRolesResp.OK.Roles {
+		if strings.HasPrefix(role, teamId+"_") {
+			currentRole = role
+		}
+	}
+
+	deleteRoleResp, err := userroles.RemoveUserRole("public", userId, currentRole, nil)
+	if err != nil {
+		return err
+	}
+
+	if deleteRoleResp.UnknownRoleError != nil {
+		return errors.New("uknown error removing role from user")
+	}
+	return nil
+}
+
+func addUserToRole(userID string, role string) error {
+	response, err := userroles.AddRoleToUser("public", userID, role, nil)
+	if err != nil {
+		return err
+	}
+
+	if response.UnknownRoleError != nil {
+		// No such role exists
+		return errors.New("uknown error assigning role to user")
+	}
+
+	if response.OK.DidUserAlreadyHaveRole {
+		return errors.New("user already exists for this role")
+	}
+	return nil
 }

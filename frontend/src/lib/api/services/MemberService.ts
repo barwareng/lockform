@@ -8,7 +8,7 @@ export class MemberService extends BaseService {
 			query
 		});
 	}
-	updateRole(query: { userId: string; email: string; role: string }) {
+	update(query: { userId: string; email: string; role: string }) {
 		return this.client.send('/api/members', {
 			method: 'PUT',
 			query
@@ -17,6 +17,12 @@ export class MemberService extends BaseService {
 	getAll(): Promise<IMember[]> {
 		return this.client.send('/api/members', {
 			method: 'GET'
+		});
+	}
+	delete(query: { userId: string }) {
+		return this.client.send('/api/members', {
+			method: 'DELETE',
+			query
 		});
 	}
 }

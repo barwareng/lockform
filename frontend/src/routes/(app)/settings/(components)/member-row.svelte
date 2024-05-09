@@ -15,12 +15,13 @@
 	import { page } from '$app/stores';
 	import { closeAndRefocusTrigger } from '$utils';
 	import { ROLES } from '$utils/constants/roles.constants';
-
+	import RemovalConfirmation from './removal-confirmation.svelte';
+	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
 	let updatingRole = false;
 	const updateRole = async (userId: string, email: string, role: string) => {
 		try {
 			updatingRole = true;
-			await client.members.updateRole({ userId, email, role });
+			await client.members.update({ userId, email, role });
 			updatingRole = false;
 			await invalidateAll();
 		} catch (error) {
@@ -30,23 +31,26 @@
 		}
 	};
 	let popoverOpen = false;
+	let showRemovalConfirmation = false;
 </script>
 
-<div class="flex flex-col justify-between gap-1 space-x-4 rounded p-2 md:flex-row md:items-center">
+<div class="flex flex-col justify-between gap-1 rounded p-2 md:flex-row md:items-center">
 	<div class="flex items-center space-x-4">
 		<Avatar seed={member.id} />
-		<div>
-			{#if member?.firstName || member?.lastName}
-				<p class="text-sm font-medium leading-none">
-					{member.firstName ?? ''}
-					{member.lastName ?? ''}
-				</p>
+		<div class="flex flex-col">
+			<div>
+				{#if member?.firstName || member?.lastName}
+					<p class="text-sm font-medium leading-none">
+						{member.firstName ?? ''}
+						{member.lastName ?? ''}
+					</p>
+				{/if}
+				<p class="text-muted-foreground text-sm">{member.email ?? ''}</p>
+			</div>
+			{#if $page.data.userId == member.id}
+				<Badge class="max-w-fit text-[10px] capitalize">YOU</Badge>
 			{/if}
-			<p class="text-muted-foreground text-sm">{member.email ?? ''}</p>
 		</div>
-		{#if $page.data.userId == member.id}
-			<Badge class="text-[10px] capitalize">YOU</Badge>
-		{/if}
 	</div>
 	{#if requireRoles([ROLE_VALUES.ADMIN, ROLE_VALUES.OWNER]) && member.role !== ROLE_VALUES.OWNER}
 		<Popover.Root let:ids bind:open={popoverOpen}>
@@ -55,11 +59,11 @@
 					builders={[builder]}
 					variant="outline"
 					disabled={updatingRole}
-					class="ml-auto capitalize"
+					class="ml-auto max-w-fit capitalize"
 				>
 					{member.role}
 					{#if updatingRole}
-						<LoaderCircle class="h-4 w-4 animate-spin" />
+						<ButtonLoadingSpinner bind:state={updatingRole} />
 					{:else}
 						<ChevronDownIcon class="text-muted-foreground ml-2 h-4 w-4" />
 					{/if}
@@ -80,17 +84,31 @@
 									class="flex flex-col items-start space-y-1 px-4 py-2"
 								>
 									<p>{role.name}</p>
-									<p class="text-muted-foreground text-left text-sm">
+									<p class="text-muted-foreground text-left text-xs">
 										{role.description}
 									</p>
 								</Command.Item>
 							{/each}
+
+							<Command.Item
+								onSelect={() => {
+									showRemovalConfirmation = true;
+									popoverOpen = closeAndRefocusTrigger(ids.trigger);
+								}}
+								class="flex  flex-col items-start space-y-1 px-4 py-2"
+							>
+								<p class="text-destructive">Remove</p>
+								<p class="text-destructive text-left text-xs">
+									Removes this member from your team.
+								</p>
+							</Command.Item>
 						</Command.Group>
 					</Command.List>
 				</Command.Root>
 			</Popover.Content>
 		</Popover.Root>
 	{:else}
-		<Badge variant="outline" class="px-4 py-2 capitalize">{member.role}</Badge>
+		<Badge variant="outline" class="ml-auto max-w-fit px-4 py-2 capitalize">{member.role}</Badge>
 	{/if}
 </div>
+<RemovalConfirmation bind:open={showRemovalConfirmation} id={member.id} />

@@ -4,7 +4,7 @@
 	import { requireRoles } from '$utils/guards';
 	import { ROLE_VALUES } from '$utils/interfaces/roles.interface';
 	import type { PageData } from '../$types';
-	import LoadingSpinner from '$lib/components/reusable/LoadingSpinner.svelte';
+	import LoadingSpinner from '$lib/components/reusable/loading-spinners/LoadingSpinner.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 
 	import MemberRow from './(components)/member-row.svelte';
@@ -28,8 +28,11 @@
 		<LoadingSpinner />
 	{:else if members?.length}
 		<Card.Content class="grid gap-2 p-0 sm:p-4">
-			{#each members as member}
+			{#each members as member, i}
 				<MemberRow bind:member />
+				{#if i < members.length - 1}
+					<Separator />
+				{/if}
 			{/each}
 		</Card.Content>
 	{/if}

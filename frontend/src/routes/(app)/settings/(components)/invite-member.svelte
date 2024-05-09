@@ -10,6 +10,7 @@
 	import { ChevronDownIcon, LoaderCircleIcon, PlusCircleIcon } from 'lucide-svelte';
 	import { ROLES } from '$utils/constants/roles.constants';
 	import { closeAndRefocusTrigger } from '$utils';
+	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
 
 	let email: string;
 	let selectedRole = ROLES?.filter((r) => r.value != 'owner')?.[0];
@@ -84,9 +85,7 @@
 			<Dialog.Footer>
 				<Button variant="outline" on:click={() => (open = false)}>Cancel</Button>
 				<Button type="button" disabled={sendingInvite} on:click={sendInvite}>
-					{#if sendingInvite}
-						<LoaderCircleIcon class="h-4 w-4 animate-spin" />
-					{/if}
+					<ButtonLoadingSpinner bind:state={sendingInvite} />
 					Invite
 				</Button>
 			</Dialog.Footer>

@@ -1,6 +1,6 @@
 import { client } from '$lib/api/Client';
 import { VITE_API_BASE_URL } from '$lib/env';
-import { isPublicRoute } from '$utils/routing';
+import { isPublicRoute, onboardingAllowedRoutes } from '$utils/routing';
 import { redirect, type Handle } from '@sveltejs/kit';
 import * as jose from 'jose';
 
@@ -20,7 +20,6 @@ export const handle = (async ({ event, resolve }) => {
 	if (!jwt) {
 		// Allow public routes and shareables (e.g. /posts/123)
 		if (!isPublicRoute(event.url.pathname)) {
-			console.log('NOT FOUND JWT');
 			throw redirect(302, '/signin');
 		} else {
 			const response = await resolve(event);
@@ -43,14 +42,14 @@ export const handle = (async ({ event, resolve }) => {
 		// Prevent access until email verification is complete
 		const isEmailVerified = (payload as any)['st-ev'].v;
 		if (!isEmailVerified) {
-			throw redirect(302, '/verify-email');
+			throw redirect(302, '/verify-email/request-verification');
 		}
 
 		// TODO handle onboarding
-		// const isOnboarded = !!(payload as any)['onboarded'];
-		// if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
-		// 	throw redirect(302, '/settings');
-		// }
+		const isOnboarded = !!(payload as any)['isOnboarded'];
+		if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
+			throw redirect(302, '/settings/profile');
+		}
 	}
 	const response = await resolve(event);
 	return response;

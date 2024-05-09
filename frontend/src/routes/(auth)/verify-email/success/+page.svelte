@@ -12,7 +12,8 @@
 			>Thank you for verifying your email address. To use {VITE_SUPERTOKENS_APP_NAME} services, please
 			create a team to help you manage your resources.</Alert.Description
 		>
-		<div class="mt-4 flex w-full justify-end">
+		<div class="mt-4 flex w-full justify-end gap-x-2">
+			<Button variant="ghost" href="/">Go to dashboard</Button>
 			<Button on:click={() => ($showCreateTeamDialog = true)}>Create team</Button>
 		</div>
 	</Alert.Root>

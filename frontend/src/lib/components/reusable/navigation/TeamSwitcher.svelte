@@ -8,7 +8,7 @@
 	import { CheckIcon, ChevronsUpDownIcon, PlusCircleIcon } from 'lucide-svelte';
 	import { showCreateTeamDialog } from '$stores';
 	import { page } from '$app/stores';
-	import { getTeamCookie, setTeamCookie } from '$utils';
+	import { closeAndRefocusTrigger, getTeamCookie, setTeamCookie } from '$utils';
 	import { invalidateAll } from '$app/navigation';
 	import type { ITeam } from '$utils/interfaces/teams.interface';
 
@@ -21,11 +21,6 @@
 		$page.data.teams.find((team: Partial<ITeam>) => team.id == getTeamCookie()) ??
 		$page.data.teams?.[0];
 
-	const closeAndRefocusTrigger = (triggerId: string) => {
-		open = false;
-
-		tick().then(() => document.getElementById(triggerId)?.focus());
-	};
 	const changeTeam = (team: Partial<ITeam>) => {
 		selectedTeam = team;
 		setTeamCookie(team.id!);
@@ -67,7 +62,7 @@
 							<Command.Item
 								onSelect={() => {
 									changeTeam(team);
-									closeAndRefocusTrigger(ids.trigger);
+									open = closeAndRefocusTrigger(ids.trigger);
 								}}
 								value={team.name}
 								class="text-sm"

@@ -23,7 +23,7 @@
 		<Card.Content class="grid gap-4">
 			<div class="grid gap-2">
 				<Input id="email" type="email" bind:value={email} placeholder="m@example.com" />
-				{#if emailErrors.length}
+				{#if emailErrors?.length}
 					{#each emailErrors as error}
 						<div class="text-destructive flex items-center gap-x-1 text-xs">
 							<TriangleAlertIcon class="h-3 w-3" />

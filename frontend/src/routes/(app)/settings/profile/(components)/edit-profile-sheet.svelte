@@ -4,7 +4,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Form from '$lib/components/ui/form';
 	import { PencilIcon } from 'lucide-svelte';
-	import { isMobileDevice } from '$utils';
+	import { isMobile } from '$utils';
 	import type { IUser } from '$utils/interfaces/users.interfaces';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import FileUpload from '$lib/components/reusable/files/FileUpload.svelte';
@@ -20,7 +20,7 @@
 			Edit Profile
 		</Button>
 	</Sheet.Trigger>
-	<Sheet.Content side={isMobileDevice() ? 'bottom' : 'right'}>
+	<Sheet.Content side={$isMobile ? 'bottom' : 'right'}>
 		<form class="flex max-h-screen min-h-full flex-col justify-between">
 			<div class="space-y-3 overflow-y-scroll px-1">
 				<Sheet.Header class="bg-background sticky top-0 mb-6">

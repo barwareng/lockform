@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
 	import {
+		AntennaIcon,
 		Building,
 		Cog,
 		ConstructionIcon,
@@ -18,6 +19,12 @@
 			icon: PieChartIcon,
 			name: 'Dashboard',
 			path: `/`,
+			position: 'top'
+		},
+		{
+			icon: AntennaIcon,
+			name: 'Channels',
+			path: `/channels`,
 			position: 'top'
 		},
 

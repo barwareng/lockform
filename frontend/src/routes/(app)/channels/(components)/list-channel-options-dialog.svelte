@@ -20,10 +20,10 @@
 			<Drawer.Description>Select a channel to add.</Drawer.Description>
 		</Drawer.Header>
 		<div class="flex flex-wrap justify-center gap-4 overflow-y-scroll">
-			{#each Array(20) as _}
-				<EmailDialog />
-				<PhoneDialog />
-			{/each}
+			<!-- {#each Array(20) as _} -->
+			<EmailDialog />
+			<PhoneDialog />
+			<!-- {/each} -->
 		</div>
 	</Drawer.Content>
 </Drawer.Root>

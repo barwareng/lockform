@@ -45,6 +45,7 @@
 	const addChannel = async () => {
 		try {
 			addingChannel = true;
+			channel.value = phoneNumber?.replaceAll(' ', '');
 			// TODO API call
 			addingChannel = false;
 			open = false;

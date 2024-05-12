@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	import { buttonVariants } from '$lib/components/ui/button';
 	import * as Drawer from '$lib/components/ui/drawer';
 	import { PlusCircleIcon } from 'lucide-svelte';
-	import EmailDialog from './channel-dialogs/email-dialog.svelte';
-	import PhoneDialog from './channel-dialogs/phone-dialog.svelte';
 	import { isMobile } from '$utils';
 	import { cn } from '$lib/utils';
+	import { channelDialogs } from './channel-dialogs/dialogs';
 </script>
 
-<Drawer.Root open>
+<Drawer.Root>
 	<Drawer.Trigger class={buttonVariants({ variant: 'default' })}>
 		<PlusCircleIcon class="mr-1 h-4 w-4" />
 		Add channel
@@ -19,11 +17,17 @@
 			<Drawer.Title>Select channel</Drawer.Title>
 			<Drawer.Description>Select a channel to add.</Drawer.Description>
 		</Drawer.Header>
-		<div class="flex flex-wrap justify-center gap-4 overflow-y-scroll">
-			<!-- {#each Array(20) as _} -->
-			<EmailDialog />
-			<PhoneDialog />
-			<!-- {/each} -->
+		<div class="space-y-5 overflow-y-scroll px-4">
+			{#each channelDialogs as dialogGroup}
+				<div class="space-y-2">
+					<p class="font-semibold">{dialogGroup.type}</p>
+					<div class="flex flex-wrap justify-start gap-4">
+						{#each dialogGroup.dialogs as dialog}
+							<svelte:component this={dialog} />
+						{/each}
+					</div>
+				</div>
+			{/each}
 		</div>
 	</Drawer.Content>
 </Drawer.Root>

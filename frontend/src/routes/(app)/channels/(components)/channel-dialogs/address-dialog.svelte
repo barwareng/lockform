@@ -1,5 +1,4 @@
 <script lang="ts">
-	import * as Popover from '$lib/components/ui/popover';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
@@ -17,7 +16,7 @@
 	const addChannel = async () => {
 		try {
 			addingChannel = true;
-			channel.type = CHANNEL.PHONE;
+			channel.type = CHANNEL.ADDRESS;
 			await client.channels.create(channel);
 			await invalidateAll();
 			addingChannel = false;

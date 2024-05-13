@@ -13,10 +13,12 @@
 <ModeWatcher />
 <Toaster />
 <main class="py-4">
-	<div class="container sticky top-2 mx-auto max-w-screen-xl">
-		<Navbar />
+	<div class=" sticky top-2 z-10 backdrop-blur-sm">
+		<div class="container mx-auto max-w-screen-xl">
+			<Navbar />
+		</div>
+		<Separator class="my-2" />
 	</div>
-	<Separator class="my-2" />
 	<div class="container mx-auto max-w-screen-xl">
 		<slot />
 	</div>

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/veriform/app/models"
 	"github.com/veriform/pkg/database"
 )
@@ -56,12 +57,13 @@ func SearchChannel(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	if err := database.DB.Where("value ILIKE ?", "%"+search.SearchPhrase+"%").Find(&channel).Error; err != nil {
+	if err := database.DB.Find(&channel, &models.Channel{Value: search.SearchPhrase}).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
+	log.Info("ID: ", channel.TeamID)
 	if err := database.DB.Preload("Channels").Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,

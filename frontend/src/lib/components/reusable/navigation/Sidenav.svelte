@@ -34,6 +34,12 @@
 			path: `/contacts`,
 			position: 'top'
 		},
+		{
+			icon: ContactIcon,
+			name: 'Badges',
+			path: `/badges`,
+			position: 'top'
+		},
 
 		{
 			icon: Cog,

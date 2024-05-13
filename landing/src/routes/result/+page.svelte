@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData } from './[searchPhrase]/$types';
 	import * as Card from '$lib/components/ui/card';
 	import {
 		BadgeCheck,
@@ -37,16 +37,16 @@
 		return icon;
 	};
 	let matchingChannel: IChannel;
+	$: searchPhrase = $page.url.searchParams.get('search')!;
 	const getMatchingChannel = () => {
-		let searchPhrase = $page.params.searchPhrase;
 		if (isPossiblePhoneNumber(searchPhrase)) {
-			matchingChannel = verification?.channels.find(
+			matchingChannel = verification?.channels?.find(
 				(channel) =>
 					parsePhoneNumber(channel.value)?.formatInternational() ==
 					parsePhoneNumber(searchPhrase)?.formatInternational()
 			)!;
 		} else {
-			matchingChannel = verification?.channels.find((channel) => channel.value == searchPhrase)!;
+			matchingChannel = verification?.channels?.find((channel) => channel.value == searchPhrase)!;
 		}
 	};
 	$: verification && getMatchingChannel();
@@ -90,7 +90,7 @@
 					</div>
 				</div>
 			</Card.Content>
-			{#if verification.channels.length}
+			{#if verification?.channels?.length}
 				<Card.Footer class="bg-muted flex flex-col items-start gap-2 pt-6">
 					{#each verification.channels as channel, i}
 						{@const icon = getIcon(channel.type)}
@@ -123,7 +123,7 @@
 					class="text-background flex w-full flex-col items-center justify-center pt-6 text-center"
 				>
 					<ShieldOffIcon class="h-8 w-8" />
-					<h3 class="mt-2 text-sm font-semibold">{$page.params.searchPhrase}</h3>
+					<h3 class="mt-2 text-sm font-semibold">{searchPhrase}</h3>
 					<p class="text-muted-foreground mt-1 max-w-md text-sm">
 						We could not verify this business contact. <br /> Please proceed transactions with caution.
 					</p>
@@ -139,7 +139,7 @@
 				</Button>
 				<Button variant="destructive" size="sm">
 					<ShieldXIcon class="mr-2 h-4 w-4" />
-					Mark as spam
+					Report fraud
 				</Button>
 			</Card.Footer>
 		</Card.Root>

@@ -64,16 +64,21 @@ func SearchChannel(c *fiber.Ctx) error {
 		})
 	}
 	log.Info("ID: ", channel.TeamID)
-	if err := database.DB.Preload("Channels").Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
+	if len(channel.TeamID) > 0 {
+		if err := database.DB.Preload("Channels").Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": true,
+				"msg":   err.Error(),
+			})
+		}
+		return c.JSON(fiber.Map{
+			"error": false,
+			"msg":   nil,
+			"data":  team,
 		})
 	}
-
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,
-		"data":  team,
 	})
 }

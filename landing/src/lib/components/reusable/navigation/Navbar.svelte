@@ -14,7 +14,7 @@
 		</a>
 	</div>
 	<div class="flex items-center gap-x-2">
-		<Button size="sm">Verify Business</Button>
+		<Button size="sm">Get Verified</Button>
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
 				<Button size="icon" variant="ghost"><SunMoonIcon class="h-5 w-5" /></Button>

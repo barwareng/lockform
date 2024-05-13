@@ -62,7 +62,7 @@ func SearchChannel(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	if err := database.DB.Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
+	if err := database.DB.Preload("Channels").Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),

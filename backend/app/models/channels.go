@@ -7,6 +7,7 @@ type Channel struct {
 	TeamID    string    `json:"teamId"`
 	Value     string    `json:"value" gorm:"unique;default:null"`
 	Label     string    `json:"label"`
+	Category  string    `json:"category"`
 	Type      string    `json:"type"`
 	Url       string    `json:"url"`
 	CreatedAt time.Time `json:"createdAt"`

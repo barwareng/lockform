@@ -12,4 +12,7 @@ func InitRoutes(app *fiber.App) {
 	userRoutes(protected)
 	memberRoutes(protected)
 	channelRoutes(protected)
+
+	public := app.Group("/public")
+	publicChannelRoutes(public)
 }

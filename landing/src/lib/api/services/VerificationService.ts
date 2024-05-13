@@ -1,10 +1,10 @@
 import { BaseService } from '$lib/api/services/utils/BaseService';
 
 export class VerificationService extends BaseService {
-	verify(body: { searchPhrase: string }) {
+	verify(query: { searchPhrase: string }) {
 		return this.client.send('/public/verify', {
-			method: 'POST',
-			body
+			method: 'GET',
+			query
 		});
 	}
 }

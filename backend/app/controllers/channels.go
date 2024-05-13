@@ -42,3 +42,36 @@ func GetChannels(c *fiber.Ctx) error {
 		"data":  channels,
 	})
 }
+
+func SearchChannel(c *fiber.Ctx) error {
+	team := &models.Team{}
+	type Search struct {
+		SearchPhrase string `json:"searchPhrase"`
+	}
+	search := new(Search)
+	channel := &models.Channel{}
+	if err := c.QueryParser(search); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	if err := database.DB.Where("value ILIKE ?", "%"+search.SearchPhrase+"%").Find(&channel).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	if err := database.DB.Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"error": false,
+		"msg":   nil,
+		"data":  team,
+	})
+}

@@ -1,20 +1,23 @@
 <script lang="ts">
-	import * as Popover from '$lib/components/ui/popover';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import BaseDialog from './base-dialog.svelte';
 	import { MailIcon } from 'lucide-svelte';
-	import type { IChannel } from '$utils/interfaces/channels.interface';
+	import { CHANNEL, type IChannel } from '$utils/interfaces/channels.interface';
 	import { toastError, toastSuccess } from '$utils/toasts';
 	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
+	import { client } from '$lib/api/Client';
+	import { invalidateAll } from '$app/navigation';
 	let channel: Partial<IChannel> = {};
 	let addingChannel = false;
 	let open = false;
 	const addChannel = async () => {
 		try {
 			addingChannel = true;
-			// TODO API call
+			channel.type = CHANNEL.EMAIL;
+			await client.channels.create(channel);
+			await invalidateAll();
 			addingChannel = false;
 			open = false;
 			toastSuccess('Channel successfully added.');

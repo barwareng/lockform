@@ -6,7 +6,7 @@
 	import BaseDialog from './base-dialog.svelte';
 	import { Check, ChevronsUpDownIcon, PhoneIcon } from 'lucide-svelte';
 	import * as Select from '$lib/components/ui/select';
-	import type { IChannel } from '$utils/interfaces/channels.interface';
+	import { CHANNEL, type IChannel } from '$utils/interfaces/channels.interface';
 	import { toastError, toastSuccess } from '$utils/toasts';
 	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
 	import { TelInput, normalizedCountries } from 'svelte-tel-input';
@@ -20,6 +20,8 @@
 	} from 'svelte-tel-input/types';
 	import { cn } from '$lib/utils';
 	import { closeAndRefocusTrigger } from '$utils';
+	import { client } from '$lib/api/Client';
+	import { invalidateAll } from '$app/navigation';
 	let channel: Partial<IChannel> = {};
 	let addingChannel = false;
 	let open = false;
@@ -46,6 +48,9 @@
 		try {
 			addingChannel = true;
 			channel.value = phoneNumber?.replaceAll(' ', '');
+			channel.type = CHANNEL.PHONE;
+			await client.channels.create(channel);
+			await invalidateAll();
 			// TODO API call
 			addingChannel = false;
 			open = false;

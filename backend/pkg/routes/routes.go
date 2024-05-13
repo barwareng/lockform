@@ -9,6 +9,7 @@ import (
 func InitRoutes(app *fiber.App) {
 	protected := app.Group("/api", adaptor.HTTPMiddleware(middleware.VerifySession))
 	teamRoutes(protected)
-	memberRoutes(protected)
 	userRoutes(protected)
+	memberRoutes(protected)
+	channelRoutes(protected)
 }

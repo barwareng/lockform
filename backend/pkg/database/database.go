@@ -29,6 +29,7 @@ func ConnectDb() {
 	db.AutoMigrate(
 		&models.Team{},
 		&models.User{},
+		&models.Channel{},
 	)
 	DB = db
 }

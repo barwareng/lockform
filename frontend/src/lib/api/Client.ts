@@ -1,5 +1,6 @@
 import { VITE_API_BASE_URL } from '$lib/env';
 import { ClientResponseError } from './ClientResponseError';
+import { ChannelService } from './services/ChannelService';
 import { MemberService } from './services/MemberService';
 import { TeamService } from './services/TeamService';
 import { UserService } from './services/UserService';
@@ -42,6 +43,7 @@ export default class Client {
 	users: UserService;
 	teams: TeamService;
 	members: MemberService;
+	channels: ChannelService;
 	private cancelControllers: { [key: string]: AbortController } = {};
 	private enableAutoCancellation = true;
 
@@ -51,6 +53,7 @@ export default class Client {
 		this.users = new UserService(this);
 		this.teams = new TeamService(this);
 		this.members = new MemberService(this);
+		this.channels = new ChannelService(this);
 	}
 	// Set the fetch function as Sveltekit's event.fetch or window.fetch
 	setFetch(fetchFunc: typeof fetch): Client {

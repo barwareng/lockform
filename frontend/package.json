@@ -58,9 +58,13 @@
 		"formsnap": "^1.0.0",
 		"jose": "^5.2.4",
 		"js-cookie": "^3.0.5",
+		"libphonenumber-js": "^1.11.1",
 		"mode-watcher": "^0.3.0",
 		"supertokens-web-js": "^0.10.0",
+		"svelte-legos": "^0.2.2",
+		"svelte-tel-input": "^3.3.9",
 		"tailwind-merge": "^2.2.2",
-		"tailwind-variants": "^0.2.1"
+		"tailwind-variants": "^0.2.1",
+		"vaul-svelte": "^0.3.0"
 	}
 }

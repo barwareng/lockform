@@ -98,9 +98,9 @@ func AddMember(c *fiber.Ctx) error {
 		})
 	}
 	return c.JSON(fiber.Map{
-		"error":  false,
-		"msg":    nil,
-		"member": user,
+		"error": false,
+		"msg":   nil,
+		"data":  user,
 	})
 }
 func ChangeMemberRole(c *fiber.Ctx) error {

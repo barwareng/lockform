@@ -13,7 +13,7 @@
 			lockform
 		</a>
 	</div>
-	<div>
+	<div class="flex items-center gap-x-2">
 		<Button size="sm">Verify Business</Button>
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>

@@ -82,6 +82,9 @@ devDependencies:
   svelte-meta-tags:
     specifier: ^3.1.2
     version: 3.1.2(svelte@4.2.16)(typescript@5.4.5)
+  svelte-sonner:
+    specifier: ^0.3.24
+    version: 0.3.24(svelte@4.2.16)
   tailwindcss:
     specifier: ^3.4.1
     version: 3.4.3
@@ -2709,6 +2712,14 @@ packages:
       strip-indent: 3.0.0
       svelte: 4.2.16
       typescript: 5.4.5
+    dev: true
+
+  /svelte-sonner@0.3.24(svelte@4.2.16):
+    resolution: {integrity: sha512-txuL0JBUs0v6qGrr0PGCsbXmKHuthdrAkfISYi8umuveF7+gINb6EXl6VmKY9aHhyxCqvVgqd6yophQNrnor4w==}
+    peerDependencies:
+      svelte: '>=3 <5'
+    dependencies:
+      svelte: 4.2.16
     dev: true
 
   /svelte@4.2.16:

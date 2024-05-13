@@ -6,6 +6,7 @@
 		Building,
 		Cog,
 		ConstructionIcon,
+		ContactIcon,
 		HomeIcon,
 		LogOutIcon,
 		PieChartIcon,
@@ -25,6 +26,12 @@
 			icon: AntennaIcon,
 			name: 'Channels',
 			path: `/channels`,
+			position: 'top'
+		},
+		{
+			icon: ContactIcon,
+			name: 'Contacts',
+			path: `/contacts`,
 			position: 'top'
 		},
 

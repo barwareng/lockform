@@ -53,7 +53,7 @@
 </script>
 
 <main class="flex w-full items-center justify-center py-32">
-	{#if !verification}
+	{#if verification}
 		<Card.Root class="w-full max-w-lg overflow-hidden">
 			<Card.Content class="bg-primary pt-6">
 				<div class="text-background mb-2 flex select-none items-center justify-end text-[10px]">
@@ -64,7 +64,7 @@
 					<div class="aspect-square w-32 overflow-hidden rounded">
 						<img
 							src="https://picsum.photos/seed/{verification.name}/200/300"
-							alt="Gray by Drew Beamer"
+							alt={verification.name}
 							class="h-full w-full rounded-md object-cover"
 						/>
 					</div>
@@ -91,7 +91,7 @@
 				</div>
 			</Card.Content>
 			{#if verification.channels.length}
-				<Card.Footer class="flex flex-col items-start gap-2 pt-6">
+				<Card.Footer class="bg-muted flex flex-col items-start gap-2 pt-6">
 					{#each verification.channels as channel, i}
 						{@const icon = getIcon(channel.type)}
 						<div class="flex items-center gap-2">
@@ -132,7 +132,7 @@
 					</div>
 				</div>
 			</Card.Content>
-			<Card.Footer class="flex items-center gap-2 pt-6">
+			<Card.Footer class="bg-muted flex items-center gap-2 pt-6">
 				<Button size="sm">
 					<ShieldPlus class="mr-2 h-4 w-4" />
 					Suggest verification

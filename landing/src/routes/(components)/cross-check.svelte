@@ -11,7 +11,7 @@
 		placeholder="Email address, phone number, social media handle"
 		bind:value={searchPhrase}
 	/>
-	<Button type="button" disabled={!searchPhrase} on:click={() => goto(`/results/${searchPhrase}`)}
+	<Button type="button" disabled={!searchPhrase} on:click={() => goto(`/result/${searchPhrase}`)}
 		>Verify</Button
 	>
 </form>

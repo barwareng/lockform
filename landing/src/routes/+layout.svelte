@@ -7,6 +7,7 @@
 	import { VITE_APP_NAME } from '$lib/env';
 
 	import { Toaster } from '$lib/components/ui/sonner';
+	import Footer from '$lib/components/reusable/navigation/Footer.svelte';
 </script>
 
 <MetaTags title={VITE_APP_NAME} />
@@ -21,5 +22,11 @@
 	</div>
 	<div class="container mx-auto max-w-screen-xl">
 		<slot />
+	</div>
+	<div class="">
+		<Separator class="my-2" />
+		<div class="container mx-auto max-w-screen-xl">
+			<Footer />
+		</div>
 	</div>
 </main>

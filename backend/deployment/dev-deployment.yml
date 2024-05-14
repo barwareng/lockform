@@ -31,7 +31,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-      - "traefik.http.routers.traefik.rule=Host(`dev.traefik.veriform.com`)"
+      - "traefik.http.routers.traefik.rule=Host(`dev.traefik.rentisha.com`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=myresolver"
@@ -68,7 +68,7 @@ services:
       retries: 5
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.supertokens.rule=Host(`dev.supertokens.veriform.com`)"
+      - "traefik.http.routers.supertokens.rule=Host(`dev.supertokens.rentisha.com`)"
       - "traefik.http.services.supertokens.loadbalancer.server.port=3567"
       - "traefik.http.routers.supertokens.entrypoints=websecure"
       - "traefik.http.routers.supertokens.tls=true"
@@ -93,11 +93,11 @@ services:
       - "traefik.enable=true"
       - "traefik.http.services.api.loadbalancer.server.port=3000"
       - "traefik.http.routers.api.entrypoints=web"
-      - "traefik.http.routers.api.rule=Host(`dev.api.veriform.com`)"
+      - "traefik.http.routers.api.rule=Host(`dev.api.rentisha.com`)"
       - "traefik.http.routers.api.middlewares=api-https"
       - "traefik.http.middlewares.api-https.redirectscheme.scheme=https"
       - "traefik.http.routers.api-secure.entrypoints=websecure"
-      - "traefik.http.routers.api-secure.rule=Host(`dev.api.veriform.com`)"
+      - "traefik.http.routers.api-secure.rule=Host(`dev.api.rentisha.com`)"
       - "traefik.http.routers.api-secure.tls=true"
       - "traefik.http.routers.api-secure.tls.certresolver=myresolver"
 

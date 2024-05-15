@@ -7,8 +7,8 @@ export const setTeamCookie = (teamID: string) => {
 		sameSite: 'Lax',
 		secure: true,
 		expires: 60 * 60 * 24 * 7,
-		httpOnly: true
-		// httpOnly: process.env.NODE_ENV === 'production'
+		// httpOnly: true
+		httpOnly: process.env.NODE_ENV === 'production'
 	});
 };
 export const getTeamCookie = (): string => {

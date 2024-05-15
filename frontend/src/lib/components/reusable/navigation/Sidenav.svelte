@@ -3,6 +3,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import {
 		AntennaIcon,
+		BadgeIcon,
 		Building,
 		Cog,
 		ConstructionIcon,
@@ -35,7 +36,7 @@
 			position: 'top'
 		},
 		{
-			icon: ContactIcon,
+			icon: BadgeIcon,
 			name: 'Badges',
 			path: `/badges`,
 			position: 'top'

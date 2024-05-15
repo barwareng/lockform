@@ -18,7 +18,7 @@
 	let open = false;
 
 	$: selectedTeam =
-		$page.data.teams.find((team: Partial<ITeam>) => team.id == getTeamCookie()) ??
+		$page.data.teams?.find((team: Partial<ITeam>) => team.id == getTeamCookie()) ??
 		$page.data.teams?.[0];
 
 	const changeTeam = (team: Partial<ITeam>) => {
@@ -28,7 +28,7 @@
 	};
 </script>
 
-{#if $page.data.teams && $page.data.teams.length > 0}
+{#if $page.data.teams && $page.data.teams?.length > 0}
 	<Popover.Root bind:open let:ids>
 		<Popover.Trigger asChild let:builder>
 			<Button

@@ -17,7 +17,7 @@ export const load = (async ({ url }) => {
 		userId = accessTokenPayload.userId;
 		teams = accessTokenPayload.teams;
 		isOnboarded = accessTokenPayload.isOnboarded;
-		if (!getTeamCookie() && teams.length) {
+		if (!getTeamCookie() && teams?.length) {
 			setTeamCookie(teams[0].id!);
 		}
 		const teamId = getTeamCookie();

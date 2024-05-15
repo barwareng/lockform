@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Sidenav from '$lib/components/reusable/navigation/Sidenav.svelte';
 	import { Separator } from '$lib/components/ui/separator';
-	import type { LayoutData } from '../$types';
 </script>
 
 <main class="relative mx-auto flex h-screen w-screen max-w-screen-2xl">

@@ -16,10 +16,9 @@
 	export { className as class };
 
 	let open = false;
-
-	$: selectedTeam =
-		$page.data.teams?.find((team: Partial<ITeam>) => team.id == getTeamCookie()) ??
-		$page.data.teams?.[0];
+	let teams: Partial<ITeam>[];
+	$: teams = $page.data.teams;
+	$: selectedTeam = teams?.find((team: Partial<ITeam>) => team.id == getTeamCookie()) ?? teams?.[0];
 
 	const changeTeam = (team: Partial<ITeam>) => {
 		selectedTeam = team;
@@ -28,7 +27,7 @@
 	};
 </script>
 
-{#if $page.data.teams && $page.data.teams?.length > 0}
+{#if teams && teams?.length > 0}
 	<Popover.Root bind:open let:ids>
 		<Popover.Trigger asChild let:builder>
 			<Button
@@ -58,7 +57,7 @@
 				<Command.List>
 					<Command.Empty>No team found.</Command.Empty>
 					<Command.Group heading="Teams">
-						{#each $page.data.teams as team}
+						{#each teams as team}
 							<Command.Item
 								onSelect={() => {
 									changeTeam(team);

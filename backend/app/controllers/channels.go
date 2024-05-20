@@ -31,6 +31,14 @@ func AddChannel(c *fiber.Ctx) error {
 func GetChannels(c *fiber.Ctx) error {
 	var channels []models.Channel
 	teamId := c.Cookies("teamId")
+	log.Infof("Team: %s\n", teamId)
+	if teamId == "" {
+		return c.JSON(fiber.Map{
+			"error": false,
+			"msg":   nil,
+			"data":  nil,
+		})
+	}
 	if err := database.DB.Find(&channels, &models.Channel{TeamID: teamId}).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
@@ -64,21 +72,23 @@ func SearchChannel(c *fiber.Ctx) error {
 		})
 	}
 	log.Info("ID: ", channel.TeamID)
-	if len(channel.TeamID) > 0 {
-		if err := database.DB.Preload("Channels").Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": true,
-				"msg":   err.Error(),
-			})
-		}
+	if channel.TeamID == "" {
 		return c.JSON(fiber.Map{
 			"error": false,
 			"msg":   nil,
-			"data":  team,
+			"data":  nil,
+		})
+	}
+	if err := database.DB.Preload("Channels").Find(&team, &models.Team{ID: channel.TeamID}).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
 		})
 	}
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,
+		"data":  team,
 	})
+
 }

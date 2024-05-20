@@ -8,12 +8,16 @@
 	import { showCreateTeamDialog } from '$stores';
 	import { goto } from '$app/navigation';
 	import { toastError } from '$utils/toasts';
+	import Session from 'supertokens-web-js/recipe/session';
+	import { setTeamCookie } from '$utils';
 
 	let name: string;
 	let description: string;
 	const createTeam = async () => {
 		try {
-			await client.teams.create({ name, description });
+			const team = await client.teams.create({ name, description });
+			setTeamCookie(team.id);
+			await Session.attemptRefreshingSession();
 			name = '';
 			description = '';
 			$showCreateTeamDialog = false;

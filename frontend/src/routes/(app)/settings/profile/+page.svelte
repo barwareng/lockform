@@ -1,5 +1,4 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
 	import LoadingSpinner from '$lib/components/reusable/loading-spinners/LoadingSpinner.svelte';
 	import { MetaTags } from 'svelte-meta-tags';
 	import type { PageData } from './$types';
@@ -11,16 +10,47 @@
 	import { toastError, toastSuccess } from '$utils/toasts';
 	import { client } from '$lib/api/Client';
 	import { invalidateAll } from '$app/navigation';
+	import * as Popover from '$lib/components/ui/popover';
 	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
-
+	import Session from 'supertokens-web-js/recipe/session';
+	import * as Command from '$lib/components/ui/command';
+	import { TelInput, normalizedCountries } from 'svelte-tel-input';
+	import type {
+		DetailedValue,
+		E164Number,
+		CountryCode,
+		TelInputOptions
+	} from 'svelte-tel-input/types';
+	import { Check, ChevronsUpDownIcon } from 'lucide-svelte';
+	import { closeAndRefocusTrigger } from '$utils';
+	import { cn } from '$lib/utils';
+	import PhoneNumber from '$lib/components/reusable/inputs/PhoneNumber.svelte';
 	export let data: PageData;
 	$: ({ profile } = data);
 	$: loadingProfile = data?.loadingProfile ?? true;
 	let updatingProfile = false;
+	let phoneNumber: E164Number | null;
+	$: phoneNumber = null;
+
+	// Selected country
+	let country: CountryCode | null = 'US';
+
+	// Validity
+	let valid: boolean;
+
+	// Phone number details
+	let detailedValue: DetailedValue | null = null;
+
+	let options: TelInputOptions = {
+		invalidateOnCountryChange: true,
+		format: 'international'
+	};
+	let showCountryCodePopOver = false;
 	const updateProfile = async () => {
 		try {
 			updatingProfile = true;
 			await client.users.update(profile);
+			await Session.attemptRefreshingSession();
 			await invalidateAll();
 			toastSuccess('Your profile has been updated');
 			updatingProfile = false;
@@ -64,7 +94,8 @@
 				</div>
 				<div class="flex-1 space-y-1">
 					<Label>Phone number</Label>
-					<Input bind:value={profile.phoneNumber} placeholder="(702)-234-5566" />
+					<!-- <Input bind:value={profile.phoneNumber} placeholder="(702)-234-5566" /> -->
+					<PhoneNumber bind:phoneNumber={profile.phoneNumber} />
 				</div>
 			</div>
 			<Button disabled={updatingProfile} on:click={updateProfile}>

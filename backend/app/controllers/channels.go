@@ -31,7 +31,6 @@ func AddChannel(c *fiber.Ctx) error {
 func GetChannels(c *fiber.Ctx) error {
 	var channels []models.Channel
 	teamId := c.Cookies("teamId")
-	log.Infof("Team: %s\n", teamId)
 	if teamId == "" {
 		return c.JSON(fiber.Map{
 			"error": false,

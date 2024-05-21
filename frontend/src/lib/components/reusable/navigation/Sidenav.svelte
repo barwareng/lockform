@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { Button } from '$lib/components/ui/button';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { setMode } from 'mode-watcher';
 	import {
 		AntennaIcon,
 		BadgeIcon,
@@ -11,6 +13,8 @@
 		HomeIcon,
 		LogOutIcon,
 		PieChartIcon,
+		SunMoon,
+		SunMoonIcon,
 		User
 	} from 'lucide-svelte';
 	import { logout } from '$utils/supertokens';
@@ -88,18 +92,28 @@
 			<LogOutIcon class="mr-1 h-4 w-4" />
 			Logout
 		</Button>
-		<div class="pt-2">
+		<div class="flex items-center justify-between pt-2">
 			<Button
 				variant="link"
-				href="https://veriform.com"
+				href="https://lockform.com"
 				target="_blank"
-				class="flex items-center justify-start gap-x-2"
+				class="flex flex-col items-start justify-start gap-y-0"
 			>
-				<img src="/images/png/logo.png" alt="veriform-logo" class="aspect-square h-6" />
-
-				<h1 class="text-base font-bold text-[#5179A7]">Veriform</h1>
-				<p class="text-[10px]">&copy; {new Date().getFullYear()} All rights reserved</p>
+				<h1 class="text-lg font-black">lockform</h1>
+				<p class="-mt-1 text-[10px]">&copy; {new Date().getFullYear()} All rights reserved</p>
 			</Button>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger>
+					<Button size="icon" variant="ghost"><SunMoonIcon class="h-5 w-5" /></Button>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content>
+					<DropdownMenu.Group>
+						<DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
+						<DropdownMenu.Item on:click={() => setMode('light')}>Light</DropdownMenu.Item>
+						<DropdownMenu.Item on:click={() => setMode('system')}>System</DropdownMenu.Item>
+					</DropdownMenu.Group>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		</div>
 	</div>
 </nav>

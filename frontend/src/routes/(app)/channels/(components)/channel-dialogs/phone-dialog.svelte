@@ -22,6 +22,7 @@
 			addingChannel = true;
 			channel.value = phoneNumber?.replaceAll(' ', '');
 			channel.type = CHANNEL.PHONE;
+			channel.category = 'General';
 			await client.channels.create(channel);
 			await invalidateAll();
 			// TODO API call
@@ -35,7 +36,7 @@
 	};
 </script>
 
-<BaseDialog title="Phone" icon={PhoneIcon} bind:open>
+<BaseDialog title="Phone" icon={PhoneIcon} bind:open bind:isPublic={channel.isPublic}>
 	<div class="space-y-3">
 		<div class="flex-1 space-y-1">
 			<Label>Number</Label>

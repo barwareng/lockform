@@ -17,6 +17,7 @@
 		try {
 			addingChannel = true;
 			channel.type = CHANNEL.ADDRESS;
+			channel.category = 'General';
 			await client.channels.create(channel);
 			await invalidateAll();
 			addingChannel = false;
@@ -29,7 +30,7 @@
 	};
 </script>
 
-<BaseDialog title="Address" icon={MapPinIcon} bind:open>
+<BaseDialog title="Address" icon={MapPinIcon} bind:open bind:isPublic={channel.isPublic}>
 	<div class="space-y-3">
 		<div class="flex-1 space-y-1">
 			<Label>Value</Label>

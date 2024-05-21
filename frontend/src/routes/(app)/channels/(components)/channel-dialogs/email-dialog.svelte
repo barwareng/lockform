@@ -16,6 +16,7 @@
 		try {
 			addingChannel = true;
 			channel.type = CHANNEL.EMAIL;
+			channel.category = 'General';
 			await client.channels.create(channel);
 			await invalidateAll();
 			addingChannel = false;
@@ -28,7 +29,7 @@
 	};
 </script>
 
-<BaseDialog title="Email" icon={MailIcon} bind:open>
+<BaseDialog title="Email" icon={MailIcon} bind:open bind:isPublic={channel.isPublic}>
 	<div class="space-y-3">
 		<div class="flex-1 space-y-1">
 			<Label>Value</Label>

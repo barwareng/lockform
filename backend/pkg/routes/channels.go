@@ -9,8 +9,8 @@ import (
 
 func adminChannelRoutes(router fiber.Router) {
 	route := router.Group("/channels", middleware.ValidateRoles([]string{"owner", "admin"}))
-	route.Post("/", controllers.AddChannel)
-	route.Put("/", controllers.AddChannel)
+	route.Post("/", controllers.SaveChannel)
+	route.Delete("/", controllers.RemoveChannel)
 }
 func protectedChannelRoutes(router fiber.Router) {
 	route := router.Group("/channels", adaptor.HTTPMiddleware(middleware.VerifySession))

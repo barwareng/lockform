@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
@@ -58,10 +57,7 @@ func AddTeam(c *fiber.Ctx) error {
 		}
 		var userTeams []models.AccessTokenTeamPayload
 		accessTokenPayload := sessionContainer.GetAccessTokenPayload()
-		if accessTokenPayload["teams"] == nil {
-			userTeams = append(userTeams, models.AccessTokenTeamPayload{ID: team.ID, Name: team.Name})
-
-		} else {
+		if accessTokenPayload["teams"] != nil {
 			teams, ok := accessTokenPayload["teams"].([]interface{})
 			if !ok {
 				return errors.New("could not assert claim")
@@ -78,8 +74,8 @@ func AddTeam(c *fiber.Ctx) error {
 				}
 				userTeams = append(userTeams, payload)
 			}
-			log.Infof("Teams: %v\n", userTeams)
 		}
+		userTeams = append(userTeams, models.AccessTokenTeamPayload{ID: team.ID, Name: team.Name})
 		accessTokenPayload["teams"] = userTeams
 		if err := sessionContainer.MergeIntoAccessTokenPayload(accessTokenPayload); err != nil {
 			return err

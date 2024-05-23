@@ -2,7 +2,7 @@
 	import Logo from '$lib/icons/Logo.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import { ShoppingBagIcon, SunMoonIcon, UserRoundIcon } from 'lucide-svelte';
+	import { SunMoonIcon } from 'lucide-svelte';
 	import { setMode } from 'mode-watcher';
 </script>
 

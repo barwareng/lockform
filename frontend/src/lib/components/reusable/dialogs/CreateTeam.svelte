@@ -23,7 +23,6 @@
 			$showCreateTeamDialog = false;
 			goto('/', { invalidateAll: true });
 		} catch (error) {
-			console.log(error);
 			toastError(error);
 		}
 	};

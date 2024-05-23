@@ -19,7 +19,7 @@ export class ChannelService extends BaseService {
 			method: 'GET'
 		});
 	}
-	delete(query: { channelId: string }) {
+	delete(query: { id: number }) {
 		return this.client.send('/api/channels', {
 			method: 'DELETE',
 			query

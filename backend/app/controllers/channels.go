@@ -7,7 +7,7 @@ import (
 	"github.com/veriform/pkg/database"
 )
 
-func AddChannel(c *fiber.Ctx) error {
+func SaveChannel(c *fiber.Ctx) error {
 	channel := &models.Channel{}
 	if err := c.BodyParser(channel); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -90,4 +90,25 @@ func SearchChannel(c *fiber.Ctx) error {
 		"data":  team,
 	})
 
+}
+
+func RemoveChannel(c *fiber.Ctx) error {
+	channel := &models.Channel{}
+	if err := c.QueryParser(channel); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	if err := database.DB.Delete(&channel).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+	return c.JSON(fiber.Map{
+		"error": false,
+		"msg":   nil,
+		"data":  nil,
+	})
 }

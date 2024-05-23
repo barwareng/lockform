@@ -20,7 +20,6 @@ export const load = (async ({ url }) => {
 		if (!getTeamCookie() && teams?.length) {
 			setTeamCookie(teams[0].id!);
 		}
-		console.log(roleClaims);
 		const teamId = getTeamCookie();
 		// get roles for this current team and strip the team ID
 		const roles = roleClaims

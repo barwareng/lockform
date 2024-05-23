@@ -149,7 +149,6 @@ export const handleOauthCallback = async () => {
 			// will fail.
 
 			// As a hack to solve this, you can override the backend functions to create a fake email for the user.
-			console.log('No email provided by social login. Please use another form of login');
 			goto('/signin', { invalidateAll: true });
 		}
 	} catch (err: any) {

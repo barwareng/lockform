@@ -199,7 +199,6 @@ export default class Client {
 			})
 			.catch((err) => {
 				// wrap to normalize all errors
-				// console.log('lkjhgf', JSON.parse(err));
 				throw new ClientResponseError(err);
 			});
 	}

@@ -20,7 +20,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	export let data: PageData;
 	$: ({ verification } = data);
-	$: console.log(verification);
 	const getIcon = (type: CHANNEL) => {
 		let icon: any;
 		switch (type) {

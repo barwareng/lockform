@@ -26,7 +26,6 @@
 			await invalidateAll();
 		} catch (error) {
 			updatingRole = false;
-			console.log(error);
 			toastError(error);
 		}
 	};

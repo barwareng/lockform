@@ -20,10 +20,10 @@
 		<div class="space-y-5 overflow-y-scroll px-4">
 			{#each channelDialogs as dialogGroup}
 				<div class="space-y-2">
-					<p class="font-semibold">{dialogGroup.type}</p>
+					<p class="font-semibold">{dialogGroup.category}</p>
 					<div class="flex flex-wrap justify-start gap-4">
 						{#each dialogGroup.dialogs as dialog}
-							<svelte:component this={dialog} />
+							<svelte:component this={dialog.component} />
 						{/each}
 					</div>
 				</div>

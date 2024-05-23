@@ -5,7 +5,7 @@ import type { PageLoad } from './$types';
 
 export const load = (async () => {
 	let loadingChannels = true;
-	let channels: IChannel[] = [];
+	let channels: Partial<IChannel>[] = [];
 	try {
 		channels = await client.channels.getAll();
 		loadingChannels = false;

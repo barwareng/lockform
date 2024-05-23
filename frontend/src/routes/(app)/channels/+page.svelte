@@ -71,7 +71,9 @@
 					<Table.Head class="hidden md:table-cell">Category</Table.Head>
 					<Table.Head class="hidden md:table-cell">Public</Table.Head>
 					<Table.Head class="hidden md:table-cell">URL</Table.Head>
-					<Table.Head class="sr-only">Action</Table.Head>
+					{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
+						<Table.Head class="sr-only">Action</Table.Head>
+					{/if}
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -95,24 +97,26 @@
 						<Table.Cell class="hidden md:table-cell">{channel.category || '--'}</Table.Cell>
 						<Table.Cell class="hidden md:table-cell">{channel.isPublic ? 'Yes' : 'No'}</Table.Cell>
 						<Table.Cell class="hidden md:table-cell">{channel.url || '--'}</Table.Cell>
-						<Table.Cell class="text-right">
-							<DropdownMenu.Root>
-								<DropdownMenu.Trigger asChild let:builder>
-									<Button aria-haspopup="true" size="icon" variant="ghost" builders={[builder]}>
-										<EllipsisIcon class="h-4 w-4" />
-										<span class="sr-only">Toggle menu</span>
-									</Button>
-								</DropdownMenu.Trigger>
-								<DropdownMenu.Content align="end">
-									<DropdownMenu.Label>Actions</DropdownMenu.Label>
-									{#if dialog?.component && channel}
-										<svelte:component this={dialog.component} {channel} isEditing />
-									{/if}
-									<!-- <DropdownMenu.Item>Delete</DropdownMenu.Item> -->
-									<RemoveMember id={channel.id} />
-								</DropdownMenu.Content>
-							</DropdownMenu.Root>
-						</Table.Cell>
+						{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
+							<Table.Cell class="text-right">
+								<DropdownMenu.Root>
+									<DropdownMenu.Trigger asChild let:builder>
+										<Button aria-haspopup="true" size="icon" variant="ghost" builders={[builder]}>
+											<EllipsisIcon class="h-4 w-4" />
+											<span class="sr-only">Toggle menu</span>
+										</Button>
+									</DropdownMenu.Trigger>
+									<DropdownMenu.Content align="end">
+										<DropdownMenu.Label>Actions</DropdownMenu.Label>
+										{#if dialog?.component && channel}
+											<svelte:component this={dialog.component} {channel} isEditing />
+										{/if}
+										<!-- <DropdownMenu.Item>Delete</DropdownMenu.Item> -->
+										<RemoveMember id={channel.id} />
+									</DropdownMenu.Content>
+								</DropdownMenu.Root>
+							</Table.Cell>
+						{/if}
 					</Table.Row>
 				{/each}
 			</Table.Body>

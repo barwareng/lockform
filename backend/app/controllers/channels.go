@@ -3,8 +3,8 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/veriform/app/models"
-	"github.com/veriform/pkg/database"
+	"github.com/lockform/app/models"
+	"github.com/lockform/pkg/database"
 )
 
 func SaveChannel(c *fiber.Ctx) error {

@@ -5,12 +5,12 @@ import (
 	"errors"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/lockform/app/models"
+	"github.com/lockform/pkg/database"
 	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/recipe/userroles/userrolesclaims"
-	"github.com/veriform/app/models"
-	"github.com/veriform/pkg/database"
 	"gorm.io/gorm"
 )
 

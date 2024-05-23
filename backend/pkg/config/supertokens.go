@@ -4,6 +4,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/lockform/app/models"
+	"github.com/lockform/pkg/database"
 	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/ingredients/emaildelivery"
 	"github.com/supertokens/supertokens-golang/recipe/emailverification"
@@ -15,8 +17,6 @@ import (
 	"github.com/supertokens/supertokens-golang/recipe/thirdpartyemailpassword/tpepmodels"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/supertokens"
-	"github.com/veriform/app/models"
-	"github.com/veriform/pkg/database"
 )
 
 func SupertokensInit() {

@@ -17,6 +17,7 @@
 	import parsePhoneNumber from 'libphonenumber-js';
 	import { channelDialogs } from './(components)/channel-dialogs/dialogs';
 	import EmailDialog from './(components)/channel-dialogs/email-dialog.svelte';
+	import RemoveMember from './(components)/channel-dialogs/remove-member.svelte';
 
 	export let data: PageData;
 	$: ({ channels } = data);
@@ -107,7 +108,8 @@
 									{#if dialog?.component && channel}
 										<svelte:component this={dialog.component} {channel} isEditing />
 									{/if}
-									<DropdownMenu.Item>Delete</DropdownMenu.Item>
+									<!-- <DropdownMenu.Item>Delete</DropdownMenu.Item> -->
+									<RemoveMember id={channel.id} />
 								</DropdownMenu.Content>
 							</DropdownMenu.Root>
 						</Table.Cell>

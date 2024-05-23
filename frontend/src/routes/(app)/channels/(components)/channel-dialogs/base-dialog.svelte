@@ -38,7 +38,7 @@
 				builders={[builder]}
 				variant="ghost"
 				size="sm"
-				class="flex w-full justify-start px-2 text-sm font-normal "
+				class="flex w-full justify-start px-2 text-sm font-normal"
 			>
 				Edit
 			</Button>

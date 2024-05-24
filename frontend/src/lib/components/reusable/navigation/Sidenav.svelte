@@ -33,12 +33,12 @@
 			path: `/channels`,
 			position: 'top'
 		},
-		{
-			icon: ContactIcon,
-			name: 'Contacts',
-			path: `/contacts`,
-			position: 'top'
-		},
+		// {
+		// 	icon: ContactIcon,
+		// 	name: 'Contacts',
+		// 	path: `/contacts`,
+		// 	position: 'top'
+		// },
 		{
 			icon: BadgeIcon,
 			name: 'Badges',

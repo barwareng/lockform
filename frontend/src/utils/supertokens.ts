@@ -14,7 +14,7 @@ import ThirdPartyEmailPassword, {
 	thirdPartySignInAndUp
 } from 'supertokens-web-js/recipe/thirdpartyemailpassword';
 import {
-	SUPERTOKENS_COOKIE_DOMAIN,
+	VITE_SUPERTOKENS_COOKIE_DOMAIN,
 	VITE_API_BASE_URL,
 	VITE_APP_BASE_URL,
 	VITE_SUPERTOKENS_APP_NAME
@@ -33,7 +33,7 @@ export const supertokensInit = () => {
 			EmailVerification.init(),
 			Session.init({
 				autoAddCredentials: true,
-				sessionTokenBackendDomain: (SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
+				sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
 			}),
 			ThirdPartyEmailPassword.init()
 		]

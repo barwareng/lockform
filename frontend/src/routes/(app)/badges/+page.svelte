@@ -5,9 +5,7 @@
 	import { VITE_APP_NAME } from '$lib/env';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { Label } from '$lib/components/ui/label';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 	import BadgeBottomLeft from './(components)/badge-bottom-left.svelte';
 	import BadgeBottomCenter from './(components)/badge-bottom-center.svelte';
 	import BadgeBottomRight from './(components)/badge-bottom-right.svelte';
@@ -48,29 +46,28 @@
 		<Separator class="my-6" />
 
 		<Tabs.Root value="Bottom Left">
-			<Tabs.List class="">
+			<Tabs.List class="max-w-full overflow-x-scroll">
 				{#each badgeVariants as variant}
 					<Tabs.Trigger value={variant.name}>{variant.name}</Tabs.Trigger>
 				{/each}
 			</Tabs.List>
 			{#each badgeVariants as variant}
 				<Tabs.Content value={variant.name} class="w-full ">
-					<Card.Root class="mx-auto mt-6 w-1/2">
+					<Card.Root class="mx-auto mt-6 w-full lg:w-1/2">
 						<Card.Header>
-							<!-- <Card.Title>Account</Card.Title>
-							<Card.Description>
-								Make changes to your account here. Click save when you're done.
-							</Card.Description> -->
+							<div class="flex w-full items-center space-x-4">
+								<Skeleton class="h-12 w-12 rounded-full" />
+								<div class="flex-1 space-y-2">
+									<Skeleton class="h-4 w-4/5"></Skeleton>
+									<Skeleton class="h-4 w-3/5" />
+								</div>
+							</div>
 						</Card.Header>
 						<Card.Content class="space-y-2">
-							<!-- <div class="space-y-1">
-								<Label for="name">Name</Label>
-								<Input id="name" value="Pedro Duarte" />
-							</div>
-							<div class="space-y-1">
-								<Label for="username">Username</Label>
-								<Input id="username" value="@peduarte" />
-							</div> -->
+							<Skeleton class="h-16 w-full" />
+							<Skeleton class="h-12 w-full" />
+							<Skeleton class="h-12 w-1/3" />
+							<Skeleton class="mx-auto h-10 w-1/2" />
 						</Card.Content>
 						<Card.Footer>
 							<svelte:component this={variant.component}></svelte:component>

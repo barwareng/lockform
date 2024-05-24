@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/veriform/pkg/middleware"
@@ -11,7 +12,12 @@ import (
 
 func InitRoutes(app *fiber.App) {
 
-	protected := app.Group("/api", adaptor.HTTPMiddleware(middleware.VerifySession))
+	protected := app.Group("/api", func(c *fiber.Ctx) error {
+		log.Info("Team COKKIE", c.Cookies("teamId"))
+		return c.Next()
+	},
+		adaptor.HTTPMiddleware(middleware.VerifySession),
+	)
 	teamRoutes(protected)
 	userRoutes(protected)
 	memberRoutes(protected)

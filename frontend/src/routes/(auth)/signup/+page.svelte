@@ -12,6 +12,7 @@
 	let emailErrors: string[] = [];
 	let passwordErrors: string[] = [];
 	const signUp = async () => {
+		
 		const res = await signupWithEmailAndPassword(email, password);
 		emailErrors = res.emailErrors;
 		passwordErrors = res.passwordErrors;

@@ -32,8 +32,8 @@ export const supertokensInit = () => {
 		recipeList: [
 			EmailVerification.init(),
 			Session.init({
-				autoAddCredentials: true,
-				sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
+				autoAddCredentials: true
+				// sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
 			}),
 			ThirdPartyEmailPassword.init()
 		]
@@ -120,6 +120,7 @@ export const signinWithEmailAndPassword = async (email: string, password: string
 };
 
 export const oauthLogin = async (thirdPartyId: 'google' | 'github') => {
+	console.log('Ouath');
 	try {
 		const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
 			thirdPartyId,

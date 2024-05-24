@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/gofiber/fiber/v2/middleware/idempotency"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -17,11 +18,13 @@ import (
 // See: https://docs.gofiber.io/api/middleware
 func FiberMiddleware(app *fiber.App) {
 	app.Use(
+
+		healthcheck.New(),
 		helmet.New(),
 		idempotency.New(),
 		cors.New(cors.Config{
 			AllowOrigins:     os.Getenv("CORS_ALLOWED_ORIGINS"),
-			AllowHeaders:     "Origin, Content-Type, Accept, X-Team, " + strings.Join(supertokens.GetAllCORSHeaders(), ", "),
+			AllowHeaders:     "Origin, Content-Type, Accept, " + strings.Join(supertokens.GetAllCORSHeaders(), ", "),
 			AllowCredentials: true,
 		}),
 		recover.New(),

@@ -110,7 +110,7 @@ export const signinWithEmailAndPassword = async (email: string, password: string
 			// TODO display error
 			passwordErrors = passwordErrors.concat('Email password combination is incorrect.');
 		} else {
-			goto('/', { invalidateAll: true });
+			// goto('/', { invalidateAll: true });
 		}
 		return { emailErrors, passwordErrors };
 	} catch (err: any) {

@@ -40,16 +40,15 @@ export const handle = (async ({ event, resolve }) => {
 	});
 	if (payload && typeof payload === 'object') {
 		// Prevent access until email verification is complete
-		const isEmailVerified = (payload as any)['st-ev'].v;
-		if (!isEmailVerified) {
-			throw redirect(302, '/verify-email/request-verification');
-		}
-
-		// TODO handle onboarding
-		const isOnboarded = !!(payload as any)['isOnboarded'];
-		if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
-			throw redirect(302, '/settings/profile');
-		}
+		// const isEmailVerified = (payload as any)['st-ev'].v;
+		// if (!isEmailVerified) {
+		// 	throw redirect(302, '/verify-email/request-verification');
+		// }
+		// // TODO handle onboarding
+		// const isOnboarded = !!(payload as any)['isOnboarded'];
+		// if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
+		// 	throw redirect(302, '/settings/profile');
+		// }
 	}
 	const response = await resolve(event);
 	return response;

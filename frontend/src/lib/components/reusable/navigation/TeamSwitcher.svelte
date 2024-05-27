@@ -18,12 +18,17 @@
 	let open = false;
 	let teams: Partial<ITeam>[];
 	$: teams = $page.data.teams;
-	$: selectedTeam = teams?.find((team: Partial<ITeam>) => team.id == getTeamCookie()) ?? teams?.[0];
+	$: selectedTeam =
+		teams?.find(async (team: Partial<ITeam>) => team.id == (await getTeamCookie())) ?? teams?.[0];
 
-	const changeTeam = (team: Partial<ITeam>) => {
+	const changeTeam = async (team: Partial<ITeam>) => {
+		console.log(team.name);
+		console.log(selectedTeam.name);
+		await setTeamCookie(team.id!);
 		selectedTeam = team;
-		setTeamCookie(team.id!);
-		invalidateAll();
+		setTimeout(async () => {
+			await invalidateAll();
+		}, 3000);
 	};
 </script>
 

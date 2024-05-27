@@ -17,10 +17,12 @@ export const load = (async ({ url }) => {
 		userId = accessTokenPayload.userId;
 		teams = accessTokenPayload.teams;
 		isOnboarded = accessTokenPayload.isOnboarded;
-		if (!getTeamCookie() && teams?.length) {
-			setTeamCookie(teams[0].id!);
+		const teamId = await getTeamCookie();
+		console.log('layout teamID', teamId);
+		if (!teamId && teams?.length) {
+			await setTeamCookie(teams[0].id!);
 		}
-		const teamId = getTeamCookie();
+		// teamId = await getTeamCookie();
 		// get roles for this current team and strip the team ID
 		const roles = roleClaims
 			?.filter((c) => c.includes(teamId))

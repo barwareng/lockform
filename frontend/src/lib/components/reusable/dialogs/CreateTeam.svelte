@@ -16,7 +16,7 @@
 	const createTeam = async () => {
 		try {
 			const team = await client.teams.create({ name, description });
-			setTeamCookie(team.id);
+			await setTeamCookie(team.id);
 			await Session.attemptRefreshingSession();
 			name = '';
 			description = '';

@@ -15,7 +15,7 @@
 	let open = false;
 </script>
 
-<BaseDialog title="Address" icon={MapPinIcon} bind:open bind:isEditing>
+<BaseDialog title="Address" icon={MapPinIcon} bind:open bind:isEditing bind:channel>
 	<div class="space-y-3">
 		<div class="flex-1 space-y-1">
 			<Label>Value</Label>

@@ -2,19 +2,19 @@ version: "3.9"
 services:
   postgres:
     image: postgres:16
-    container_name: veriform-postgres
+    container_name: lockform-postgres
     ports:
       - "5432:5432"
     restart: always
     env_file:
       - ../.env
     volumes:
-      - veriform-postgres:/var/lib/postgresql/data
+      - lockform-postgres:/var/lib/postgresql/data
     networks:
-      - veriform
+      - lockform
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-postgresql:9.0
-    container_name: veriform-supertokens
+    container_name: lockform-supertokens
     depends_on:
       - postgres
     ports:
@@ -22,7 +22,7 @@ services:
     env_file:
       - ../.env
     networks:
-      - veriform
+      - lockform
     restart: always
     healthcheck:
       test: >
@@ -31,6 +31,6 @@ services:
       timeout: 5s
       retries: 5
 volumes:
-  veriform-postgres:
+  lockform-postgres:
 networks:
-  veriform:
+  lockform:

@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
-	"github.com/veriform/pkg/middleware"
+	"github.com/lockform/pkg/middleware"
 )
 
 func InitRoutes(app *fiber.App) {

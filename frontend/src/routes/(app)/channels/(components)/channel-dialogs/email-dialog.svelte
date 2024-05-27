@@ -9,12 +9,11 @@
 		category: 'General',
 		isPublic: true
 	};
-
 	let open = false;
 	export let isEditing = false;
 </script>
 
-<BaseDialog title="Email" icon={MailIcon} bind:open bind:isEditing>
+<BaseDialog title="Email" icon={MailIcon} bind:open bind:isEditing bind:channel>
 	<div class="space-y-3">
 		<div class="flex-1 space-y-1">
 			<Label>Value</Label>

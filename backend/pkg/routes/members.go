@@ -3,8 +3,8 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
-	"github.com/veriform/app/controllers"
-	"github.com/veriform/pkg/middleware"
+	"github.com/lockform/app/controllers"
+	"github.com/lockform/pkg/middleware"
 )
 
 func adminMemberRoutes(router fiber.Router) {

@@ -1,4 +1,4 @@
-module github.com/veriform
+module github.com/lockform
 
 go 1.19
 

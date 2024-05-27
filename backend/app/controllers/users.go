@@ -2,9 +2,9 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/lockform/app/models"
+	"github.com/lockform/pkg/database"
 	"github.com/supertokens/supertokens-golang/recipe/session"
-	"github.com/veriform/app/models"
-	"github.com/veriform/pkg/database"
 )
 
 func UpdateProfile(c *fiber.Ctx) error {

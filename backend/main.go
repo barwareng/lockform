@@ -5,10 +5,10 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/veriform/pkg/config"
-	"github.com/veriform/pkg/database"
-	"github.com/veriform/pkg/middleware"
-	"github.com/veriform/pkg/routes"
+	"github.com/lockform/pkg/config"
+	"github.com/lockform/pkg/database"
+	"github.com/lockform/pkg/middleware"
+	"github.com/lockform/pkg/routes"
 )
 
 func main() {

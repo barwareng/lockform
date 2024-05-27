@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/veriform/app/controllers"
+	"github.com/lockform/app/controllers"
 )
 
 func protectedUserRoutes(router fiber.Router) {

@@ -37,7 +37,6 @@
 		}
 		return icon;
 	};
-	$: props = { channel: channels?.[0] };
 </script>
 
 <MetaTags

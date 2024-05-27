@@ -1,12 +1,9 @@
-// src/routes/set-cookie/+server.ts
-import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
 	// Define the cookie value and options
 	const { teamId } = await request.json();
 	const expires = new Date(Date.now() + 60 * 60 * 24 * 7 * 1000); // 7 days from now
-	console.log('Setting cookie', teamId);
 	// Set the cookie header
 	const headers = new Headers();
 	headers.append(
@@ -18,10 +15,4 @@ export const POST: RequestHandler = async ({ request }) => {
 		status: 200,
 		headers
 	});
-};
-export const GET: RequestHandler = async ({ cookies }) => {
-	// Define the cookie value and options
-	const teamId = cookies.get('teamId');
-
-	return new Response(teamId);
 };

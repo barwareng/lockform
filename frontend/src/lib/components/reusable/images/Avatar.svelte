@@ -9,8 +9,8 @@
 	});
 </script>
 
-<div class={$$props.class}>
-	<Avatar.Root>
+<div>
+	<Avatar.Root class={$$props.class}>
 		<Avatar.Image {src} alt={seed} />
 		<Avatar.Fallback>
 			{@html avatar}

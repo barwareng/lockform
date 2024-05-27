@@ -3,13 +3,13 @@ import Cookies from 'js-cookie';
 import { tick } from 'svelte';
 
 export const setTeamCookie = async (teamId: string) => {
-	await fetch('/', {
+	await fetch('/set-team', {
 		method: 'POST',
 		body: JSON.stringify({ teamId })
 	});
 };
 export const getTeamCookie = async (): Promise<string> => {
-	const res = await fetch('/');
+	const res = await fetch('/get-team');
 	return await res.text();
 };
 export const deleteTeamCookie = () => {

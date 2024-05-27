@@ -11,16 +11,26 @@ export const load = (async ({ url }) => {
 	let teams: Partial<ITeam>[] = [];
 	let userId = '';
 	let isOnboarded = false;
+	let selectedTeam: Partial<ITeam> = {};
 	if (browser && (await Session.doesSessionExist())) {
 		const accessTokenPayload = await Session.getAccessTokenPayloadSecurely();
 		const roleClaims: string[] = accessTokenPayload?.['st-role']?.v;
 		userId = accessTokenPayload.userId;
 		teams = accessTokenPayload.teams;
 		isOnboarded = accessTokenPayload.isOnboarded;
-		if (!getTeamCookie() && teams?.length) {
-			setTeamCookie(teams[0].id!);
+		const teamId = await getTeamCookie();
+		if (teams?.length) {
+			if (!teamId) {
+				await setTeamCookie(teams[0].id!);
+				selectedTeam = teams[0];
+			} else {
+				teams.forEach((team) => {
+					if (teamId == team.id) {
+						selectedTeam = team;
+					}
+				});
+			}
 		}
-		const teamId = getTeamCookie();
 		// get roles for this current team and strip the team ID
 		const roles = roleClaims
 			?.filter((c) => c.includes(teamId))
@@ -29,5 +39,5 @@ export const load = (async ({ url }) => {
 		if (!isOnboarded && !onboardingAllowedRoutes.has(url.pathname))
 			throw redirect(302, '/settings/profile');
 	}
-	return { teams, userId };
+	return { teams, userId, selectedTeam };
 }) satisfies LayoutLoad;

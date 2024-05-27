@@ -7,6 +7,7 @@
 		AntennaIcon,
 		BadgeIcon,
 		Building,
+		CircleX,
 		Cog,
 		ConstructionIcon,
 		ContactIcon,
@@ -19,7 +20,7 @@
 	} from 'lucide-svelte';
 	import { logout } from '$utils/supertokens';
 	import TeamSwitcher from './TeamSwitcher.svelte';
-
+	export let openMobileNav = false;
 	$: routes = [
 		{
 			icon: PieChartIcon,
@@ -33,12 +34,12 @@
 			path: `/channels`,
 			position: 'top'
 		},
-		{
-			icon: ContactIcon,
-			name: 'Contacts',
-			path: `/contacts`,
-			position: 'top'
-		},
+		// {
+		// 	icon: ContactIcon,
+		// 	name: 'Contacts',
+		// 	path: `/contacts`,
+		// 	position: 'top'
+		// },
 		{
 			icon: BadgeIcon,
 			name: 'Badges',
@@ -55,14 +56,24 @@
 	];
 </script>
 
-<nav class="flex h-full flex-col justify-between px-3 py-6">
+<nav class="flex min-h-screen flex-col justify-between px-3 py-6">
+	<Button
+		size="icon"
+		variant="ghost"
+		class="absolute -right-6 top-0 !h-12 !w-12 rounded-full lg:hidden"
+		on:click={() => (openMobileNav = false)}
+	>
+		<CircleX />
+	</Button>
 	<div class="space-y-0.5">
 		<TeamSwitcher />
+
 		{#each routes.filter((route) => route.position == 'top') as route}
 			<Button
 				variant={route.path == $page.url.pathname ? 'secondary' : 'ghost'}
 				class="w-full items-center justify-start rounded-full text-xs"
 				href={route.path}
+				on:click={() => (openMobileNav = false)}
 			>
 				<svelte:component this={route.icon} class="mr-1 h-4 w-4" />
 				<span>
@@ -77,6 +88,7 @@
 				variant={route.path == $page.url.pathname ? 'secondary' : 'ghost'}
 				class="w-full items-center justify-start rounded-full text-xs"
 				href={route.path}
+				on:click={() => (openMobileNav = false)}
 			>
 				<svelte:component this={route.icon} class="mr-1 h-4 w-4" />
 				<span>
@@ -96,6 +108,7 @@
 			<Button
 				variant="link"
 				href="https://lockform.com"
+				on:click={() => (openMobileNav = false)}
 				target="_blank"
 				class="flex flex-col items-start justify-start gap-y-0"
 			>
@@ -108,9 +121,24 @@
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
 					<DropdownMenu.Group>
-						<DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={() => setMode('light')}>Light</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={() => setMode('system')}>System</DropdownMenu.Item>
+						<DropdownMenu.Item
+							on:click={() => {
+								setMode('dark');
+								openMobileNav = false;
+							}}>Dark</DropdownMenu.Item
+						>
+						<DropdownMenu.Item
+							on:click={() => {
+								setMode('light');
+								openMobileNav = false;
+							}}>Light</DropdownMenu.Item
+						>
+						<DropdownMenu.Item
+							on:click={() => {
+								setMode('system');
+								openMobileNav = false;
+							}}>System</DropdownMenu.Item
+						>
 					</DropdownMenu.Group>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>

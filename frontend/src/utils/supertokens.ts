@@ -14,7 +14,7 @@ import ThirdPartyEmailPassword, {
 	thirdPartySignInAndUp
 } from 'supertokens-web-js/recipe/thirdpartyemailpassword';
 import {
-	SUPERTOKENS_COOKIE_DOMAIN,
+	VITE_SUPERTOKENS_COOKIE_DOMAIN,
 	VITE_API_BASE_URL,
 	VITE_APP_BASE_URL,
 	VITE_SUPERTOKENS_APP_NAME
@@ -32,8 +32,8 @@ export const supertokensInit = () => {
 		recipeList: [
 			EmailVerification.init(),
 			Session.init({
-				autoAddCredentials: true,
-				sessionTokenBackendDomain: (SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
+				autoAddCredentials: true
+				// sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
 			}),
 			ThirdPartyEmailPassword.init()
 		]
@@ -120,6 +120,7 @@ export const signinWithEmailAndPassword = async (email: string, password: string
 };
 
 export const oauthLogin = async (thirdPartyId: 'google' | 'github') => {
+	console.log('Ouath');
 	try {
 		const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
 			thirdPartyId,

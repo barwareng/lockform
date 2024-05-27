@@ -2,17 +2,15 @@ import { mediaQuery } from 'svelte-legos';
 import Cookies from 'js-cookie';
 import { tick } from 'svelte';
 
-export const setTeamCookie = (teamID: string) => {
-	Cookies.set('teamId', teamID, {
-		sameSite: 'Lax',
-		secure: true,
-		expires: 60 * 60 * 24 * 7,
-		// httpOnly: true
-		httpOnly: process.env.NODE_ENV === 'production'
+export const setTeamCookie = async (teamId: string) => {
+	await fetch('/set-team', {
+		method: 'POST',
+		body: JSON.stringify({ teamId })
 	});
 };
-export const getTeamCookie = (): string => {
-	return Cookies.get('teamId')!;
+export const getTeamCookie = async (): Promise<string> => {
+	const res = await fetch('/get-team');
+	return await res.text();
 };
 export const deleteTeamCookie = () => {
 	Cookies.remove('teamId')!;

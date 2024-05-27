@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte';
 	import { cn } from '$lib/utils.js';
-	import * as Avatar from '$lib/components/ui/avatar';
 	import { Button } from '$lib/components/ui/button';
 	import * as Command from '$lib/components/ui/command';
 	import * as Popover from '$lib/components/ui/popover';
@@ -11,6 +9,7 @@
 	import { closeAndRefocusTrigger, getTeamCookie, setTeamCookie } from '$utils';
 	import { invalidateAll } from '$app/navigation';
 	import type { ITeam } from '$utils/interfaces/teams.interface';
+	import Avatar from '../images/Avatar.svelte';
 
 	let className: string | undefined | null = undefined;
 	export { className as class };
@@ -18,12 +17,12 @@
 	let open = false;
 	let teams: Partial<ITeam>[];
 	$: teams = $page.data.teams;
-	$: selectedTeam = teams?.find((team: Partial<ITeam>) => team.id == getTeamCookie()) ?? teams?.[0];
+	$: selectedTeam = $page.data.selectedTeam;
 
-	const changeTeam = (team: Partial<ITeam>) => {
+	const changeTeam = async (team: Partial<ITeam>) => {
+		await setTeamCookie(team.id!);
 		selectedTeam = team;
-		setTeamCookie(team.id!);
-		invalidateAll();
+		await invalidateAll();
 	};
 </script>
 
@@ -38,15 +37,10 @@
 				aria-label="Select a team"
 				class={cn('mb-4 w-full justify-between rounded-full', className)}
 			>
-				<Avatar.Root class="mr-2 h-5 w-5">
-					<Avatar.Image
-						src="https://avatar.vercel.sh/${selectedTeam.id}.png"
-						alt={selectedTeam.name}
-						class="grayscale"
-					/>
-					<Avatar.Fallback>SC</Avatar.Fallback>
-				</Avatar.Root>
-				{selectedTeam.name}
+				{#key selectedTeam}
+					<Avatar src="" seed={selectedTeam?.id} class="mr-2 h-5 w-5" />
+				{/key}
+				{selectedTeam?.name}
 				<ChevronsUpDownIcon class="ml-auto h-4 w-4 shrink-0 opacity-50" />
 			</Button>
 		</Popover.Trigger>
@@ -66,17 +60,10 @@
 								value={team.name}
 								class="text-sm"
 							>
-								<Avatar.Root class="mr-2 h-5 w-5">
-									<Avatar.Image
-										src="https://avatar.vercel.sh/${team.id}.png"
-										alt={team.name}
-										class="grayscale"
-									/>
-									<Avatar.Fallback></Avatar.Fallback>
-								</Avatar.Root>
+								<Avatar src="" seed={team?.id} class="mr-2 h-5 w-5" />
 								{team.name}
 								<CheckIcon
-									class={cn('ml-auto h-4 w-4', selectedTeam.id !== team.id && 'text-transparent')}
+									class={cn('ml-auto h-4 w-4', selectedTeam?.id !== team.id && 'text-transparent')}
 								/>
 							</Command.Item>
 						{/each}

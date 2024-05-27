@@ -20,7 +20,6 @@ import (
 )
 
 func SupertokensInit() {
-	cookieSameSite := "lax"
 	cookieDomain := os.Getenv("SUPERTOKENS_COOKIE_DOMAIN")
 	cookieSecure := true
 	apiBasePath := "/auth"
@@ -192,10 +191,9 @@ func SupertokensInit() {
 
 					},
 				},
-				CookieSameSite: &cookieSameSite,
-				CookieSecure:   &cookieSecure,
-				CookieDomain:   &cookieDomain,
-			}), // initializes session features
+				CookieSecure: &cookieSecure,
+				CookieDomain: &cookieDomain,
+			}),
 		},
 	})
 

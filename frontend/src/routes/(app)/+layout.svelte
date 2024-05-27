@@ -3,12 +3,14 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import { MenuIcon } from 'lucide-svelte';
-	let openMobileNav = true;
+	import { fade, slide } from 'svelte/transition';
+	let openMobileNav = false;
 </script>
 
 <main class="relative mx-auto flex h-screen w-screen max-w-screen-2xl">
 	{#if openMobileNav}
 		<aside
+			transition:slide
 			class="bg-background absolute z-40 min-h-screen w-5/6 min-w-[300px] max-w-40 shrink-0 basis-1/5 lg:hidden"
 		>
 			<Sidenav bind:openMobileNav />

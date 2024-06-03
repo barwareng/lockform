@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
+	"github.com/lockform/app/controllers"
 	"github.com/lockform/pkg/middleware"
 )
 
@@ -14,11 +15,14 @@ func InitRoutes(app *fiber.App) {
 	protected := app.Group("/api",
 		adaptor.HTTPMiddleware(middleware.VerifySession),
 	)
+	// OauthRoutes
+	protected.Post("/oauth/authorize", controllers.AuthorizationRequest)
+	// Protected Resource Routes
 	teamRoutes(protected)
 	userRoutes(protected)
 	memberRoutes(protected)
 	channelRoutes(protected)
-
+	// Public Channels
 	public := app.Group("/public")
 	publicChannelRoutes(public)
 	app.Get("/badge", func(c *fiber.Ctx) error {

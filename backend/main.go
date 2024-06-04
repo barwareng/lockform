@@ -14,7 +14,9 @@ import (
 func main() {
 	database.ConnectDb()
 	config.SupertokensInit()
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		AppName: "Lockform",
+	})
 	middleware.FiberMiddleware(app)
 	routes.InitRoutes(app)
 

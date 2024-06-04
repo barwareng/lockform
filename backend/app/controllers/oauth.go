@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/lockform/app/models"
 )
 
@@ -14,9 +13,11 @@ func AuthorizationRequest(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	log.Info(oauthAuthorizationRequest)
-	// return c.Redirect(oauthAuthorizationRequest.RedirectUri)
-	return c.Redirect("http://127.0.0.1:5175/callback", 301)
-	// return c.SendStatus(200)
+	// sessionTokens := session.RefreshSession()
 
+	return c.JSON(fiber.Map{
+		"error": false,
+		"msg":   nil,
+		"data":  oauthAuthorizationRequest.RedirectUri,
+	})
 }

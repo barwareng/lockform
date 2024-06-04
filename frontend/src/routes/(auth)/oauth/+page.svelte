@@ -15,7 +15,8 @@
 	);
 	const sendOauthAuthorizationRequest = async () => {
 		try {
-			await client.oauth.authorize(oauthAuthorizationRequestParams);
+			const uri = await client.oauth.authorize(oauthAuthorizationRequestParams);
+			window.location.href = uri;
 		} catch (error) {
 			toastError(error);
 		}

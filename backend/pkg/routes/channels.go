@@ -8,13 +8,13 @@ import (
 )
 
 func adminChannelRoutes(router fiber.Router) {
-	route := router.Group("/channels", middleware.ValidateRoles([]string{"owner", "admin"}))
-	route.Post("/", controllers.SaveChannel)
+	route := router.Group("/channels", middleware.ValidateTeam, middleware.ValidateRoles([]string{"owner", "admin"}))
+	route.Post("/", middleware.ValidateTeam, controllers.SaveChannel)
 	route.Delete("/", controllers.RemoveChannel)
 }
 func protectedChannelRoutes(router fiber.Router) {
 	route := router.Group("/channels", adaptor.HTTPMiddleware(middleware.VerifySession))
-	route.Get("/", controllers.GetChannels)
+	route.Get("/", middleware.ValidateTeam, controllers.GetChannels)
 }
 
 func publicChannelRoutes(router fiber.Router) {

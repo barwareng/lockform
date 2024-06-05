@@ -15,7 +15,7 @@ func SaveChannel(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	channel.TeamID = c.Cookies("teamId")
+	channel.TeamID = c.Locals("teamId").(string)
 	if err := database.DB.Save(&channel).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
@@ -30,14 +30,8 @@ func SaveChannel(c *fiber.Ctx) error {
 }
 func GetChannels(c *fiber.Ctx) error {
 	var channels []models.Channel
-	teamId := c.Cookies("teamId")
-	if teamId == "" {
-		return c.JSON(fiber.Map{
-			"error": false,
-			"msg":   nil,
-			"data":  nil,
-		})
-	}
+	teamId := c.Locals("teamId").(string)
+
 	if err := database.DB.Find(&channels, &models.Channel{TeamID: teamId}).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,

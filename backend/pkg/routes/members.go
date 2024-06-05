@@ -8,14 +8,14 @@ import (
 )
 
 func adminMemberRoutes(router fiber.Router) {
-	route := router.Group("/members", middleware.ValidateRoles([]string{"owner", "admin"}))
+	route := router.Group("/members", middleware.ValidateTeam, middleware.ValidateRoles([]string{"owner", "admin"}))
 	route.Post("/", controllers.AddMember)
 	route.Put("/", controllers.ChangeMemberRole)
 	route.Delete("/", controllers.RemoveMember)
 }
 func protectedMemberRoutes(router fiber.Router) {
 	route := router.Group("/members", adaptor.HTTPMiddleware(middleware.VerifySession))
-	route.Get("/", controllers.GetMembers)
+	route.Get("/", middleware.ValidateTeam, controllers.GetMembers)
 }
 func memberRoutes(router fiber.Router) {
 	// Order of the routes matters. Begin with most accessible

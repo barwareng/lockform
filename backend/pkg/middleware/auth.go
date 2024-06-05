@@ -35,7 +35,7 @@ func ValidateRoles(roles []string) fiber.Handler {
 }
 
 func verifyRoles(userRoles []string, c *fiber.Ctx) (bool, error) {
-	teamId := c.Cookies("teamId")
+	teamId := c.Locals("teamId").(string)
 
 	var formattedUserRoles []interface{}
 	for _, role := range userRoles {

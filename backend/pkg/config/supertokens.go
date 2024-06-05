@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/lockform/app/models"
 	"github.com/lockform/pkg/database"
 	"github.com/rs/xid"
@@ -37,7 +36,6 @@ func SupertokensInit() {
 			GetOrigin: func(request *http.Request, userContext supertokens.UserContext) (string, error) {
 				if request != nil {
 					origin := request.Header.Get("origin")
-					log.Info("RIGINGIN: ", origin)
 					if origin == "" {
 						// this means the client is in an iframe, it's a mobile app, or
 						// there is a privacy setting on the frontend which doesn't send

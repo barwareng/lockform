@@ -25,7 +25,7 @@ type Members struct {
 	Role string `json:"role"`
 }
 
-// TODO cuser transactions
+// TODO use transactions
 func AddMember(c *fiber.Ctx) error {
 	var user models.User
 	params := &AddMemberParams{}
@@ -46,7 +46,7 @@ func AddMember(c *fiber.Ctx) error {
 		})
 	}
 	// Save the user in the DB
-	teamID := c.Cookies("teamId")
+	teamID := c.Locals("teamId").(string)
 	user.Email = params.Email
 	if len(getUsersResult) == 0 {
 		signUpResult, err := thirdpartyemailpassword.EmailPasswordSignUp("public", params.Email, os.Getenv("FAKE_PASSWORD"))
@@ -112,7 +112,7 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	teamId := c.Cookies("teamId")
+	teamId := c.Locals("teamId").(string)
 	if err := removeUserRole(params.UserID, teamId); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
@@ -141,7 +141,7 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 	})
 }
 func GetMembers(c *fiber.Ctx) error {
-	teamId := c.Cookies("teamId")
+	teamId := c.Locals("teamId").(string)
 	team := &models.Team{ID: teamId}
 	if err := database.DB.Preload("Users").Find(&team).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -182,7 +182,7 @@ func RemoveMember(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	teamId := c.Cookies("teamId")
+	teamId := c.Locals("teamId").(string)
 	if err := removeUserRole(params.UserID, teamId); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,

@@ -26,6 +26,7 @@ func InitRoutes(app *fiber.App) {
 	// Public Channels
 	public := app.Group("/public")
 	publicChannelRoutes(public)
+	public.Post("/verification", controllers.VerifyEmailsFromAddon)
 	app.Get("/badge", func(c *fiber.Ctx) error {
 		c.Set("Cross-Origin-Resource-Policy", "same-site")
 		return c.Next()

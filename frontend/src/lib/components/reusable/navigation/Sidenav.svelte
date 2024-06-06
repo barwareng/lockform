@@ -11,6 +11,7 @@
 		Cog,
 		ConstructionIcon,
 		ContactIcon,
+		ExternalLinkIcon,
 		HomeIcon,
 		LogOutIcon,
 		PieChartIcon,
@@ -34,18 +35,24 @@
 			path: `/channels`,
 			position: 'top'
 		},
-		// {
-		// 	icon: ContactIcon,
-		// 	name: 'Contacts',
-		// 	path: `/contacts`,
-		// 	position: 'top'
-		// },
 		{
-			icon: BadgeIcon,
-			name: 'Badges',
-			path: `/badges`,
+			icon: ContactIcon,
+			name: 'Trusted Contacts',
+			path: `/trusted-contacts`,
 			position: 'top'
 		},
+		{
+			icon: ExternalLinkIcon,
+			name: 'Trusted Domains',
+			path: `/trusted-domains`,
+			position: 'top'
+		},
+		// {
+		// 	icon: BadgeIcon,
+		// 	name: 'Badges',
+		// 	path: `/badges`,
+		// 	position: 'top'
+		// },
 
 		{
 			icon: Cog,

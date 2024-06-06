@@ -30,6 +30,7 @@ func ConnectDb() {
 		&models.Team{},
 		&models.User{},
 		&models.Channel{},
+		&models.TrustedContact{},
 	)
 	DB = db
 }

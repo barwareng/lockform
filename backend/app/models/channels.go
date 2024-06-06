@@ -13,5 +13,5 @@ type Channel struct {
 	IsPublic  bool      `json:"isPublic" gorm:"default:true"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
-	DeletedAt time.Time `json:"deletedAt"`
+	DeletedAt time.Time `json:"-"`
 }

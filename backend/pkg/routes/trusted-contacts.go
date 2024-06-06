@@ -14,7 +14,7 @@ func adminTrustedContactRoutes(router fiber.Router) {
 func protectedTrustedContactRoutes(router fiber.Router) {
 	route := router.Group("/trusted-contacts", middleware.ValidateTeam, adaptor.HTTPMiddleware(middleware.VerifySession))
 	route.Post("/", controllers.SaveTrustedContact)
-	route.Get("/", controllers.GetChannels)
+	route.Get("/", controllers.GetTrustedContacts)
 }
 func trustedContactRoutes(router fiber.Router) {
 	// Order of the routes matters. Begin with most accessible

@@ -1,3 +1,8 @@
+export enum CONTACT {
+    EMAIL = 'email',
+    PHONE = 'phone',
+    ADDRESS = 'address'
+}
 export interface ITrustedContact {
     id: number
     value: string

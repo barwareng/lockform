@@ -8,11 +8,11 @@ import (
 )
 
 func adminTrustedContactRoutes(router fiber.Router) {
-	route := router.Group("/channels", middleware.ValidateTeam, middleware.ValidateRoles([]string{"owner", "admin"}))
+	route := router.Group("/trusted-contacts", middleware.ValidateTeam, middleware.ValidateRoles([]string{"owner", "admin"}))
 	route.Delete("/", controllers.RemoveTrustedContact)
 }
 func protectedTrustedContactRoutes(router fiber.Router) {
-	route := router.Group("/channels", middleware.ValidateTeam, adaptor.HTTPMiddleware(middleware.VerifySession))
+	route := router.Group("/trusted-contacts", middleware.ValidateTeam, adaptor.HTTPMiddleware(middleware.VerifySession))
 	route.Post("/", controllers.SaveTrustedContact)
 	route.Get("/", controllers.GetChannels)
 }

@@ -23,10 +23,10 @@ func InitRoutes(app *fiber.App) {
 	memberRoutes(protected)
 	channelRoutes(protected)
 	trustedContactRoutes(protected)
+	protected.Post("/verification", middleware.ValidateTeam, controllers.VerifyEmailsFromAddon)
 	// Public Channels
 	public := app.Group("/public")
 	publicChannelRoutes(public)
-	public.Post("/verification", controllers.VerifyEmailsFromAddon)
 	app.Get("/badge", func(c *fiber.Ctx) error {
 		c.Set("Cross-Origin-Resource-Policy", "same-site")
 		return c.Next()

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/lockform/app/models"
 	"github.com/lockform/pkg/database"
 )
@@ -27,14 +28,15 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 		})
 	}
 	var err error
-	verificationRequest.Values, verificationResponse.TeamMembers, err = populateTeamMember(verificationRequest.Values)
+	teamId := c.Locals("teamId").(string)
+	verificationRequest.Values, verificationResponse.TeamMembers, err = populateTeamMember(verificationRequest.Values, teamId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	verificationRequest.Values, verificationResponse.TrustedContacts, err = populateTrustedContacts(verificationRequest.Values)
+	verificationRequest.Values, verificationResponse.TrustedContacts, err = populateTrustedContacts(verificationRequest.Values, teamId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -55,9 +57,12 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 		"data":  verificationResponse,
 	})
 }
-func populateTeamMember(searchValues []string) (newSearchValues []string, foundTeamMemberEmails []string, err error) {
+
+// TODO implement team id
+func populateTeamMember(searchValues []string, teamId string) (newSearchValues []string, foundTeamMemberEmails []string, err error) {
 	var members []models.User
 	var teamMemberEmails []string
+	log.Info(teamId)
 	if err := database.DB.Where("email IN ?", searchValues).Find(&members).Error; err != nil {
 		return nil, nil, err
 	}
@@ -67,10 +72,10 @@ func populateTeamMember(searchValues []string) (newSearchValues []string, foundT
 	searchValues = removeElements(searchValues, teamMemberEmails)
 	return searchValues, teamMemberEmails, nil
 }
-func populateTrustedContacts(searchValues []string) (newSearchValues []string, foundTrustedContactEmails []string, err error) {
+func populateTrustedContacts(searchValues []string, teamId string) (newSearchValues []string, foundTrustedContactEmails []string, err error) {
 	var trustedContacts []models.TrustedContact
 	var trustedContactEmails []string
-	if err := database.DB.Where("value IN ?", searchValues).Find(&trustedContacts).Error; err != nil {
+	if err := database.DB.Where("value IN ? AND team_id = ?", searchValues, teamId).Find(&trustedContacts).Error; err != nil {
 		return nil, nil, err
 	}
 	for _, trustedContact := range trustedContacts {

@@ -8,7 +8,7 @@ export interface ITrustedContact {
     value: string
     label: string
     domain: string
-    type: string
+    type: CONTACT
     addedBy?: {
         id: string
         name: string

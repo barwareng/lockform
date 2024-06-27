@@ -37,14 +37,14 @@
 		},
 		{
 			icon: ContactIcon,
-			name: 'Trusted Contacts',
-			path: `/trusted-contacts`,
+			name: 'Contacts',
+			path: `/contacts`,
 			position: 'top'
 		},
 		{
 			icon: ExternalLinkIcon,
-			name: 'Trusted Domains',
-			path: `/trusted-domains`,
+			name: 'Domains',
+			path: `/domains`,
 			position: 'top'
 		},
 		// {

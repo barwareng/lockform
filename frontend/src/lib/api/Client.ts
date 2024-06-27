@@ -3,7 +3,7 @@ import { ClientResponseError } from './ClientResponseError';
 import { ChannelService } from './services/ChannelService';
 import { MemberService } from './services/MemberService';
 import { TeamService } from './services/TeamService';
-import { TrustedContactService } from './services/TrustedContactService';
+import { ContactService } from './services/ContactService';
 import { UserService } from './services/UserService';
 import type { SendOptions } from './services/utils/options';
 
@@ -45,7 +45,7 @@ export default class Client {
 	teams: TeamService;
 	members: MemberService;
 	channels: ChannelService;
-	trustedContacts: TrustedContactService
+	contacts: ContactService
 	private cancelControllers: { [key: string]: AbortController } = {};
 	private enableAutoCancellation = true;
 
@@ -56,7 +56,7 @@ export default class Client {
 		this.teams = new TeamService(this);
 		this.members = new MemberService(this);
 		this.channels = new ChannelService(this);
-		this.trustedContacts = new TrustedContactService(this);
+		this.contacts = new ContactService(this);
 	}
 	// Set the fetch function as Sveltekit's event.fetch or window.fetch
 	setFetch(fetchFunc: typeof fetch): Client {

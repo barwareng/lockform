@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type TrustedContact struct {
+type Contact struct {
 	ID        int        `json:"id" gorm:"primaryKey;uniqueIndex"`
 	TeamID    string     `json:"teamId" gorm:"index"`
 	AddedByID string     `json:"addedById" gorm:"index"`

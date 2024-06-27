@@ -11,11 +11,11 @@ type VerificationRequest struct {
 	Values []string
 }
 type VerificationResponse struct {
-	TeamMembers     []string `json:"teamMembers"`
-	TrustedContacts []string `json:"trustedContacts"`
-	Verified        []string `json:"verified"`
-	Unknown         []string `json:"unknown"`
-	Flagged         []string `json:"flagged"`
+	TeamMembers []string `json:"teamMembers"`
+	Contacts    []string `json:"contacts"`
+	Verified    []string `json:"verified"`
+	Unknown     []string `json:"unknown"`
+	Flagged     []string `json:"flagged"`
 }
 
 func VerifyEmailsFromAddon(c *fiber.Ctx) error {
@@ -36,7 +36,7 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	verificationRequest.Values, verificationResponse.TrustedContacts, err = populateTrustedContacts(verificationRequest.Values, teamId)
+	verificationRequest.Values, verificationResponse.Contacts, err = populateContacts(verificationRequest.Values, teamId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -72,26 +72,26 @@ func populateTeamMember(searchValues []string, teamId string) (newSearchValues [
 	searchValues = removeElements(searchValues, teamMemberEmails)
 	return searchValues, teamMemberEmails, nil
 }
-func populateTrustedContacts(searchValues []string, teamId string) (newSearchValues []string, foundTrustedContactEmails []string, err error) {
-	var trustedContacts []models.TrustedContact
-	var trustedContactEmails []string
-	if err := database.DB.Where("value IN ? AND team_id = ?", searchValues, teamId).Find(&trustedContacts).Error; err != nil {
+func populateContacts(searchValues []string, teamId string) (newSearchValues []string, foundContactEmails []string, err error) {
+	var contacts []models.Contact
+	var contactEmails []string
+	if err := database.DB.Where("value IN ? AND team_id = ?", searchValues, teamId).Find(&contacts).Error; err != nil {
 		return nil, nil, err
 	}
-	for _, trustedContact := range trustedContacts {
-		trustedContactEmails = append(trustedContactEmails, trustedContact.Value)
+	for _, contact := range contacts {
+		contactEmails = append(contactEmails, contact.Value)
 	}
-	searchValues = removeElements(searchValues, trustedContactEmails)
-	return searchValues, trustedContactEmails, nil
+	searchValues = removeElements(searchValues, contactEmails)
+	return searchValues, contactEmails, nil
 }
-func populateVerifiedContacts(searchValues []string) (newSearchValues []string, foundTrustedContactEmails []string, err error) {
+func populateVerifiedContacts(searchValues []string) (newSearchValues []string, foundContactEmails []string, err error) {
 	var channels []models.Channel
 	var verifiedEmails []string
 	if err := database.DB.Where("value IN ?", searchValues).Find(&channels).Error; err != nil {
 		return nil, nil, err
 	}
-	for _, trustedContact := range channels {
-		verifiedEmails = append(verifiedEmails, trustedContact.Value)
+	for _, contact := range channels {
+		verifiedEmails = append(verifiedEmails, contact.Value)
 	}
 	searchValues = removeElements(searchValues, verifiedEmails)
 	return searchValues, verifiedEmails, nil

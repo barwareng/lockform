@@ -22,7 +22,7 @@ func InitRoutes(app *fiber.App) {
 	userRoutes(protected)
 	memberRoutes(protected)
 	channelRoutes(protected)
-	trustedContactRoutes(protected)
+	contactRoutes(protected)
 	protected.Post("/verification", middleware.ValidateTeam, controllers.VerifyEmailsFromAddon)
 	// Public Channels
 	public := app.Group("/public")

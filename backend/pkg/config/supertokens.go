@@ -209,7 +209,7 @@ func SupertokensInit() {
 
 					},
 				},
-				ExposeAccessTokenToFrontendInCookieBasedAuth: true,
+				// ExposeAccessTokenToFrontendInCookieBasedAuth: true,
 				CookieSecure:   &cookieSecure,
 				CookieDomain:   &cookieDomain,
 				CookieSameSite: &cookieSameSite,

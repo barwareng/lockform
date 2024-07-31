@@ -1,7 +1,6 @@
 package config
 
 import (
-	"net/http"
 	"os"
 	"strings"
 
@@ -31,25 +30,25 @@ func SupertokensInit() {
 			ConnectionURI: os.Getenv("SUPERTOKENS_CONNECTION_URI"),
 		},
 		AppInfo: supertokens.AppInfo{
-			AppName:   os.Getenv("APP_NAME"),
-			APIDomain: os.Getenv("SUPERTOKENS_API_DOMAIN"),
-			// WebsiteDomain:   os.Getenv("SUPERTOKENS_FRONTEND_DOMAIN"),
-			GetOrigin: func(request *http.Request, userContext supertokens.UserContext) (string, error) {
-				if request != nil {
-					origin := request.Header.Get("origin")
-					if origin == "" {
-						// this means the client is in an iframe, it's a mobile app, or
-						// there is a privacy setting on the frontend which doesn't send
-						// the origin
-					} else {
-						if origin == "https://script.google.com" {
-							// query from the test site
-							return "https://script.google.com", nil
-						}
-					}
-				}
-				return os.Getenv("SUPERTOKENS_FRONTEND_DOMAIN"), nil
-			},
+			AppName:       os.Getenv("APP_NAME"),
+			APIDomain:     os.Getenv("SUPERTOKENS_API_DOMAIN"),
+			WebsiteDomain: os.Getenv("SUPERTOKENS_FRONTEND_DOMAIN"),
+			// GetOrigin: func(request *http.Request, userContext supertokens.UserContext) (string, error) {
+			// 	if request != nil {
+			// 		origin := request.Header.Get("origin")
+			// 		if origin == "" {
+			// 			// this means the client is in an iframe, it's a mobile app, or
+			// 			// there is a privacy setting on the frontend which doesn't send
+			// 			// the origin
+			// 		} else {
+			// 			if origin == "https://script.google.com" {
+			// 				// query from the test site
+			// 				return "https://script.google.com", nil
+			// 			}
+			// 		}
+			// 	}
+			// 	return os.Getenv("SUPERTOKENS_FRONTEND_DOMAIN"), nil
+			// },
 			APIBasePath:     &apiBasePath,
 			WebsiteBasePath: &websiteBasePath,
 		},
@@ -209,9 +208,9 @@ func SupertokensInit() {
 
 					},
 				},
+				CookieSameSite: &cookieSameSite,
 				CookieSecure:   &cookieSecure,
 				CookieDomain:   &cookieDomain,
-				CookieSameSite: &cookieSameSite,
 			}),
 		},
 	})

@@ -18,7 +18,8 @@ export const handle = (async ({ event, resolve }) => {
 	// This avoids the infinite redirect issue in (https://supertokens.com/docs/thirdparty/common-customizations/sessions/ssr#why-do-we-trigger-the-refresh-session-flow-instead-of-redirecting-the-user-to-the-login-page-directly)
 	// because we have separate handling for a present but expired/invalid jwt token below
 	if (!jwt) {
-		event.cookies.delete('teamId', { path: '/' });
+
+		event.cookies.delete('teamId', { path: '/' }); // Delete team id, so the next logged in user does not access it.
 		if (!isPublicRoute(event.url.pathname)) {
 			throw redirect(302, '/signin');
 		} else {
@@ -64,6 +65,7 @@ export async function handleFetch({ event, request, fetch }) {
 	if (request.url.startsWith(VITE_API_BASE_URL)) {
 		const cookie = event.request.headers.get('cookie');
 		if (cookie) {
+			console.log('Cookie', cookie)
 			request.headers.set('cookie', cookie);
 		}
 	}

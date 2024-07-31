@@ -22,6 +22,7 @@ import {
 import { goto, invalidateAll } from '$app/navigation';
 import { deleteTeamCookie } from '$utils';
 import { toastError, toastSuccess } from './toasts';
+// recei
 export const supertokensInit = () => {
 	SuperTokens.init({
 		appInfo: {
@@ -33,7 +34,8 @@ export const supertokensInit = () => {
 			EmailVerification.init(),
 			Session.init({
 				autoAddCredentials: true,
-				sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
+				// sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined,
+				// sessionTokenFrontendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined,
 			}),
 			ThirdPartyEmailPassword.init()
 		]

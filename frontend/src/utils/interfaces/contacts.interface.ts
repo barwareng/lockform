@@ -3,7 +3,7 @@ export enum CONTACT {
     PHONE = 'phone',
     ADDRESS = 'address'
 }
-export interface ITrustedContact {
+export interface IContact {
     id: number
     value: string
     label: string

@@ -5,26 +5,26 @@
 	import { PhoneIcon } from 'lucide-svelte';
 	import PhoneNumber from '$lib/components/reusable/inputs/PhoneNumber.svelte';
 	import { parsePhoneNumber } from 'libphonenumber-js';
-	import { CONTACT, type ITrustedContact } from '$utils/interfaces/trusted-contacts.interface';
-	export let trustedContact: Partial<ITrustedContact> = {
+	import { CONTACT, type IContact } from '$utils/interfaces/contacts.interface';
+	export let contact: Partial<IContact> = {
 		type: CONTACT.PHONE
 	};
 	let open = false;
 	export let isEditing = false;
-	$: if (trustedContact.value) {
-		trustedContact.value = parsePhoneNumber(trustedContact.value)?.formatInternational();
+	$: if (contact.value) {
+		contact.value = parsePhoneNumber(contact.value)?.formatInternational();
 	}
 </script>
 
-<BaseDialog title="Phone" icon={PhoneIcon} bind:open bind:isEditing bind:trustedContact>
+<BaseDialog title="Phone" icon={PhoneIcon} bind:open bind:isEditing bind:contact>
 	<div class="space-y-3">
 		<div class="flex-1 space-y-1">
 			<Label>Number</Label>
-			<PhoneNumber bind:phoneNumber={trustedContact.value} />
+			<PhoneNumber bind:phoneNumber={contact.value} />
 		</div>
 		<div class="flex-1 space-y-1">
 			<Label>Label <span class="text-muted-foreground text-[10px]">(optional)</span></Label>
-			<Input type="text" bind:value={trustedContact.label} placeholder="e.g Work" />
+			<Input type="text" bind:value={contact.label} placeholder="e.g Work" />
 		</div>
 	</div>
 </BaseDialog>

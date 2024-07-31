@@ -23,6 +23,7 @@ import (
 func SupertokensInit() {
 	cookieDomain := os.Getenv("SUPERTOKENS_COOKIE_DOMAIN")
 	cookieSecure := true
+	cookieSameSite := "lax"
 	apiBasePath := "/auth"
 	websiteBasePath := "/auth"
 	err := supertokens.Init(supertokens.TypeInput{
@@ -208,8 +209,9 @@ func SupertokensInit() {
 
 					},
 				},
-				CookieSecure: &cookieSecure,
-				CookieDomain: &cookieDomain,
+				CookieSecure:   &cookieSecure,
+				CookieDomain:   &cookieDomain,
+				CookieSameSite: &cookieSameSite,
 			}),
 		},
 	})

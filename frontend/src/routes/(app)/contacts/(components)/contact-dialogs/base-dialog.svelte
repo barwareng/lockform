@@ -6,19 +6,18 @@
 	import { client } from '$lib/api/Client';
 	import { invalidateAll } from '$app/navigation';
 	import { toastError, toastSuccess } from '$utils/toasts';
-	import { CONTACT, type ITrustedContact } from '$utils/interfaces/trusted-contacts.interface';
+	import { CONTACT, type IContact } from '$utils/interfaces/contacts.interface';
 	export let icon: any;
 	export let title: string;
 	export let open = false;
 	export let isEditing = false;
 	let isSaving = false;
-	export let trustedContact: Partial<ITrustedContact> = {};
+	export let contact: Partial<IContact> = {};
 	const saveContact = async () => {
 		try {
 			isSaving = true;
-			if (trustedContact.type == CONTACT.PHONE)
-				trustedContact.value = trustedContact.value?.replaceAll(' ', '');
-			await client.trustedContacts.create(trustedContact);
+			if (contact.type == CONTACT.PHONE) contact.value = contact.value?.replaceAll(' ', '');
+			await client.contacts.create(contact);
 			await invalidateAll();
 			isSaving = false;
 			open = false;

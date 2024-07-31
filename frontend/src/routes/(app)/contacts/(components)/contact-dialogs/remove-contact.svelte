@@ -6,16 +6,16 @@
 	import { toastError, toastSuccess } from '$utils/toasts';
 	import { Button } from '$lib/components/ui/button';
 	export let id: number;
-	let removingTrustedContact = false;
-	const removeTrustedContact = async () => {
+	let removingContact = false;
+	const removeContact = async () => {
 		try {
-			removingTrustedContact = true;
-			await client.trustedContacts.delete({ id });
-			removingTrustedContact = false;
+			removingContact = true;
+			await client.contacts.delete({ id });
+			removingContact = false;
 			invalidateAll();
 			toastSuccess('Contact has been removed.');
 		} catch (error) {
-			removingTrustedContact = false;
+			removingContact = false;
 			toastError(error);
 		}
 	};
@@ -41,8 +41,8 @@
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<AlertDialog.Action disabled={removingTrustedContact} on:click={removeTrustedContact}>
-				<ButtonLoadingSpinner bind:state={removingTrustedContact} />
+			<AlertDialog.Action disabled={removingContact} on:click={removeContact}>
+				<ButtonLoadingSpinner bind:state={removingContact} />
 				Continue
 			</AlertDialog.Action>
 		</AlertDialog.Footer>

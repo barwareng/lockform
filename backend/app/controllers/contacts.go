@@ -7,18 +7,18 @@ import (
 	"github.com/supertokens/supertokens-golang/recipe/session"
 )
 
-func SaveTrustedContact(c *fiber.Ctx) error {
-	trustedContact := &models.TrustedContact{}
-	if err := c.BodyParser(trustedContact); err != nil {
+func SaveContact(c *fiber.Ctx) error {
+	contact := &models.Contact{}
+	if err := c.BodyParser(contact); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
 	sessionContainer := session.GetSessionFromRequestContext(c.Context())
-	trustedContact.AddedByID = sessionContainer.GetUserID()
-	trustedContact.TeamID = c.Locals("teamId").(string)
-	if err := database.DB.Save(&trustedContact).Error; err != nil {
+	contact.AddedByID = sessionContainer.GetUserID()
+	contact.TeamID = c.Locals("teamId").(string)
+	if err := database.DB.Save(&contact).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
@@ -27,14 +27,14 @@ func SaveTrustedContact(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,
-		"data":  trustedContact,
+		"data":  contact,
 	})
 }
 
-func GetTrustedContacts(c *fiber.Ctx) error {
-	var trustedContacts []models.TrustedContact
+func GetContacts(c *fiber.Ctx) error {
+	var contacts []models.Contact
 	teamId := c.Locals("teamId").(string)
-	if err := database.DB.Find(&trustedContacts, &models.TrustedContact{TeamID: teamId}).Error; err != nil {
+	if err := database.DB.Find(&contacts, &models.Contact{TeamID: teamId}).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
@@ -43,19 +43,19 @@ func GetTrustedContacts(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,
-		"data":  trustedContacts,
+		"data":  contacts,
 	})
 }
 
-func RemoveTrustedContact(c *fiber.Ctx) error {
-	trustedContact := &models.TrustedContact{}
-	if err := c.QueryParser(trustedContact); err != nil {
+func RemoveContact(c *fiber.Ctx) error {
+	contact := &models.Contact{}
+	if err := c.QueryParser(contact); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	if err := database.DB.Delete(&trustedContact).Error; err != nil {
+	if err := database.DB.Delete(&contact).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),

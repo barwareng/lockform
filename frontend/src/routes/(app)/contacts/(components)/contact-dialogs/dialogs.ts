@@ -1,5 +1,5 @@
 
-import { CONTACT } from '$utils/interfaces/trusted-contacts.interface';
+import { CONTACT } from '$utils/interfaces/contacts.interface';
 import AddressDialog from './address-dialog.svelte';
 import EmailDialog from './email-dialog.svelte';
 import PhoneDialog from './phone-dialog.svelte';

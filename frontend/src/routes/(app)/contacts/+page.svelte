@@ -13,13 +13,13 @@
 	import { Button } from '$lib/components/ui/button';
 	import parsePhoneNumber from 'libphonenumber-js';
 	import ListContactOptionsDialog from './(components)/list-contact-options-dialog.svelte';
-	import { CONTACT } from '$utils/interfaces/trusted-contacts.interface';
-	import RemoveTrustedContact from './(components)/contact-dialogs/remove-trusted-contact.svelte';
+	import { CONTACT } from '$utils/interfaces/contacts.interface';
+	import RemoveContact from './(components)/contact-dialogs/remove-contact.svelte';
 	import { contactDialogs } from './(components)/contact-dialogs/dialogs';
 
 	export let data: PageData;
-	$: ({ trustedContacts } = data);
-	$: loadingTrustedContacts = data.loadingTrustedContacts ?? true;
+	$: ({ contacts } = data);
+	$: loadingContacts = data.loadingContacts ?? true;
 	const getIcon = (type: CONTACT) => {
 		let icon: any;
 		switch (type) {
@@ -38,17 +38,17 @@
 </script>
 
 <MetaTags
-	title="{VITE_APP_NAME} | Trusted Contacts"
-	description="Manage all the contacts trusted by you organization. This includes those add from add-ons from different workspaces like GMail, Outlook, etc."
+	title="{VITE_APP_NAME} | Contacts"
+	description="Manage all your organization's contacts. This includes those add from add-ons from different workspaces like GMail, Outlook, etc."
 />
 <div class="relative pb-16">
 	<div class="bg-background sticky top-0 z-10">
 		<div class="flex flex-col items-start gap-6 md:flex-row md:justify-between">
 			<div class="space-y-0.5">
-				<h2 class="text-2xl font-bold tracking-tight">Trusted Contacts</h2>
+				<h2 class="text-2xl font-bold tracking-tight">Contacts</h2>
 				<p class="text-muted-foreground max-w-lg text-sm">
-					Manage all the contacts trusted by you organization. This includes those add from add-ons
-					from different workspaces like GMail, Outlook etc.
+					Manage all your organization's contacts. This includes those add from add-ons from
+					different workspaces like GMail, Outlook etc.
 				</p>
 			</div>
 			{#if requireRoles([ROLE_VALUES.ADMIN, ROLE_VALUES.OWNER])}
@@ -57,9 +57,9 @@
 		</div>
 		<Separator class="my-6" />
 	</div>
-	{#if loadingTrustedContacts}
+	{#if loadingContacts}
 		<LoadingSpinner />
-	{:else if trustedContacts?.length}
+	{:else if contacts?.length}
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
@@ -75,25 +75,23 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#each trustedContacts as trustedContact}
-					{@const icon = getIcon(trustedContact.type)}
-					{@const dialog = contactDialogs.find((d) => d.type == trustedContact.type)}
+				{#each contacts as contact}
+					{@const icon = getIcon(contact.type)}
+					{@const dialog = contactDialogs.find((d) => d.type == contact.type)}
 					<Table.Row>
 						<Table.Cell class="hidden sm:table-cell">
 							<svelte:component this={icon} class="h-6 w-6" />
 						</Table.Cell>
-						{#if trustedContact.type == CONTACT.PHONE}
+						{#if contact.type == CONTACT.PHONE}
 							<Table.Cell class="font-medium"
-								>{parsePhoneNumber(trustedContact.value)?.formatInternational()}</Table.Cell
+								>{parsePhoneNumber(contact.value)?.formatInternational()}</Table.Cell
 							>
 						{:else}
-							<Table.Cell class="font-medium">{trustedContact.value}</Table.Cell>
+							<Table.Cell class="font-medium">{contact.value}</Table.Cell>
 						{/if}
-						<Table.Cell class="hidden md:table-cell">{trustedContact.label || '--'}</Table.Cell>
-						<Table.Cell class="hidden md:table-cell">{trustedContact.domain || '--'}</Table.Cell>
-						<Table.Cell class="hidden md:table-cell"
-							>{trustedContact.addedBy?.name || ''}</Table.Cell
-						>
+						<Table.Cell class="hidden md:table-cell">{contact.label || '--'}</Table.Cell>
+						<Table.Cell class="hidden md:table-cell">{contact.domain || '--'}</Table.Cell>
+						<Table.Cell class="hidden md:table-cell">{contact.addedBy?.name || ''}</Table.Cell>
 						{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
 							<Table.Cell class="text-right">
 								<DropdownMenu.Root>
@@ -105,10 +103,10 @@
 									</DropdownMenu.Trigger>
 									<DropdownMenu.Content align="end">
 										<DropdownMenu.Label>Actions</DropdownMenu.Label>
-										{#if dialog?.component && trustedContact}
-											<svelte:component this={dialog.component} {trustedContact} isEditing />
+										{#if dialog?.component && contact}
+											<svelte:component this={dialog.component} {contact} isEditing />
 										{/if}
-										<RemoveTrustedContact id={trustedContact.id} />
+										<RemoveContact id={contact.id} />
 									</DropdownMenu.Content>
 								</DropdownMenu.Root>
 							</Table.Cell>
@@ -119,8 +117,8 @@
 		</Table.Root>
 	{:else}
 		<EmptyState
-			title="No trusted contacts yet"
-			subtitle="When you add your team's trusted contacts, they will show up here."
+			title="No contacts yet"
+			subtitle="When you add your team's contacts, they will show up here."
 		>
 			<div slot="leading-icon"><ContactIcon class="h-12 w-12" /></div>
 			{#if requireRoles([ROLE_VALUES.ADMIN, ROLE_VALUES.OWNER])}

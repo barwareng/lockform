@@ -1,5 +1,8 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
-	export let data: PageData;
+	import { MetaTags } from 'svelte-meta-tags';
+	import { VITE_APP_NAME } from '$lib/env';
+	import WipPlaceHolder from '$lib/components/reusable/WIPPlaceHolder.svelte';
 </script>
+
+<MetaTags title="{VITE_APP_NAME} | Domains" />
+<WipPlaceHolder />

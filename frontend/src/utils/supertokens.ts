@@ -32,8 +32,8 @@ export const supertokensInit = () => {
 		recipeList: [
 			EmailVerification.init(),
 			Session.init({
-				autoAddCredentials: true
-				// sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
+				autoAddCredentials: true,
+				sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined
 			}),
 			ThirdPartyEmailPassword.init()
 		]
@@ -120,13 +120,12 @@ export const signinWithEmailAndPassword = async (email: string, password: string
 };
 
 export const oauthLogin = async (thirdPartyId: 'google' | 'github') => {
-	console.log('Ouath');
 	try {
 		const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
 			thirdPartyId,
 			frontendRedirectURI: `${VITE_APP_BASE_URL}/oauth-callback/${thirdPartyId}`
 		});
-		window.location = authUrl;
+		window.location.href = authUrl;
 	} catch (err: any) {
 		toastError(err);
 	}
@@ -176,8 +175,6 @@ export const consumeVerificationCode = async () => {
 	try {
 		const response = await verifyEmail();
 		if (response.status === 'EMAIL_VERIFICATION_INVALID_TOKEN_ERROR') {
-			// toastError('The verification link is expired or invalid. Please try again.');
-			if (err?.status >= 400 && err?.status < 500) goto('/signin', { invalidateAll: true });
 			goto('/verify-email/failed', { invalidateAll: true });
 		} else {
 			goto('/verify-email/success');

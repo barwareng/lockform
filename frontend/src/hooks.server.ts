@@ -49,34 +49,6 @@ export const handle = (async ({ event, resolve }) => {
 			throw redirect(302, '/settings/profile');
 		}
 	}
-	// try {
-	// 	const { payload } = await jose.jwtVerify(jwt, JWKS);
-
-	// 	if (payload && typeof payload === 'object') {
-	// 		// Prevent access until email verification is complete
-	// 		const isEmailVerified = (payload as any)['st-ev'].v;
-	// 		if (!isEmailVerified) {
-	// 			throw redirect(302, '/verify-email/request-verification');
-	// 		}
-
-	// 		// Handle onboarding
-	// 		const isOnboarded = !!(payload as any)['isOnboarded'];
-	// 		if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
-	// 			throw redirect(302, '/settings/profile');
-	// 		}
-	// 	}
-	// } catch (err) {
-	// 	if (!isPublicRoute(event.url.pathname)) {
-	// 		const redirectBack =
-	// 			event.url.href.replace(event.url.origin, '') !== '/'
-	// 				? `?redirectBack=${event.url.href.replace(event.url.origin, '')}`
-	// 				: '';
-	// 		throw redirect(302, `/refresh-session${redirectBack}`);
-	// 	}
-	// 	console.log('JWKS err:', err)
-	// 	throw err;
-	// }
-
 	const response = await resolve(event);
 	return response;
 }) satisfies Handle;

@@ -18,7 +18,6 @@ export const handle = (async ({ event, resolve }) => {
 	// This avoids the infinite redirect issue in (https://supertokens.com/docs/thirdparty/common-customizations/sessions/ssr#why-do-we-trigger-the-refresh-session-flow-instead-of-redirecting-the-user-to-the-login-page-directly)
 	// because we have separate handling for a present but expired/invalid jwt token below
 	if (!jwt) {
-
 		event.cookies.delete('teamId', { path: '/' }); // Delete team id, so the next logged in user does not access it.
 		if (!isPublicRoute(event.url.pathname)) {
 			throw redirect(302, '/signin');
@@ -53,6 +52,7 @@ export const handle = (async ({ event, resolve }) => {
 					: '';
 			throw redirect(302, `/refresh-session${redirectBack}`);
 		}
+		console.log('JWKS err:', err)
 		throw err;
 	}
 

@@ -29,6 +29,8 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 	}
 	var err error
 	teamId := c.Locals("teamId").(string)
+	log.Info("Team ID: ", teamId)
+	// teamId := "cql4qfp7l2ilqk1si1ug"
 	verificationRequest.Values, verificationResponse.TeamMembers, err = populateTeamMember(verificationRequest.Values, teamId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -72,6 +74,7 @@ func populateTeamMember(searchValues []string, teamId string) (newSearchValues [
 	searchValues = removeElements(searchValues, teamMemberEmails)
 	return searchValues, teamMemberEmails, nil
 }
+
 func populateContacts(searchValues []string, teamId string) (newSearchValues []string, foundContactEmails []string, err error) {
 	var contacts []models.Contact
 	var contactEmails []string

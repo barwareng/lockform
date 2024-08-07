@@ -16,6 +16,7 @@
 	import { CONTACT } from '$utils/interfaces/contacts.interface';
 	import RemoveContact from './(components)/contact-dialogs/remove-contact.svelte';
 	import { contactDialogs } from './(components)/contact-dialogs/dialogs';
+	import { cn } from '$lib/utils';
 
 	export let data: PageData;
 	$: ({ contacts } = data);
@@ -42,11 +43,11 @@
 	description="Manage all your organization's contacts. This includes those add from add-ons from different workspaces like GMail, Outlook, etc."
 />
 <div class="relative pb-16">
-	<div class="sticky top-0 z-10 bg-background">
+	<div class="bg-background sticky top-0 z-10">
 		<div class="flex flex-col items-start gap-6 md:flex-row md:justify-between">
 			<div class="space-y-0.5">
 				<h2 class="text-2xl font-bold tracking-tight">Contacts</h2>
-				<p class="max-w-lg text-sm text-muted-foreground">
+				<p class="text-muted-foreground max-w-lg text-sm">
 					Manage all your organization's contacts. This includes those add from add-ons from
 					different workspaces like GMail, Outlook etc.
 				</p>
@@ -63,11 +64,12 @@
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head class="hidden w-[100px] sm:table-cell">Contact</Table.Head>
-					<Table.Head>Value</Table.Head>
-					<Table.Head class="hidden md:table-cell">Label</Table.Head>
+					<Table.Head>Contact</Table.Head>
+					<Table.Head>Trusted</Table.Head>
+					<Table.Head class="hidden sm:table-cell">Added By</Table.Head>
 					<Table.Head class="hidden md:table-cell">Domain</Table.Head>
-					<Table.Head class="hidden md:table-cell">Added By</Table.Head>
+					<Table.Head class="hidden md:table-cell">URL</Table.Head>
+					<!-- <Table.Head class="hidden md:table-cell">Category</Table.Head> -->
 
 					{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
 						<Table.Head class="sr-only">Action</Table.Head>
@@ -79,19 +81,37 @@
 					{@const icon = getIcon(contact.type)}
 					{@const dialog = contactDialogs.find((d) => d.type == contact.type)}
 					<Table.Row>
-						<Table.Cell class="hidden sm:table-cell">
-							<svelte:component this={icon} class="h-6 w-6" />
+						<Table.Cell class="flex items-center gap-x-2">
+							<div>
+								<svelte:component this={icon} class="h-6 !w-6" />
+							</div>
+							<div>
+								<p class="whitespace-nowrap">
+									{contact.label || ''}
+								</p>
+								<p class="text-xs opacity-75">
+									{#if contact.type == CONTACT.PHONE}
+										{parsePhoneNumber(contact.value)?.formatInternational()}
+									{:else}
+										{contact.value}
+									{/if}
+								</p>
+							</div>
 						</Table.Cell>
-						{#if contact.type == CONTACT.PHONE}
-							<Table.Cell class="font-medium"
-								>{parsePhoneNumber(contact.value)?.formatInternational()}</Table.Cell
-							>
-						{:else}
-							<Table.Cell class="font-medium">{contact.value}</Table.Cell>
-						{/if}
-						<Table.Cell class="hidden md:table-cell">{contact.label || '--'}</Table.Cell>
+
+						<Table.Cell>{contact.isTrusted ? 'Yes' : 'No'}</Table.Cell>
+						<Table.Cell class="hidden sm:table-cell">
+							<div>
+								<p class="whitespace-nowrap">
+									{contact.addedBy?.name || ''}
+								</p>
+								<p class="text-xs opacity-75">
+									{contact.addedBy?.email}
+								</p>
+							</div>
+						</Table.Cell>
 						<Table.Cell class="hidden md:table-cell">{contact.domain || '--'}</Table.Cell>
-						<Table.Cell class="hidden md:table-cell">{contact.addedBy?.name || ''}</Table.Cell>
+						<Table.Cell class="hidden md:table-cell">{contact.url || '--'}</Table.Cell>
 						{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
 							<Table.Cell class="text-right">
 								<DropdownMenu.Root>

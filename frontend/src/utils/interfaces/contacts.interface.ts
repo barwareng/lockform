@@ -28,5 +28,6 @@ export interface IContactList extends IContact, ITeamContact {
 	addedBy: {
 		id: string;
 		name: string;
+		email: string;
 	};
 }

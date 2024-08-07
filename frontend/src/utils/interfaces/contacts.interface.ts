@@ -14,15 +14,20 @@ export interface IContact {
 	category: ContactCategory;
 }
 
-export interface TeamContact {
+export interface ITeamContact {
 	id: number;
 	contactId: number;
 	teamId: string;
 	addedById: string;
-	isTrusted: string;
+	isTrusted: boolean;
 	reasonForUntrusting: string;
 	addedBy?: {
 		id: string;
 		name: string;
 	};
+}
+
+export interface ISaveContactBody {
+	contact: Partial<IContact>;
+	teamContact: Partial<ITeamContact>;
 }

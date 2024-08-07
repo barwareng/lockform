@@ -27,6 +27,7 @@ export const handle = (async ({ event, resolve }) => {
 		}
 	}
 	const JWKS = jose.createRemoteJWKSet(new URL(`${VITE_API_BASE_URL}/auth/jwt/jwks.json`));
+	// @ts-ignore
 	const { payload } = await jose.jwtVerify(jwt, JWKS).catch(async (err) => {
 		if (!isPublicRoute(event.url.pathname)) {
 			const redirectBack =
@@ -58,7 +59,6 @@ export async function handleFetch({ event, request, fetch }) {
 	if (request.url.startsWith(VITE_API_BASE_URL)) {
 		const cookie = event.request.headers.get('cookie');
 		if (cookie) {
-			console.log('Cookie', cookie);
 			request.headers.set('cookie', cookie);
 		}
 	}

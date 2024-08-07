@@ -15,25 +15,25 @@ If it does exist, associate it with the adding team/individual
 */
 func SaveContact(c *fiber.Ctx) error {
 	type SaveContactRequest struct {
-		contact     models.Contact
-		teamContact models.TeamContact
+		Contact     models.Contact     `json:"contact"`
+		TeamContact models.TeamContact `json:"teamContact"`
 	}
 	saveContactRequest := SaveContactRequest{}
-	if err := c.BodyParser(saveContactRequest); err != nil {
+	if err := c.BodyParser(&saveContactRequest); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
 	if err := database.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Where(models.Contact{Value: saveContactRequest.contact.Value, Type: saveContactRequest.contact.Value}).FirstOrCreate(&saveContactRequest.contact).Error; err != nil {
+		if err := tx.Where(models.Contact{Value: saveContactRequest.Contact.Value, Type: saveContactRequest.Contact.Value}).FirstOrCreate(&saveContactRequest.Contact).Error; err != nil {
 			return err
 		}
 		sessionContainer := session.GetSessionFromRequestContext(c.Context())
-		saveContactRequest.teamContact.ContactID = saveContactRequest.contact.ID
-		saveContactRequest.teamContact.AddedByID = sessionContainer.GetUserID()
-		saveContactRequest.teamContact.TeamID = c.Locals("teamId").(string)
-		if err := tx.Where(models.TeamContact{ContactID: saveContactRequest.contact.ID, TeamID: saveContactRequest.teamContact.AddedByID}).FirstOrCreate(&saveContactRequest.teamContact).Error; err != nil {
+		saveContactRequest.TeamContact.ContactID = saveContactRequest.Contact.ID
+		saveContactRequest.TeamContact.AddedByID = sessionContainer.GetUserID()
+		saveContactRequest.TeamContact.TeamID = c.Locals("teamId").(string)
+		if err := tx.Where(models.TeamContact{ContactID: saveContactRequest.Contact.ID, TeamID: saveContactRequest.TeamContact.TeamID}).FirstOrCreate(&saveContactRequest.TeamContact).Error; err != nil {
 			return err
 		}
 		return nil

@@ -25,7 +25,7 @@
 			<Card.Description>Enter your email below to create your account</Card.Description>
 		</Card.Header>
 		<Card.Content class="grid gap-4">
-			<Button variant="outline" on:click={() => oauthLogin('google')}>
+			<!-- <Button variant="outline" on:click={() => oauthLogin('google')}>
 				<Google class="mr-2 h-4 w-4" />
 				Google
 			</Button>
@@ -36,13 +36,13 @@
 				<div class="relative flex justify-center text-xs uppercase">
 					<span class="bg-card px-2 text-muted-foreground"> Or continue with </span>
 				</div>
-			</div>
+			</div> -->
 			<div class="grid gap-2">
 				<Label for="email">Email</Label>
 				<Input id="email" type="email" bind:value={email} placeholder="m@example.com" />
 				{#if emailErrors.length}
 					{#each emailErrors as error}
-						<div class="flex items-center gap-x-1 text-xs text-destructive">
+						<div class="text-destructive flex items-center gap-x-1 text-xs">
 							<TriangleAlertIcon class="h-3 w-3" />
 							<p class="">{error}</p>
 						</div>
@@ -54,7 +54,7 @@
 				<Input id="password" type="password" bind:value={password} />
 				{#if passwordErrors.length}
 					{#each passwordErrors as error}
-						<div class="flex items-center gap-x-1 text-xs text-destructive">
+						<div class="text-destructive flex items-center gap-x-1 text-xs">
 							<TriangleAlertIcon class="h-3 w-3" />
 							<p class="">{error}</p>
 						</div>

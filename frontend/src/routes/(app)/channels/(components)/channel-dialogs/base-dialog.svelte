@@ -2,8 +2,8 @@
 	import * as Popover from '$lib/components/ui/popover';
 	import { Button } from '$lib/components/ui/button';
 	import { Switch } from '$lib/components/ui/switch';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import { Label } from '$lib/components/ui/label';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
 	import { CHANNEL, type IChannel } from '$utils/interfaces/channels.interface';
 	import { client } from '$lib/api/Client';

@@ -19,6 +19,7 @@ export const toastError = async (error: any) => {
 	} else if (error?.status >= 400 && error?.status < 500) {
 		errorString = await error.json();
 	} else errorString = 'Something went wrong. Please try again.';
+	console.log('gote here');
 	toast.error(errorString);
 };
 export const toastSuccess = (message: string) => {

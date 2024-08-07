@@ -16,18 +16,17 @@ export interface IContact {
 
 export interface ITeamContact {
 	id: number;
-	contactId: number;
-	teamId: string;
-	addedById: string;
 	isTrusted: boolean;
 	reasonForUntrusting: string;
-	addedBy?: {
-		id: string;
-		name: string;
-	};
 }
 
 export interface ISaveContactBody {
 	contact: Partial<IContact>;
 	teamContact: Partial<ITeamContact>;
+}
+export interface IContactList extends IContact, ITeamContact {
+	addedBy: {
+		id: string;
+		name: string;
+	};
 }

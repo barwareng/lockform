@@ -19,11 +19,19 @@
 	<div class="space-y-3">
 		<div class="flex-1 space-y-1">
 			<Label>Value</Label>
-			<Input type="email" bind:value={saveContactBody.contact.value} placeholder="mail@acme.com" />
+			<Input
+				type="email"
+				bind:value={saveContactBody.contact.value}
+				placeholder="support@acme.com"
+			/>
 		</div>
 		<div class="flex-1 space-y-1">
 			<Label>Label <span class="text-muted-foreground text-[10px]">(optional)</span></Label>
-			<Input type="text" bind:value={saveContactBody.contact.label} placeholder="e.g Work" />
+			<Input
+				type="text"
+				bind:value={saveContactBody.contact.label}
+				placeholder="Acme Corp Support"
+			/>
 		</div>
 	</div>
 </BaseDialog>

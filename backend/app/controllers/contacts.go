@@ -25,8 +25,9 @@ func SaveContact(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
+	// log.Info(saveContactRequest.Contact)
 	if err := database.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Where(models.Contact{Value: saveContactRequest.Contact.Value, Type: saveContactRequest.Contact.Value}).FirstOrCreate(&saveContactRequest.Contact).Error; err != nil {
+		if err := tx.Where(models.Contact{Value: saveContactRequest.Contact.Value, Type: saveContactRequest.Contact.Type}).FirstOrCreate(&saveContactRequest.Contact).Error; err != nil {
 			return err
 		}
 		sessionContainer := session.GetSessionFromRequestContext(c.Context())

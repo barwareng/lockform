@@ -7,7 +7,7 @@ export const contactDialogs: {
 	component: any;
 	type: CONTACT;
 }[] = [
-	{ component: EmailDialog, type: CONTACT.EMAIL }
-	// { component: PhoneDialog, type: CONTACT.PHONE },
-	// { component: AddressDialog, type: CONTACT.ADDRESS }
+	{ component: EmailDialog, type: CONTACT.EMAIL },
+	{ component: PhoneDialog, type: CONTACT.PHONE },
+	{ component: AddressDialog, type: CONTACT.ADDRESS }
 ];

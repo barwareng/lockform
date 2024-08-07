@@ -42,11 +42,11 @@
 	description="Manage all your organization's contacts. This includes those add from add-ons from different workspaces like GMail, Outlook, etc."
 />
 <div class="relative pb-16">
-	<div class="bg-background sticky top-0 z-10">
+	<div class="sticky top-0 z-10 bg-background">
 		<div class="flex flex-col items-start gap-6 md:flex-row md:justify-between">
 			<div class="space-y-0.5">
 				<h2 class="text-2xl font-bold tracking-tight">Contacts</h2>
-				<p class="text-muted-foreground max-w-lg text-sm">
+				<p class="max-w-lg text-sm text-muted-foreground">
 					Manage all your organization's contacts. This includes those add from add-ons from
 					different workspaces like GMail, Outlook etc.
 				</p>

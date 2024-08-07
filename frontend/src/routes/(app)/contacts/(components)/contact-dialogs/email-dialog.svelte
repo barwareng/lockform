@@ -18,7 +18,7 @@
 			<Input type="email" bind:value={contact.value} placeholder="mail@acme.com" />
 		</div>
 		<div class="flex-1 space-y-1">
-			<Label>Label <span class="text-muted-foreground text-[10px]">(optional)</span></Label>
+			<Label>Label <span class="text-[10px] text-muted-foreground">(optional)</span></Label>
 			<Input type="text" bind:value={contact.label} placeholder="e.g Work" />
 		</div>
 	</div>

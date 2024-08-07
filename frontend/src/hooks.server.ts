@@ -58,7 +58,7 @@ export async function handleFetch({ event, request, fetch }) {
 	if (request.url.startsWith(VITE_API_BASE_URL)) {
 		const cookie = event.request.headers.get('cookie');
 		if (cookie) {
-			console.log('Cookie', cookie)
+			console.log('Cookie', cookie);
 			request.headers.set('cookie', cookie);
 		}
 	}

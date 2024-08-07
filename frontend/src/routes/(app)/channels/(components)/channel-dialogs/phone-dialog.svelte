@@ -25,7 +25,7 @@
 			<PhoneNumber bind:phoneNumber={channel.value} />
 		</div>
 		<div class="flex-1 space-y-1">
-			<Label>Label <span class="text-muted-foreground text-[10px]">(optional)</span></Label>
+			<Label>Label <span class="text-[10px] text-muted-foreground">(optional)</span></Label>
 			<Input type="text" bind:value={channel.label} placeholder="e.g Work" />
 		</div>
 	</div>

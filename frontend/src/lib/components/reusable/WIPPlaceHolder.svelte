@@ -22,7 +22,7 @@
 >
 	<TrafficConeIcon class="h-16 w-16" />
 	<h3 class="mt-2 text-sm font-semibold">WIP Feature</h3>
-	<p class="text-muted-foreground mt-1 max-w-md text-sm">
+	<p class="mt-1 max-w-md text-sm text-muted-foreground">
 		We are hard at work to get this feature in your hands. <br /> We'll let you know once it's ready.
 	</p>
 	<div class="mt-6 flex items-center">

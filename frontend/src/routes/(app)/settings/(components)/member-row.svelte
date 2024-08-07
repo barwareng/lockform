@@ -44,7 +44,7 @@
 						{member.lastName ?? ''}
 					</p>
 				{/if}
-				<p class="text-muted-foreground text-sm">{member.email ?? ''}</p>
+				<p class="text-sm text-muted-foreground">{member.email ?? ''}</p>
 			</div>
 			{#if $page.data.userId == member.id}
 				<Badge class="max-w-fit text-[10px] capitalize">YOU</Badge>
@@ -64,7 +64,7 @@
 					{#if updatingRole}
 						<ButtonLoadingSpinner bind:state={updatingRole} />
 					{:else}
-						<ChevronDownIcon class="text-muted-foreground ml-2 h-4 w-4" />
+						<ChevronDownIcon class="ml-2 h-4 w-4 text-muted-foreground" />
 					{/if}
 				</Button>
 			</Popover.Trigger>
@@ -83,7 +83,7 @@
 									class="flex flex-col items-start space-y-1 px-4 py-2"
 								>
 									<p>{role.name}</p>
-									<p class="text-muted-foreground text-left text-xs">
+									<p class="text-left text-xs text-muted-foreground">
 										{role.description}
 									</p>
 								</Command.Item>
@@ -97,7 +97,7 @@
 								class="flex  flex-col items-start space-y-1 px-4 py-2"
 							>
 								<p class="text-destructive">Remove</p>
-								<p class="text-destructive text-left text-xs">
+								<p class="text-left text-xs text-destructive">
 									Removes this member from your team.
 								</p>
 							</Command.Item>

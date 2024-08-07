@@ -12,7 +12,6 @@
 	let emailErrors: string[] = [];
 	let passwordErrors: string[] = [];
 	const signUp = async () => {
-		
 		const res = await signupWithEmailAndPassword(email, password);
 		emailErrors = res.emailErrors;
 		passwordErrors = res.passwordErrors;
@@ -35,7 +34,7 @@
 					<span class="w-full border-t" />
 				</div>
 				<div class="relative flex justify-center text-xs uppercase">
-					<span class="bg-card text-muted-foreground px-2"> Or continue with </span>
+					<span class="bg-card px-2 text-muted-foreground"> Or continue with </span>
 				</div>
 			</div>
 			<div class="grid gap-2">
@@ -43,7 +42,7 @@
 				<Input id="email" type="email" bind:value={email} placeholder="m@example.com" />
 				{#if emailErrors.length}
 					{#each emailErrors as error}
-						<div class="text-destructive flex items-center gap-x-1 text-xs">
+						<div class="flex items-center gap-x-1 text-xs text-destructive">
 							<TriangleAlertIcon class="h-3 w-3" />
 							<p class="">{error}</p>
 						</div>
@@ -55,7 +54,7 @@
 				<Input id="password" type="password" bind:value={password} />
 				{#if passwordErrors.length}
 					{#each passwordErrors as error}
-						<div class="text-destructive flex items-center gap-x-1 text-xs">
+						<div class="flex items-center gap-x-1 text-xs text-destructive">
 							<TriangleAlertIcon class="h-3 w-3" />
 							<p class="">{error}</p>
 						</div>

@@ -8,7 +8,7 @@ type TeamContact struct {
 	TeamID              string     `json:"teamId" gorm:"index"`
 	AddedByID           string     `json:"addedById" gorm:"index"`
 	IsTrusted           bool       `json:"isTrusted" gorm:"index"`
-	ReasonForUntrusting string     `json:"easonForUntrusting" gorm:"index"`
+	ReasonForUntrusting string     `json:"reasonForUntrusting" gorm:"index"`
 	CreatedAt           time.Time  `json:"createdAt"`
 	UpdatedAt           time.Time  `json:"updatedAt"`
 	DeletedAt           *time.Time `sql:"index" json:"-"`

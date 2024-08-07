@@ -52,7 +52,7 @@
 						<Popover.Trigger asChild let:builder>
 							<Button builders={[builder]} variant="outline" class="ml-auto">
 								{selectedRole.name}
-								<ChevronDownIcon class="text-muted-foreground ml-2 h-4 w-4" />
+								<ChevronDownIcon class="ml-2 h-4 w-4 text-muted-foreground" />
 							</Button>
 						</Popover.Trigger>
 						<Popover.Content class="p-0" align="end">
@@ -70,7 +70,7 @@
 												class="flex flex-col items-start space-y-1 px-4 py-2"
 											>
 												<p>{role.name}</p>
-												<p class="text-muted-foreground text-left text-sm">
+												<p class="text-left text-sm text-muted-foreground">
 													{role.description}
 												</p>
 											</Command.Item>

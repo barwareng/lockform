@@ -34,11 +34,11 @@
 	description="Manage your team and personal profile settings."
 />
 <div class="relative pb-16">
-	<div class="bg-background sticky top-0 z-10">
+	<div class="sticky top-0 z-10 bg-background">
 		<div class="flex flex-col items-start gap-6 md:flex-row md:justify-between">
 			<div class="space-y-0.5">
 				<h2 class="text-2xl font-bold tracking-tight">Settings</h2>
-				<p class="text-muted-foreground text-sm">Manage your team and personal profile settings.</p>
+				<p class="text-sm text-muted-foreground">Manage your team and personal profile settings.</p>
 			</div>
 		</div>
 		<Separator class="my-6" />

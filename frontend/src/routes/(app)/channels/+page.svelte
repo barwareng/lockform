@@ -44,11 +44,11 @@
 	description="Manage all the channels that your team uses to communicate"
 />
 <div class="relative pb-16">
-	<div class="bg-background sticky top-0 z-10">
+	<div class="sticky top-0 z-10 bg-background">
 		<div class="flex flex-col items-start gap-6 md:flex-row md:justify-between">
 			<div class="space-y-0.5">
 				<h2 class="text-2xl font-bold tracking-tight">Channels</h2>
-				<p class="text-muted-foreground text-sm">
+				<p class="text-sm text-muted-foreground">
 					Manage all the channels that your team uses to communicate
 				</p>
 			</div>

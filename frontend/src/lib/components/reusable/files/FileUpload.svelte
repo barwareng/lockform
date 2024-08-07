@@ -47,7 +47,7 @@
 </script>
 
 <FileDrop {handleFiles}>
-	<div class="hover:bg-muted flex w-fit gap-4 rounded border border-dashed">
+	<div class="flex w-fit gap-4 rounded border border-dashed hover:bg-muted">
 		<div class="flex aspect-square min-w-20 flex-col items-center justify-center">
 			{#if uploading}
 				<LoaderCircleIcon class="h-4 w-4 animate-spin" />

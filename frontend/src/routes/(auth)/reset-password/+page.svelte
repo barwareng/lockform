@@ -25,7 +25,7 @@
 				<Input id="email" type="email" bind:value={email} placeholder="m@example.com" />
 				{#if emailErrors?.length}
 					{#each emailErrors as error}
-						<div class="text-destructive flex items-center gap-x-1 text-xs">
+						<div class="flex items-center gap-x-1 text-xs text-destructive">
 							<TriangleAlertIcon class="h-3 w-3" />
 							<p class="">{error}</p>
 						</div>

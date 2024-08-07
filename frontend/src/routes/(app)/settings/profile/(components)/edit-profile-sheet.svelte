@@ -23,7 +23,7 @@
 	<Sheet.Content side={$isMobile ? 'bottom' : 'right'}>
 		<form class="flex max-h-screen min-h-full flex-col justify-between">
 			<div class="space-y-3 overflow-y-scroll px-1">
-				<Sheet.Header class="bg-background sticky top-0 mb-6">
+				<Sheet.Header class="sticky top-0 mb-6 bg-background">
 					<Sheet.Title>Edit profile</Sheet.Title>
 					<Sheet.Description class="text-xs">
 						Change how your profile will appear on the site.

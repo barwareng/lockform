@@ -66,7 +66,7 @@
 	<div class="flex flex-col justify-between md:flex-row md:items-center">
 		<div>
 			<h3 class="text-lg font-medium">Profile</h3>
-			<p class="text-muted-foreground text-sm">This is how others will see you on the site.</p>
+			<p class="text-sm text-muted-foreground">This is how others will see you on the site.</p>
 		</div>
 		<!-- <EditProfileSheet bind:profile /> -->
 	</div>

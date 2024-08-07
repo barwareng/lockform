@@ -33,7 +33,7 @@ export const supertokensInit = () => {
 		recipeList: [
 			EmailVerification.init(),
 			Session.init({
-				autoAddCredentials: true,
+				autoAddCredentials: true
 				// sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined,
 				// sessionTokenFrontendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined,
 			}),

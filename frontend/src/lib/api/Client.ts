@@ -45,7 +45,7 @@ export default class Client {
 	teams: TeamService;
 	members: MemberService;
 	channels: ChannelService;
-	contacts: ContactService
+	contacts: ContactService;
 	private cancelControllers: { [key: string]: AbortController } = {};
 	private enableAutoCancellation = true;
 

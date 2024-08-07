@@ -1,0 +1,51 @@
+<script lang="ts">
+	import { client } from '$lib/api/Client';
+	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { invalidateAll } from '$app/navigation';
+	import { toastError, toastSuccess } from '$utils/toasts';
+	import { Button } from '$lib/components/ui/button';
+	export let id: number;
+	export let isTrusted: boolean;
+	let updatingTrustworthiness = false;
+	const updateTrustworthiness = async () => {
+		try {
+			updatingTrustworthiness = true;
+			// await client.contacts.delete({ id });
+			updatingTrustworthiness = false;
+			invalidateAll();
+			toastSuccess(`Contact has been marked ${isTrusted ? 'untrusted' : 'trusted'}.`);
+		} catch (error) {
+			updatingTrustworthiness = false;
+			toastError(error);
+		}
+	};
+</script>
+
+<AlertDialog.Root>
+	<AlertDialog.Trigger asChild let:builder>
+		<Button
+			builders={[builder]}
+			variant="ghost"
+			size="sm"
+			class="flex w-full justify-start px-2 text-sm font-normal"
+		>
+			{isTrusted ? 'Untrust' : 'Trust'}
+		</Button>
+	</AlertDialog.Trigger>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+			<AlertDialog.Description>
+				This action cannot be undone. This will permanently remove this channel from your team.
+			</AlertDialog.Description>
+		</AlertDialog.Header>
+		<AlertDialog.Footer>
+			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+			<AlertDialog.Action disabled={updatingTrustworthiness} on:click={updateTrustworthiness}>
+				<ButtonLoadingSpinner bind:state={updatingTrustworthiness} />
+				Continue
+			</AlertDialog.Action>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>

@@ -9,11 +9,11 @@
 	});
 </script>
 
-<div class="w-full h-screen flex items-center justify-center">
+<div class="flex h-screen w-full items-center justify-center">
 	<Alert.Root variant="destructive" class="max-w-sm sm:max-w-md">
 		<Alert.Title class="text-base">Email Verification Error</Alert.Title>
 		<Alert.Description>Verification link is expired or token is invalid</Alert.Description>
-		<div class="flex justify-end mt-4 w-full">
+		<div class="mt-4 flex w-full justify-end">
 			<Button on:click={sendEmailVerificationLink}>Resend Verification Link</Button>
 		</div>
 	</Alert.Root>

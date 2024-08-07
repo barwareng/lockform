@@ -11,7 +11,7 @@
 	{#if openMobileNav}
 		<aside
 			transition:slide
-			class="bg-background absolute z-40 min-h-screen w-5/6 min-w-[300px] max-w-40 shrink-0 basis-1/5 lg:hidden"
+			class="absolute z-40 min-h-screen w-5/6 min-w-[300px] max-w-40 shrink-0 basis-1/5 bg-background lg:hidden"
 		>
 			<Sidenav bind:openMobileNav />
 		</aside>
@@ -21,7 +21,7 @@
 	</aside>
 	<Separator orientation="vertical" />
 	<section class="min-h-screen flex-1 overflow-y-scroll px-6 pb-10 lg:px-10">
-		<div class="bg-background h-10">
+		<div class="h-10 bg-background">
 			<Button
 				size="icon"
 				variant="ghost"

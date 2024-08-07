@@ -12,7 +12,6 @@
 	let emailErrors: string[] = [];
 	let passwordErrors: string[] = [];
 	const signUp = async () => {
-		
 		const res = await signupWithEmailAndPassword(email, password);
 		emailErrors = res.emailErrors;
 		passwordErrors = res.passwordErrors;
@@ -26,7 +25,7 @@
 			<Card.Description>Enter your email below to create your account</Card.Description>
 		</Card.Header>
 		<Card.Content class="grid gap-4">
-			<Button variant="outline" on:click={() => oauthLogin('google')}>
+			<!-- <Button variant="outline" on:click={() => oauthLogin('google')}>
 				<Google class="mr-2 h-4 w-4" />
 				Google
 			</Button>
@@ -35,9 +34,9 @@
 					<span class="w-full border-t" />
 				</div>
 				<div class="relative flex justify-center text-xs uppercase">
-					<span class="bg-card text-muted-foreground px-2"> Or continue with </span>
+					<span class="bg-card px-2 text-muted-foreground"> Or continue with </span>
 				</div>
-			</div>
+			</div> -->
 			<div class="grid gap-2">
 				<Label for="email">Email</Label>
 				<Input id="email" type="email" bind:value={email} placeholder="m@example.com" />

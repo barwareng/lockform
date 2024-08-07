@@ -5,41 +5,60 @@ import (
 	"github.com/lockform/app/models"
 	"github.com/lockform/pkg/database"
 	"github.com/supertokens/supertokens-golang/recipe/session"
+	"gorm.io/gorm"
 )
 
+/*
+First check if contact of said value and type exists
+If does not exist, first create the contact's record. Then associate it with the adding team/individual
+If it does exist, associate it with the adding team/individual
+*/
 func SaveContact(c *fiber.Ctx) error {
-	contact := &models.Contact{}
-	if err := c.BodyParser(contact); err != nil {
+	type SaveContactRequest struct {
+		contact     models.Contact
+		teamContact models.TeamContact
+	}
+	saveContactRequest := SaveContactRequest{}
+	if err := c.BodyParser(saveContactRequest); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	sessionContainer := session.GetSessionFromRequestContext(c.Context())
-	contact.AddedByID = sessionContainer.GetUserID()
-	contact.TeamID = c.Locals("teamId").(string)
-	if err := database.DB.Save(&contact).Error; err != nil {
+	if err := database.DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where(models.Contact{Value: saveContactRequest.contact.Value, Type: saveContactRequest.contact.Value}).FirstOrCreate(&saveContactRequest.contact).Error; err != nil {
+			return err
+		}
+		sessionContainer := session.GetSessionFromRequestContext(c.Context())
+		saveContactRequest.teamContact.ContactID = saveContactRequest.contact.ID
+		saveContactRequest.teamContact.AddedByID = sessionContainer.GetUserID()
+		saveContactRequest.teamContact.TeamID = c.Locals("teamId").(string)
+		if err := tx.Where(models.TeamContact{ContactID: saveContactRequest.contact.ID, TeamID: saveContactRequest.teamContact.AddedByID}).FirstOrCreate(&saveContactRequest.teamContact).Error; err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
+
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,
-		"data":  contact,
 	})
 }
 
 func GetContacts(c *fiber.Ctx) error {
 	var contacts []models.Contact
-	teamId := c.Locals("teamId").(string)
-	if err := database.DB.Find(&contacts, &models.Contact{TeamID: teamId}).Error; err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
+	// teamId := c.Locals("teamId").(string)
+	// if err := database.DB.Find(&contacts, &models.Contact{TeamID: teamId}).Error; err != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 		"error": true,
+	// 		"msg":   err.Error(),
+	// 	})
+	// }
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,

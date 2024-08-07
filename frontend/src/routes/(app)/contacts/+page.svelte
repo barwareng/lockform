@@ -8,7 +8,15 @@
 	import { ROLE_VALUES } from '$utils/interfaces/roles.interface';
 	import LoadingSpinner from '$lib/components/reusable/loading-spinners/LoadingSpinner.svelte';
 	import EmptyState from '$lib/components/reusable/EmptyState.svelte';
-	import { ContactIcon, EllipsisIcon, MailIcon, MapPinIcon, PhoneIcon } from 'lucide-svelte';
+	import {
+		ContactIcon,
+		EllipsisIcon,
+		InfoIcon,
+		MailIcon,
+		MapPinIcon,
+		PhoneIcon
+	} from 'lucide-svelte';
+	import { Badge } from '$lib/components/ui/badge';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
 	import parsePhoneNumber from 'libphonenumber-js';
@@ -16,7 +24,8 @@
 	import { CONTACT } from '$utils/interfaces/contacts.interface';
 	import RemoveContact from './(components)/contact-dialogs/remove-contact.svelte';
 	import { contactDialogs } from './(components)/contact-dialogs/dialogs';
-	import { cn } from '$lib/utils';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import UpdateTrustworthiness from './(components)/contact-dialogs/update-trustworthiness.svelte';
 
 	export let data: PageData;
 	$: ({ contacts } = data);
@@ -69,8 +78,6 @@
 					<Table.Head class="hidden sm:table-cell">Added By</Table.Head>
 					<Table.Head class="hidden md:table-cell">Domain</Table.Head>
 					<Table.Head class="hidden md:table-cell">URL</Table.Head>
-					<!-- <Table.Head class="hidden md:table-cell">Category</Table.Head> -->
-
 					{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
 						<Table.Head class="sr-only">Action</Table.Head>
 					{/if}
@@ -99,7 +106,20 @@
 							</div>
 						</Table.Cell>
 
-						<Table.Cell>{contact.isTrusted ? 'Yes' : 'No'}</Table.Cell>
+						<Table.Cell>
+							{#if contact.isTrusted}
+								<Badge variant="outline">Yes</Badge>
+							{:else}
+								<div class="flex items-center gap-x-1">
+									<Tooltip.Root>
+										<Tooltip.Trigger><Badge variant="destructive">No</Badge></Tooltip.Trigger>
+										<Tooltip.Content>
+											<p class="text-xs">{contact.reasonForUntrusting}</p>
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</div>
+							{/if}
+						</Table.Cell>
 						<Table.Cell class="hidden sm:table-cell">
 							<div>
 								<p class="whitespace-nowrap">
@@ -123,10 +143,11 @@
 									</DropdownMenu.Trigger>
 									<DropdownMenu.Content align="end">
 										<DropdownMenu.Label>Actions</DropdownMenu.Label>
-										{#if dialog?.component && contact}
+										<UpdateTrustworthiness id={contact.id} bind:isTrusted={contact.isTrusted} />
+										<!-- {#if dialog?.component && contact}
 											<svelte:component this={dialog.component} {contact} isEditing />
-										{/if}
-										<RemoveContact id={contact.id} />
+										{/if} -->
+										<!-- <RemoveContact id={contact.id} /> -->
 									</DropdownMenu.Content>
 								</DropdownMenu.Root>
 							</Table.Cell>

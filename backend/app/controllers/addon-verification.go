@@ -12,7 +12,7 @@ type VerificationRequest struct {
 type VerificationResponse struct {
 	TeamMembers       []string `json:"teamMembers"`
 	TrustedContacts   []string `json:"trustedContacts"`
-	UnTrustedContacts []string `json:"unTrustedContacts"`
+	UnTrustedContacts []string `json:"untrustedContacts"`
 	Verified          []string `json:"verified"`
 	Unknown           []string `json:"unknown"`
 	Flagged           []string `json:"flagged"`

@@ -10,11 +10,12 @@ type VerificationRequest struct {
 	Values []string
 }
 type VerificationResponse struct {
-	TeamMembers []string `json:"teamMembers"`
-	Contacts    []string `json:"contacts"`
-	Verified    []string `json:"verified"`
-	Unknown     []string `json:"unknown"`
-	Flagged     []string `json:"flagged"`
+	TeamMembers       []string `json:"teamMembers"`
+	TrustedContacts   []string `json:"trustedContacts"`
+	UnTrustedContacts []string `json:"unTrustedContacts"`
+	Verified          []string `json:"verified"`
+	Unknown           []string `json:"unknown"`
+	Flagged           []string `json:"flagged"`
 }
 
 func VerifyEmailsFromAddon(c *fiber.Ctx) error {
@@ -27,8 +28,8 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 		})
 	}
 	var err error
-	// teamId := c.Locals("teamId").(string)
-	teamId := "cqplou17l2ilf32cufg0"
+	teamId := c.Locals("teamId").(string)
+	// teamId := "cqplou17l2ilf32cufg0"
 	verificationRequest.Values, verificationResponse.TeamMembers, err = populateTeamMember(verificationRequest.Values, teamId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -36,7 +37,7 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	verificationRequest.Values, verificationResponse.Contacts, err = populateContacts(verificationRequest.Values, teamId)
+	verificationRequest.Values, verificationResponse.TrustedContacts, verificationResponse.UnTrustedContacts, err = populateContacts(verificationRequest.Values, teamId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": true,
@@ -76,22 +77,34 @@ func populateTeamMember(emails []string, teamId string) ([]string, []string, err
 	return emails, teamMemberEmails, nil
 }
 
-// Returns the remaining emails, emails found in contacts, and err
-func populateContacts(values []string, teamId string) ([]string, []string, error) {
-	var contacts []models.Contact
-	var contactValues []string
-	if err := database.DB.
+// Returns the remaining emails, emails that are trusted, emails untrusted and err
+func populateContacts(values []string, teamId string) ([]string, []string, []string, error) {
+	type ContactWithTrust struct {
+		models.Contact
+		IsTrusted bool
+	}
+
+	var contacts []ContactWithTrust
+	var trustedValues []string
+	var untrustedValues []string
+	if err := database.DB.Table("contacts").
+		Select("contacts.*, team_contacts.is_trusted").
 		Joins("JOIN team_contacts ON team_contacts.contact_id = contacts.id").
 		Where("contacts.value IN ? AND team_contacts.team_id =?", values, teamId).
 		Find(&contacts).
 		Error; err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
 	for _, contact := range contacts {
-		contactValues = append(contactValues, contact.Value)
+		if contact.IsTrusted {
+			trustedValues = append(trustedValues, contact.Value)
+		} else {
+			untrustedValues = append(untrustedValues, contact.Value)
+		}
 	}
-	values = removeElements(values, contactValues)
-	return values, contactValues, nil
+	values = removeElements(values, trustedValues)
+	values = removeElements(values, untrustedValues)
+	return values, trustedValues, untrustedValues, nil
 }
 
 // Returns the remaining emails, emails found to be verified, and err

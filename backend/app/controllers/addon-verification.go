@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/lockform/app/models"
 	"github.com/lockform/pkg/database"
 )
@@ -28,9 +27,8 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 		})
 	}
 	var err error
-	teamId := c.Locals("teamId").(string)
-	log.Info("Team ID: ", teamId)
-	// teamId := "cql4qfp7l2ilqk1si1ug"
+	// teamId := c.Locals("teamId").(string)
+	teamId := "cqplou17l2ilf32cufg0"
 	verificationRequest.Values, verificationResponse.TeamMembers, err = populateTeamMember(verificationRequest.Values, teamId)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -60,34 +58,44 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 	})
 }
 
-// TODO implement team id
-func populateTeamMember(searchValues []string, teamId string) (newSearchValues []string, foundTeamMemberEmails []string, err error) {
+// Returns the remaining emails, emails found in team members, and err
+func populateTeamMember(emails []string, teamId string) ([]string, []string, error) {
 	var members []models.User
 	var teamMemberEmails []string
-	log.Info(teamId)
-	if err := database.DB.Where("email IN ?", searchValues).Find(&members).Error; err != nil {
+	if err := database.DB.
+		Joins("JOIN user_teams ON user_teams.user_id = users.id").
+		Where("user_teams.team_id = ? AND users.email IN ?", teamId, emails).
+		Find(&members).
+		Error; err != nil {
 		return nil, nil, err
 	}
 	for _, member := range members {
 		teamMemberEmails = append(teamMemberEmails, member.Email)
 	}
-	searchValues = removeElements(searchValues, teamMemberEmails)
-	return searchValues, teamMemberEmails, nil
+	emails = removeElements(emails, teamMemberEmails)
+	return emails, teamMemberEmails, nil
 }
 
-func populateContacts(searchValues []string, teamId string) (newSearchValues []string, foundContactEmails []string, err error) {
+// Returns the remaining emails, emails found in contacts, and err
+func populateContacts(values []string, teamId string) ([]string, []string, error) {
 	var contacts []models.Contact
-	var contactEmails []string
-	if err := database.DB.Where("value IN ? AND team_id = ?", searchValues, teamId).Find(&contacts).Error; err != nil {
+	var contactValues []string
+	if err := database.DB.
+		Joins("JOIN team_contacts ON team_contacts.contact_id = contacts.id").
+		Where("contacts.value IN ? AND team_contacts.team_id =?", values, teamId).
+		Find(&contacts).
+		Error; err != nil {
 		return nil, nil, err
 	}
 	for _, contact := range contacts {
-		contactEmails = append(contactEmails, contact.Value)
+		contactValues = append(contactValues, contact.Value)
 	}
-	searchValues = removeElements(searchValues, contactEmails)
-	return searchValues, contactEmails, nil
+	values = removeElements(values, contactValues)
+	return values, contactValues, nil
 }
-func populateVerifiedContacts(searchValues []string) (newSearchValues []string, foundContactEmails []string, err error) {
+
+// Returns the remaining emails, emails found to be verified, and err
+func populateVerifiedContacts(searchValues []string) ([]string, []string, error) {
 	var channels []models.Channel
 	var verifiedEmails []string
 	if err := database.DB.Where("value IN ?", searchValues).Find(&channels).Error; err != nil {

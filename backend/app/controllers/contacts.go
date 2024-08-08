@@ -45,7 +45,7 @@ func SaveContact(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"error": false,
-		"msg":   nil,
+		"msg":   "contact saved.",
 	})
 }
 
@@ -68,6 +68,22 @@ func GetTeamContacts(c *fiber.Ctx) error {
 		"error": false,
 		"msg":   nil,
 		"data":  contacts,
+	})
+}
+
+// Update contact relationship for team. This can be done only by the person that created the contact
+func ModifyTrustworthiness(c *fiber.Ctx) error {
+	teamContact := models.TeamContact{}
+	if err := c.BodyParser(&teamContact); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"error": false,
+		"msg":   "contact updated.",
 	})
 }
 

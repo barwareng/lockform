@@ -108,7 +108,7 @@
 
 						<Table.Cell>
 							{#if contact.isTrusted}
-								<Badge variant="outline">Yes</Badge>
+								<Badge>Yes</Badge>
 							{:else}
 								<div class="flex items-center gap-x-1">
 									<Tooltip.Root>

@@ -143,7 +143,10 @@
 									</DropdownMenu.Trigger>
 									<DropdownMenu.Content align="end">
 										<DropdownMenu.Label>Actions</DropdownMenu.Label>
-										<UpdateTrustworthiness id={contact.id} bind:isTrusted={contact.isTrusted} />
+										<UpdateTrustworthiness
+											id={contact.id}
+											bind:trustworthiness={contact.isTrusted}
+										/>
 										<!-- {#if dialog?.component && contact}
 											<svelte:component this={dialog.component} {contact} isEditing />
 										{/if} -->

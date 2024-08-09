@@ -24,7 +24,6 @@
 		selectedTeam = team;
 		await invalidateAll();
 	};
-	$: console.log(teams, selectedTeam);
 </script>
 
 {#if teams && teams?.length > 0}

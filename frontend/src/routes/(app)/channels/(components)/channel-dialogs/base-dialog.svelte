@@ -20,7 +20,6 @@
 			isSaving = true;
 			if (channel.type == CHANNEL.PHONE) channel.value = channel.value?.replaceAll(' ', '');
 			await client.channels.create(channel);
-			// console.log(channel);
 			await invalidateAll();
 			isSaving = false;
 			open = false;

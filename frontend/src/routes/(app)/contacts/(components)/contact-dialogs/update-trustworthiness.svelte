@@ -8,15 +8,21 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Label } from '$lib/components/ui/label';
 	export let id: number;
-	export let isTrusted: boolean;
+	export let trustworthiness: boolean;
+	let reasonForUntrusting: string;
 	let updatingTrustworthiness = false;
+	$: isTrusted = trustworthiness;
 	const updateTrustworthiness = async () => {
 		try {
 			updatingTrustworthiness = true;
-			// await client.contacts.delete({ id });
+			await client.contacts.updateTrustworthiness({
+				contactId: id,
+				isTrusted: trustworthiness ? false : true,
+				reasonForUntrusting
+			});
 			updatingTrustworthiness = false;
 			invalidateAll();
-			toastSuccess(`Contact has been marked ${isTrusted ? 'untrusted' : 'trusted'}.`);
+			toastSuccess(`Contact has been marked ${trustworthiness ? 'untrusted' : 'trusted'}.`);
 		} catch (error) {
 			updatingTrustworthiness = false;
 			toastError(error);
@@ -32,7 +38,7 @@
 			size="sm"
 			class="flex w-full justify-start px-2 text-sm font-normal"
 		>
-			{isTrusted ? 'Untrust' : 'Trust'}
+			{trustworthiness ? 'Untrust' : 'Trust'}
 		</Button>
 	</AlertDialog.Trigger>
 	<AlertDialog.Content>
@@ -47,6 +53,7 @@
 			<div class="flex-1 space-y-1">
 				<Label class="text-xs">Why?</Label>
 				<Textarea
+					bind:value={reasonForUntrusting}
 					class="resize-none placeholder:text-xs"
 					placeholder="Reason not to trust this contact"
 				/>
@@ -56,7 +63,7 @@
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 			<AlertDialog.Action disabled={updatingTrustworthiness} on:click={updateTrustworthiness}>
 				<ButtonLoadingSpinner bind:state={updatingTrustworthiness} />
-				Continue
+				{trustworthiness ? 'Untrust' : 'Trust'}
 			</AlertDialog.Action>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>

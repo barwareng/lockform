@@ -148,10 +148,6 @@ export default class Client {
 			} else if (Object.keys(result).length) {
 				// legacy behavior
 				options = result as SendOptions;
-				// console?.warn &&
-				// 	console.warn(
-				// 		'Deprecated format of beforeSend return: please use `return { url, options }`, instead of `return options`.'
-				// 	);
 			}
 		}
 

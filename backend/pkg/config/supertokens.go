@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/lockform/app/models"
+	"github.com/lockform/app/services"
 	"github.com/lockform/pkg/database"
 	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/ingredients/emaildelivery"
@@ -79,7 +80,6 @@ func SupertokensInit() {
 				},
 				EmailDelivery: &emaildelivery.TypeInput{
 					Override: func(originalImplementation emaildelivery.EmailDeliveryInterface) emaildelivery.EmailDeliveryInterface {
-						ogSendEmail := *originalImplementation.SendEmail
 
 						(*originalImplementation.SendEmail) = func(input emaildelivery.EmailType, userContext supertokens.UserContext) error {
 
@@ -88,7 +88,7 @@ func SupertokensInit() {
 								"auth/",
 								"", 1,
 							)
-							return ogSendEmail(input, userContext)
+							return services.SendEmailVerificationLink(input.EmailVerification.User.Email, input.EmailVerification.EmailVerifyLink)
 						}
 						return originalImplementation
 					},
@@ -150,18 +150,14 @@ func SupertokensInit() {
 				},
 				EmailDelivery: &emaildelivery.TypeInput{
 					Override: func(originalImplementation emaildelivery.EmailDeliveryInterface) emaildelivery.EmailDeliveryInterface {
-						ogSendEmail := *originalImplementation.SendEmail
 
 						(*originalImplementation.SendEmail) = func(input emaildelivery.EmailType, userContext supertokens.UserContext) error {
-							// You can change the path, domain of the reset password link,
-							// or even deep link it to your mobile app
-							// This is: `${websiteDomain}${websiteBasePath}/reset-password`
 							input.PasswordReset.PasswordResetLink = strings.Replace(
 								input.PasswordReset.PasswordResetLink,
 								"auth/reset-password",
 								"reset-password/new", 1,
 							)
-							return ogSendEmail(input, userContext)
+							return services.SendPasswordResetLink(input.PasswordReset.User.Email, input.PasswordReset.PasswordResetLink)
 						}
 						return originalImplementation
 					},

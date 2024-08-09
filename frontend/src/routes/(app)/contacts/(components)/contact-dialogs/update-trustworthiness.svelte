@@ -5,6 +5,8 @@
 	import { invalidateAll } from '$app/navigation';
 	import { toastError, toastSuccess } from '$utils/toasts';
 	import { Button } from '$lib/components/ui/button';
+	import { Textarea } from '$lib/components/ui/textarea';
+	import { Label } from '$lib/components/ui/label';
 	export let id: number;
 	export let isTrusted: boolean;
 	let updatingTrustworthiness = false;
@@ -37,9 +39,19 @@
 		<AlertDialog.Header>
 			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 			<AlertDialog.Description>
-				This action cannot be undone. This will permanently remove this channel from your team.
+				<!-- TODO better wording -->
+				This action will change how this contact is displayed to team.
 			</AlertDialog.Description>
 		</AlertDialog.Header>
+		{#if isTrusted}
+			<div class="flex-1 space-y-1">
+				<Label class="text-xs">Why?</Label>
+				<Textarea
+					class="resize-none placeholder:text-xs"
+					placeholder="Reason not to trust this contact"
+				/>
+			</div>
+		{/if}
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 			<AlertDialog.Action disabled={updatingTrustworthiness} on:click={updateTrustworthiness}>

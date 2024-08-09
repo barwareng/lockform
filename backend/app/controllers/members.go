@@ -9,10 +9,12 @@ import (
 	"github.com/lockform/app/models"
 	"github.com/lockform/app/services"
 	"github.com/lockform/pkg/database"
+	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/thirdpartyemailpassword"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/recipe/userroles/userrolesclaims"
+	"gorm.io/gorm"
 )
 
 type AddMemberParams struct {
@@ -37,66 +39,83 @@ func AddMember(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	// Check if user already exists
-	getUsersResult, err := thirdpartyemailpassword.GetUsersByEmail("public", params.Email)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-	// Save the user in the DB
 	teamID := c.Locals("teamId").(string)
 	user.Email = params.Email
-	if len(getUsersResult) == 0 {
-		signUpResult, err := thirdpartyemailpassword.EmailPasswordSignUp("public", params.Email, os.Getenv("FAKE_PASSWORD"))
+	if err := database.DB.Transaction(func(tx *gorm.DB) error {
+		// Check if user already exists
+		getUsersResult, err := thirdpartyemailpassword.GetUsersByEmail("public", params.Email)
 		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": true,
-				"msg":   err.Error(),
-			})
+			return err
+		}
+		var invitationLink string
+		// Save the user in the DB
+		if len(getUsersResult) == 0 {
+			signUpResult, err := thirdpartyemailpassword.EmailPasswordSignUp("public", params.Email, xid.New().String())
+			if err != nil {
+				return err
+			}
+			// we successfully created the user. Create a password reset link to send as an invitation link
+			link, err := thirdpartyemailpassword.CreateResetPasswordLink("public", signUpResult.OK.User.ID)
+			if err != nil {
+				return err
+			}
+			if link.UnknownUserIdError != nil {
+				return errors.New("uknown error creating password reset link for user")
+			}
+			if link.OK.Link != "" {
+				invitationLink = strings.Replace(
+					link.OK.Link,
+					"auth/reset-password",
+					"reset-password/new", 1,
+				)
+			}
+			user.ID = signUpResult.OK.User.ID
+			if err := tx.Save(&user).Error; err != nil {
+				return err
+			}
+		} else {
+			user.ID = getUsersResult[0].ID
+			invitationLink = os.Getenv("SUPERTOKENS_FRONTEND_DOMAIN")
+		}
+		// Get the team being added to
+		team := models.Team{}
+		if err := tx.Select("name").Where("id = ?", teamID).Limit(1).Find(&team).Error; err != nil {
+			return err
+		}
+		// Get who is adding the user
+		sessionContainer := session.GetSessionFromRequestContext(c.Context())
+		addedById := sessionContainer.GetUserID()
+		addedBy := models.User{}
+		if err := tx.Select("first_name", "email").Where("id = ?", addedById).Limit(1).Find(&addedBy).Error; err != nil {
+			return err
+		}
+		// Associate the use with a team
+		if err = tx.Model(&user).Association("Teams").Append(&models.Team{ID: teamID}); err != nil {
+			return err
+		}
+		// Add actual role
+		if err = addUserToRole(user.ID, teamID+"_"+params.Role); err != nil {
+			return err
 		}
 
-		// we successfully created the user. Now we should send them their invite link
-		_, err = thirdpartyemailpassword.SendResetPasswordEmail("public", signUpResult.OK.User.ID)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": true,
-				"msg":   err.Error(),
-			})
+		data := models.InviteTeamUser{
+			Email:            user.Email,
+			InviterFirstName: addedBy.FirstName,
+			InviterEmail:     addedBy.Email,
+			TeamName:         team.Name,
+			InvitationLink:   invitationLink,
 		}
-		user.ID = signUpResult.OK.User.ID
-		if err := database.DB.Save(&user).Error; err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-				"error": true,
-				"msg":   err.Error(),
-			})
+		if err := services.SendTeamInvitationEmail(data); err != nil {
+			return err
 		}
-	} else {
-		user.ID = getUsersResult[0].ID
-
-	}
-
-	// Associate the use with a team
-	if err = database.DB.Model(&user).Association("Teams").Append(&models.Team{ID: teamID}); err != nil {
+		return nil
+	}); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
 		})
 	}
-	// Add actual role
-	if err = addUserToRole(user.ID, teamID+"_"+params.Role); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
-	if err := services.SendTeamInvitationEmail(params.Email); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
+
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,
@@ -120,6 +139,7 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 		})
 	}
 	if err := addUserToRole(params.UserID, teamId+"_"+params.Role); err != nil {
+
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,
 			"msg":   err.Error(),
@@ -129,12 +149,12 @@ func ChangeMemberRole(c *fiber.Ctx) error {
 	sessionContainer.FetchAndSetClaim(userrolesclaims.UserRoleClaim)
 	sessionContainer.FetchAndSetClaim(userrolesclaims.PermissionClaim)
 
-	if err := services.SendTeamInvitationEmail(params.Email); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": true,
-			"msg":   err.Error(),
-		})
-	}
+	// if err := services.SendTeamInvitationEmail(params.Email); err != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 		"error": true,
+	// 		"msg":   err.Error(),
+	// 	})
+	// }
 	return c.JSON(fiber.Map{
 		"error": false,
 		"msg":   nil,

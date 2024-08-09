@@ -6,6 +6,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/lockform/app/models"
 	"github.com/resend/resend-go/v2"
 )
 
@@ -13,20 +14,8 @@ var client = resend.NewClient(os.Getenv("RESEND_API_KEY"))
 
 // TODO add role and team name
 // TODO add HTML template
-func SendTeamInvitationEmail(recipientEmail string) error {
-	data := struct {
-		Email            string
-		InviterFirstName string
-		InviterEmail     string
-		TeamName         string
-		InvitationLink   string
-	}{
-		Email:            recipientEmail,
-		InviterFirstName: "Veronica",
-		InviterEmail:     "veronica@poised.com",
-		TeamName:         "Poised",
-		InvitationLink:   "https://app.lockform.io",
-	}
+func SendTeamInvitationEmail(data models.InviteTeamUser) error {
+
 	// Read the HTML template from a file
 	tmpl, err := template.ParseFiles("assets/templates/emails/lockform-user-invite.html")
 	if err != nil {
@@ -41,7 +30,7 @@ func SendTeamInvitationEmail(recipientEmail string) error {
 	}
 	params := &resend.SendEmailRequest{
 		From:    "Lockform <onboarding@rentisha.com>",
-		To:      []string{recipientEmail},
+		To:      []string{data.Email},
 		Subject: fmt.Sprintf("Invitation to Join %s on Lockform", data.TeamName),
 		Html:    renderedTemplate.String(),
 	}

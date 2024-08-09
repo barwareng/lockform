@@ -23,14 +23,13 @@ func SaveContact(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
-	// log.Info(saveContactRequest.Contact)
 	if err := database.DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Where(models.Contact{Value: saveContactRequest.Contact.Value, Type: saveContactRequest.Contact.Type}).FirstOrCreate(&saveContactRequest.Contact).Error; err != nil {
 			return err
 		}
 		sessionContainer := session.GetSessionFromRequestContext(c.Context())
-		saveContactRequest.TeamContact.ContactID = saveContactRequest.Contact.ID
 		saveContactRequest.TeamContact.AddedByID = sessionContainer.GetUserID()
+		saveContactRequest.TeamContact.ContactID = saveContactRequest.Contact.ID
 		saveContactRequest.TeamContact.TeamID = c.Locals("teamId").(string)
 		if err := tx.Where(models.TeamContact{ContactID: saveContactRequest.Contact.ID, TeamID: saveContactRequest.TeamContact.TeamID}).FirstOrCreate(&saveContactRequest.TeamContact).Error; err != nil {
 			return err

@@ -21,6 +21,7 @@
 	} from 'lucide-svelte';
 	import { logout } from '$utils/supertokens';
 	import TeamSwitcher from './TeamSwitcher.svelte';
+	import LockformLogo from '$lib/icons/LockformLogo.svelte';
 	export let openMobileNav = false;
 	$: routes = [
 		{
@@ -119,8 +120,11 @@
 				target="_blank"
 				class="flex flex-col items-start justify-start gap-y-0"
 			>
-				<h1 class="text-lg font-black">lockform</h1>
-				<p class="-mt-1 text-[10px]">&copy; {new Date().getFullYear()} All rights reserved</p>
+				<div class="flex items-center gap-x-2">
+					<LockformLogo class="h-6 w-6" />
+					<h1 class="text-lg font-black">lockform</h1>
+				</div>
+				<p class=" text-[10px]">&copy; {new Date().getFullYear()} All rights reserved</p>
 			</Button>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>

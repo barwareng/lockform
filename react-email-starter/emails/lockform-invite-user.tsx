@@ -51,7 +51,7 @@ export const LockformInviteUserEmail = ({
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
             <Section className="mt-[32px]">
               <Img
-                src={`${baseUrl}/static/vercel-logo.png`}
+                src="https://poised.fra1.cdn.digitaloceanspaces.com/lockform-logo.png"
                 width="40"
                 height="37"
                 alt="Lockform"
@@ -115,7 +115,7 @@ LockformInviteUserEmail.PreviewProps = {
   invitedByFirstName: "James",
   invitedByEmail: "james@poised.com",
   teamName: "Poised",
-  inviteLink: "https://vercel.com/teams/invite/foo",
+  inviteLink: "https://app.lockform.io",
 } as LockformInviteUserEmailProps;
 
 export default LockformInviteUserEmail;

@@ -13,7 +13,7 @@
 			await client.members.delete({ userId: id });
 			removingMember = false;
 			invalidateAll();
-			toastSuccess('Channel has been removed.');
+			toastSuccess('Member has been removed.');
 		} catch (error) {
 			removingMember = false;
 			toastError(error);

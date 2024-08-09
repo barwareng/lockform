@@ -14,22 +14,7 @@
       max-width: 0;
     "
   >
-    Join James on Lockform
-    <div>
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-      ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿ ‌​‍‎‏﻿
-    </div>
+    Join {{.TeamName}} on Lockform
   </div>
 
   <body
@@ -115,7 +100,7 @@
                 margin-right: 0px;
               "
             >
-              Join <strong>Poised</strong> on <strong>Lockform</strong>
+              Join <strong>{{.TeamName}}</strong> on <strong>Lockform</strong>
             </h1>
             <p
               style="
@@ -125,8 +110,7 @@
                 color: rgb(10, 10, 10);
               "
             >
-              Hello
-              <!-- -->Cleophas<!-- -->,
+              Hello,
             </p>
             <p
               style="
@@ -136,16 +120,16 @@
                 color: rgb(10, 10, 10);
               "
             >
-              <strong>James</strong> (<a
-                href="mailto:james@poised.com"
+              <strong>{{.InviterFirstName}}</strong> (<a
+                href="mailto:{{.InviterEmail}}"
                 style="
                   color: rgb(37, 99, 235);
                   text-decoration: none;
                   text-decoration-line: none;
                 "
                 target="_blank"
-                >james@poised.com</a
-              >) has invited you to the <strong>Poised</strong> team on<!-- -->
+                >{{.InviterEmail}}</a
+              >) has invited you to the <strong>{{.TeamName}}</strong> team on<!-- -->
               <strong>Lockform</strong>.
             </p>
             <table
@@ -161,7 +145,7 @@
                 <tr>
                   <td>
                     <a
-                      href="https://app.lockform.io"
+                      href="{{.InvitationLink}}"
                       style="
                         line-height: 100%;
                         text-decoration: none;
@@ -220,14 +204,14 @@
             >
               or copy and paste this URL into your browser:<!-- -->
               <a
-                href="https://app.lockform.io"
+                href="{{.InvitationLink}}"
                 style="
                   color: rgb(37, 99, 235);
                   text-decoration: none;
                   text-decoration-line: none;
                 "
                 target="_blank"
-                >https://app.lockform.io</a
+                >{{.InvitationLink}}</a
               >
             </p>
             <hr
@@ -261,7 +245,7 @@
                   text-decoration-line: none;
                 "
                 target="_blank"
-                >james@poised.com</a
+                >{{.Email}}</a
               >. If you were not expecting this invitation, you can ignore this
               email. If you are concerned about your account&#x27;s safety,
               please reply to this email to get in touch with us.

@@ -11,6 +11,7 @@ var client = resend.NewClient(os.Getenv("RESEND_API_KEY"))
 // TODO add role and team name
 // TODO add HTML template
 func SendTeamInvitationEmail(recipientEmail string) error {
+
 	params := &resend.SendEmailRequest{
 		From:    "support@rentisha.com",
 		To:      []string{recipientEmail},

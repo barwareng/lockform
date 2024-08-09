@@ -16,6 +16,7 @@ export interface IContact {
 
 export interface ITeamContact {
 	id: number;
+	contactId: number;
 	isTrusted: boolean;
 	reasonForUntrusting: string;
 }

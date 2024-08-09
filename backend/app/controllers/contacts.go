@@ -79,6 +79,16 @@ func ModifyTrustworthiness(c *fiber.Ctx) error {
 			"msg":   err.Error(),
 		})
 	}
+	if err := database.DB.
+		Model(&teamContact).Select("IsTrusted", "ReasonForUntrusting").
+		Where("contact_id = ?", teamContact.ContactID).
+		Updates(teamContact).
+		Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": true,
+			"msg":   err.Error(),
+		})
+	}
 
 	return c.JSON(fiber.Map{
 		"error": false,

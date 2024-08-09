@@ -2,7 +2,8 @@ import { BaseService } from '$lib/api/services/utils/BaseService';
 import type {
 	IContact,
 	IContactList,
-	ISaveContactBody
+	ISaveContactBody,
+	ITeamContact
 } from '$utils/interfaces/contacts.interface';
 
 export class ContactService extends BaseService {
@@ -13,6 +14,12 @@ export class ContactService extends BaseService {
 		});
 	}
 	update(body: Partial<IContact>) {
+		return this.client.send('/api/contacts', {
+			method: 'PUT',
+			body
+		});
+	}
+	updateTrustworthiness(body: Partial<ITeamContact>) {
 		return this.client.send('/api/contacts', {
 			method: 'PUT',
 			body

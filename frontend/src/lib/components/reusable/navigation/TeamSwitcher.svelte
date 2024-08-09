@@ -24,6 +24,7 @@
 		selectedTeam = team;
 		await invalidateAll();
 	};
+	$: console.log(teams, selectedTeam);
 </script>
 
 {#if teams && teams?.length > 0}
@@ -40,7 +41,7 @@
 				{#key selectedTeam}
 					<Avatar src="" seed={selectedTeam?.id} class="mr-2 h-5 w-5" />
 				{/key}
-				{selectedTeam?.name}
+				{selectedTeam?.name || ''}
 				<ChevronsUpDownIcon class="ml-auto h-4 w-4 shrink-0 opacity-50" />
 			</Button>
 		</Popover.Trigger>

@@ -66,7 +66,7 @@
 	<div class="flex flex-col justify-between md:flex-row md:items-center">
 		<div>
 			<h3 class="text-lg font-medium">Profile</h3>
-			<p class="text-sm text-muted-foreground">This is how others will see you on the site.</p>
+			<p class="text-muted-foreground text-sm">This is how others will see you on the site.</p>
 		</div>
 		<!-- <EditProfileSheet bind:profile /> -->
 	</div>
@@ -90,7 +90,7 @@
 			<div class="flex w-full flex-col justify-between gap-x-4 gap-y-3 md:flex-row md:items-start">
 				<div class="flex-1 space-y-1">
 					<Label>Email</Label>
-					<Input bind:value={profile.email} placeholder="luke@starwars.com" />
+					<Input bind:value={profile.email} disabled placeholder="luke@starwars.com" />
 				</div>
 				<div class="flex-1 space-y-1">
 					<Label>Phone number</Label>

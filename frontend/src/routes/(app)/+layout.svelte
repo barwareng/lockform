@@ -7,21 +7,23 @@
 	let openMobileNav = false;
 </script>
 
-<main class="relative mx-auto flex h-screen w-screen max-w-screen-2xl">
+<main class="relative mx-auto flex h-screen w-screen">
 	{#if openMobileNav}
 		<aside
 			transition:slide
-			class="absolute z-40 min-h-screen w-5/6 min-w-[300px] max-w-40 shrink-0 basis-1/5 bg-background lg:hidden"
+			class="bg-background absolute z-40 min-h-screen w-5/6 min-w-[300px] max-w-40 shrink-0 basis-1/5 lg:hidden"
 		>
 			<Sidenav bind:openMobileNav />
 		</aside>
 	{/if}
-	<aside class="sticky top-0 hidden max-h-screen min-w-[300px] shrink-0 basis-1/5 lg:block">
+	<aside
+		class="sticky top-0 hidden max-h-screen min-w-[300px] max-w-48 shrink-0 basis-1/5 lg:block"
+	>
 		<Sidenav bind:openMobileNav />
 	</aside>
 	<Separator orientation="vertical" />
-	<section class="min-h-screen flex-1 overflow-y-scroll px-6 pb-10 lg:px-10">
-		<div class="h-10 bg-background">
+	<section class="mx-auto min-h-screen flex-1 overflow-y-scroll px-6 pb-10 lg:px-10">
+		<div class="bg-background h-10">
 			<Button
 				size="icon"
 				variant="ghost"

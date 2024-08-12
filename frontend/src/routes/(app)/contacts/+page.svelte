@@ -109,7 +109,7 @@
 						<Table.Cell>
 							{#if contact.isTrusted}
 								<Badge>Yes</Badge>
-							{:else}
+							{:else if !contact.isTrusted && contact.reasonForUntrusting}
 								<div class="flex items-center gap-x-1">
 									<Tooltip.Root>
 										<Tooltip.Trigger><Badge variant="destructive">No</Badge></Tooltip.Trigger>
@@ -118,6 +118,8 @@
 										</Tooltip.Content>
 									</Tooltip.Root>
 								</div>
+							{:else}
+								<Badge variant="destructive">No</Badge>
 							{/if}
 						</Table.Cell>
 						<Table.Cell class="hidden sm:table-cell">

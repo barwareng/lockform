@@ -26,3 +26,6 @@ export const parseSearchParams = <T>(searchParams: URLSearchParams): Partial<T> 
 	});
 	return params;
 };
+export const delay = (ms: number): Promise<void> => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+};

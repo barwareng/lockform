@@ -4,13 +4,13 @@ import { toastError } from '$utils/toasts';
 import type { PageLoad } from './$types';
 
 export const load = (async () => {
-	let loadingContacts = true;
-	let contacts: Partial<IContactList>[] = [];
 	try {
-		contacts = await client.contacts.getAll();
-		loadingContacts = false;
-		return { loadingContacts, contacts };
+		return {
+			loading: false,
+			contacts: (await client.contacts.getAll()) as Partial<IContactList[]>
+		};
 	} catch (error) {
 		toastError(error);
+		return { loading: false };
 	}
 }) satisfies PageLoad;

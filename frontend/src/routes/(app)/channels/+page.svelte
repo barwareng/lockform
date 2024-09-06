@@ -21,7 +21,7 @@
 
 	export let data: PageData;
 	$: ({ channels } = data);
-	$: loadingChannels = data.loadingChannels ?? true;
+	$: loading = data.loading ?? true;
 	const getIcon = (type: CHANNEL) => {
 		let icon: any;
 		switch (type) {
@@ -44,11 +44,11 @@
 	description="Manage all the channels that your team uses to communicate"
 />
 <div class="relative pb-16">
-	<div class="sticky top-0 z-10 bg-background">
+	<div class="bg-background sticky top-0 z-10">
 		<div class="flex flex-col items-start gap-6 md:flex-row md:justify-between">
 			<div class="space-y-0.5">
 				<h2 class="text-2xl font-bold tracking-tight">Channels</h2>
-				<p class="text-sm text-muted-foreground">
+				<p class="text-muted-foreground text-sm">
 					Manage all the channels that your team uses to communicate
 				</p>
 			</div>
@@ -58,7 +58,7 @@
 		</div>
 		<Separator class="my-6" />
 	</div>
-	{#if loadingChannels}
+	{#if loading}
 		<LoadingSpinner />
 	{:else if channels?.length}
 		<Table.Root>

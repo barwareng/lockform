@@ -197,6 +197,7 @@ export default class Client {
 				return data.data as T;
 			})
 			.catch((err) => {
+				console.log('Error:', err);
 				// wrap to normalize all errors
 				throw new ClientResponseError(err);
 			});

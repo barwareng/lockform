@@ -49,6 +49,14 @@ export const handle = (async ({ event, resolve }) => {
 		if (!isOnboarded && !onboardingAllowedRoutes.has(event.url.pathname)) {
 			throw redirect(302, '/settings/profile');
 		}
+
+		if (
+			!payload.teams?.length &&
+			event.url.pathname !== '/team' &&
+			!onboardingAllowedRoutes.has(event.url.pathname)
+		) {
+			throw redirect(302, '/team');
+		}
 	}
 	const response = await resolve(event);
 	return response;

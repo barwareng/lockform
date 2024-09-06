@@ -2,6 +2,7 @@ import { ClientResponseError } from '$lib/api/ClientResponseError';
 import { toast } from 'svelte-sonner';
 
 export const toastError = async (error: any) => {
+	console.log('toasting to error', error);
 	let errorString;
 	if (typeof error == 'string') {
 		errorString = error;

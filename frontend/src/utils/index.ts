@@ -2,7 +2,8 @@ import { mediaQuery } from 'svelte-legos';
 import Cookies from 'js-cookie';
 import { tick } from 'svelte';
 
-export const setTeamCookie = async (teamId: string) => {
+// Pass a string to set the team cookie, pass nothing to delete it.
+export const setTeamCookie = async (teamId?: string) => {
 	await fetch('/set-team', {
 		method: 'POST',
 		body: JSON.stringify({ teamId })

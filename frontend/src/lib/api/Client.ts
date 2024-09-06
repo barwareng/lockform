@@ -187,11 +187,11 @@ export default class Client {
 				}
 
 				if (response.status >= 400) {
-					throw new ClientResponseError({
+					throw {
 						url: response.url,
 						status: response.status,
 						data: data
-					});
+					};
 				}
 
 				return data.data as T;

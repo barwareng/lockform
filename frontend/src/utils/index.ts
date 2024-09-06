@@ -13,9 +13,6 @@ export const getTeamCookie = async (): Promise<string> => {
 	const res = await fetch('/get-team');
 	return await res.text();
 };
-export const deleteTeamCookie = () => {
-	Cookies.remove('teamId')!;
-};
 export const isMobile = mediaQuery('(max-width: 768px)');
 export const closeAndRefocusTrigger = (triggerId: string): boolean => {
 	tick().then(() => document.getElementById(triggerId)?.focus());

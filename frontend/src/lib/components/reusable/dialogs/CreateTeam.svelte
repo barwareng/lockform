@@ -32,7 +32,8 @@
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>Create team</Dialog.Title>
-			<Dialog.Description>Add a new team to manage products and customers.</Dialog.Description>
+			<Dialog.Description>Add a new team to manage your organizations resources.</Dialog.Description
+			>
 		</Dialog.Header>
 		<div>
 			<div class="space-y-4 py-2 pb-4">

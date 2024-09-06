@@ -4,13 +4,15 @@ import { toastError } from '$utils/toasts';
 import type { PageLoad } from './$types';
 
 export const load = (async () => {
-	let loadingChannels = true;
-	let channels: Partial<IChannel>[] = [];
 	try {
-		channels = await client.channels.getAll();
-		loadingChannels = false;
-		return { loadingChannels, channels };
+		return {
+			loading: false,
+			channels: (await client.channels.getAll()) as Partial<IChannel[]>
+		};
 	} catch (error) {
 		toastError(error);
+		return {
+			loading: false
+		};
 	}
 }) satisfies PageLoad;

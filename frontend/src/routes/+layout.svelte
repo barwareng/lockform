@@ -5,6 +5,11 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { MetaTags } from 'svelte-meta-tags';
 	import { VITE_APP_NAME } from '$lib/env';
+	import { afterNavigate, invalidateAll } from '$app/navigation';
+	// Hack to for the handle hook to rerun
+	afterNavigate(() => {
+		invalidateAll();
+	});
 </script>
 
 <MetaTags title={VITE_APP_NAME} />

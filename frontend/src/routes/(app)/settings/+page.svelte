@@ -3,7 +3,7 @@
 	import InviteMember from './(components)/invite-member.svelte';
 	import { requireRoles } from '$utils/guards';
 	import { ROLE_VALUES } from '$utils/interfaces/roles.interface';
-	import type { PageData } from '../$types';
+	import type { PageData } from './$types';
 	import LoadingSpinner from '$lib/components/reusable/loading-spinners/LoadingSpinner.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 

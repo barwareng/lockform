@@ -1,7 +1,9 @@
+import { browser } from '$app/environment';
 import { ClientResponseError } from '$lib/api/ClientResponseError';
 import { toast } from 'svelte-sonner';
 
 export const toastError = async (error: any) => {
+	if (!browser) return;
 	let errorString;
 	if (typeof error == 'string') {
 		errorString = error;
@@ -14,7 +16,7 @@ export const toastError = async (error: any) => {
 				errorString = error.message;
 			}
 		} else errorString = error.message;
-	} else if (error.isSuperTokensGeneralError === true) {
+	} else if (error?.isSuperTokensGeneralError === true) {
 		errorString = error.message;
 	} else if (error?.status >= 400 && error?.status < 500) {
 		errorString = await error.json();

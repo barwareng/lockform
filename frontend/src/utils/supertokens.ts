@@ -20,7 +20,7 @@ import {
 	VITE_SUPERTOKENS_APP_NAME
 } from '$lib/env';
 import { goto, invalidateAll } from '$app/navigation';
-import { deleteTeamCookie } from '$utils';
+import { setTeamCookie } from '$utils';
 import { toastError, toastSuccess } from './toasts';
 // recei
 export const supertokensInit = () => {
@@ -248,6 +248,6 @@ export const newPasswordEntered = async (newPassword: string) => {
 
 export const logout = async () => {
 	await Session.signOut();
-	deleteTeamCookie();
+	setTeamCookie();
 	goto('/signin', { invalidateAll: true });
 };

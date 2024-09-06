@@ -4,14 +4,13 @@ import { toastError } from '$utils/toasts';
 import type { PageLoad } from './$types';
 
 export const load = (async () => {
-	let loadingProfile = true;
-	let profile: Partial<IUser> = {};
 	try {
-		loadingProfile = true;
-		profile = await client.users.getProfile();
-		loadingProfile = false;
-		return { loadingProfile, profile };
+		return {
+			loadingProfile: false,
+			profile: (await client.users.getProfile()) as Partial<IUser>
+		};
 	} catch (error) {
 		toastError(error);
+		return { loadingProfile: false };
 	}
 }) satisfies PageLoad;

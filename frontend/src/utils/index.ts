@@ -2,7 +2,8 @@ import { mediaQuery } from 'svelte-legos';
 import Cookies from 'js-cookie';
 import { tick } from 'svelte';
 
-export const setTeamCookie = async (teamId: string) => {
+// Pass a string to set the team cookie, pass nothing to delete it.
+export const setTeamCookie = async (teamId?: string) => {
 	await fetch('/set-team', {
 		method: 'POST',
 		body: JSON.stringify({ teamId })
@@ -11,9 +12,6 @@ export const setTeamCookie = async (teamId: string) => {
 export const getTeamCookie = async (): Promise<string> => {
 	const res = await fetch('/get-team');
 	return await res.text();
-};
-export const deleteTeamCookie = () => {
-	Cookies.remove('teamId')!;
 };
 export const isMobile = mediaQuery('(max-width: 768px)');
 export const closeAndRefocusTrigger = (triggerId: string): boolean => {
@@ -27,4 +25,7 @@ export const parseSearchParams = <T>(searchParams: URLSearchParams): Partial<T> 
 		(params as any)[key] = value;
 	});
 	return params;
+};
+export const delay = (ms: number): Promise<void> => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 };

@@ -22,14 +22,13 @@
 	import parsePhoneNumber from 'libphonenumber-js';
 	import ListContactOptionsDialog from './(components)/list-contact-options-dialog.svelte';
 	import { CONTACT } from '$utils/interfaces/contacts.interface';
-	import RemoveContact from './(components)/contact-dialogs/remove-contact.svelte';
 	import { contactDialogs } from './(components)/contact-dialogs/dialogs';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import UpdateTrustworthiness from './(components)/contact-dialogs/update-trustworthiness.svelte';
 
 	export let data: PageData;
-	$: ({ contacts } = data);
-	$: loadingContacts = data.loadingContacts ?? true;
+	let { contacts } = data;
+	$: loadingContacts = data.loading ?? true;
 	const getIcon = (type: CONTACT) => {
 		let icon: any;
 		switch (type) {

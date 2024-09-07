@@ -6,6 +6,7 @@ import { TeamService } from './services/TeamService';
 import { ContactService } from './services/ContactService';
 import { UserService } from './services/UserService';
 import type { SendOptions } from './services/utils/options';
+import { invalidateAll } from '$app/navigation';
 
 // list of known SendOptions keys (everything else is treated as query param)
 const knownSendOptionsKeys = [
@@ -174,7 +175,16 @@ export default class Client {
 			})
 			.catch((err) => {
 				console.log('Error:', err);
-				// wrap to normalize all errors
+				// Hack to handle the DOMException error supertokens throws
+				if (
+					typeof err === 'string' &&
+					err
+						.toLowerCase()
+						.includes('DOMException: String contains an invalid character'.toLowerCase())
+				) {
+					invalidateAll();
+					return;
+				}
 				throw new ClientResponseError(err);
 			});
 	}

@@ -4,7 +4,6 @@
 	import BaseDialog from './base-dialog.svelte';
 	import { PhoneIcon } from 'lucide-svelte';
 	import PhoneNumber from '$lib/components/reusable/inputs/PhoneNumber.svelte';
-	import { parsePhoneNumber } from 'libphonenumber-js';
 	import { CONTACT, type ISaveContactBody } from '$utils/interfaces/contacts.interface';
 	export let saveContactBody: ISaveContactBody = {
 		contact: {
@@ -14,11 +13,6 @@
 	};
 	let open = false;
 	export let isEditing = false;
-	$: if (saveContactBody.contact.value) {
-		saveContactBody.contact.value = parsePhoneNumber(
-			saveContactBody.contact.value
-		)?.formatInternational();
-	}
 </script>
 
 <BaseDialog title="Phone" icon={PhoneIcon} bind:open bind:isEditing bind:saveContactBody>

@@ -126,7 +126,7 @@ export default class Client {
 	/**
 	 * Sends an api http request.
 	 */
-	async send<T = any>(path: string, options: SendOptions): Promise<T> {
+	async send<T = any>(path: string, options: SendOptions): Promise<void | T> {
 		options = this.initSendOptions(path, options);
 
 		// build url + path
@@ -184,8 +184,7 @@ export default class Client {
 				) {
 					invalidateAll();
 					return;
-				}
-				throw new ClientResponseError(err);
+				} else throw new ClientResponseError(err);
 			});
 	}
 

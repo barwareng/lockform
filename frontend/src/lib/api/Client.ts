@@ -174,13 +174,12 @@ export default class Client {
 				return data.data as T;
 			})
 			.catch((err) => {
+				const parseFrontTokenErrs = ['InvalidCharacterError', 'DOMException'];
 				console.log('Error:', err);
 				// Hack to handle the DOMException error supertokens throws
 				if (
 					typeof err === 'string' &&
-					err
-						.toLowerCase()
-						.includes('DOMException: String contains an invalid character'.toLowerCase())
+					parseFrontTokenErrs.some((e) => err.toLowerCase().includes(e.toLowerCase()))
 				) {
 					invalidateAll();
 					return;

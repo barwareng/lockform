@@ -6,6 +6,7 @@ import { TeamService } from './services/TeamService';
 import { ContactService } from './services/ContactService';
 import { UserService } from './services/UserService';
 import type { SendOptions } from './services/utils/options';
+import { invalidateAll } from '$app/navigation';
 
 // list of known SendOptions keys (everything else is treated as query param)
 const knownSendOptionsKeys = [
@@ -28,18 +29,9 @@ const knownSendOptionsKeys = [
 	'window'
 ];
 
-export interface BeforeSendResult {
-	[key: string]: any; // for backward compatibility
-	url?: string;
-	options?: { [key: string]: any };
-}
-
 export default class Client {
 	fetchFunc: (url: RequestInfo | URL, config?: RequestInit) => Promise<Response>;
 	baseUrl: string;
-	beforeSend?: (url: string, options: SendOptions) => BeforeSendResult | Promise<BeforeSendResult>;
-
-	afterSend?: (response: Response, data: any) => any;
 
 	users: UserService;
 	teams: TeamService;
@@ -134,22 +126,11 @@ export default class Client {
 	/**
 	 * Sends an api http request.
 	 */
-	async send<T = any>(path: string, options: SendOptions): Promise<T> {
+	async send<T = any>(path: string, options: SendOptions): Promise<void | T> {
 		options = this.initSendOptions(path, options);
 
 		// build url + path
 		let url = this.buildUrl(path);
-
-		if (this.beforeSend) {
-			const result = Object.assign({}, await this.beforeSend(url, options));
-			if (typeof result.url !== 'undefined' || typeof result.options !== 'undefined') {
-				url = result.url || url;
-				options = result.options || options;
-			} else if (Object.keys(result).length) {
-				// legacy behavior
-				options = result as SendOptions;
-			}
-		}
 
 		// serialize the query parameters
 		if (typeof options.query !== 'undefined') {
@@ -182,10 +163,6 @@ export default class Client {
 					// with the exception of the realtime event and 204
 				}
 
-				if (this.afterSend) {
-					data = structuredClone(await this.afterSend(response, data));
-				}
-
 				if (response.status >= 400) {
 					throw {
 						url: response.url,
@@ -198,8 +175,16 @@ export default class Client {
 			})
 			.catch((err) => {
 				console.log('Error:', err);
-				// wrap to normalize all errors
-				throw new ClientResponseError(err);
+				// Hack to handle the DOMException error supertokens throws
+				if (
+					typeof err === 'string' &&
+					err
+						.toLowerCase()
+						.includes('DOMException: String contains an invalid character'.toLowerCase())
+				) {
+					invalidateAll();
+					return;
+				} else throw new ClientResponseError(err);
 			});
 	}
 

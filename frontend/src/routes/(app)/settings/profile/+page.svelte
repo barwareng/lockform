@@ -26,7 +26,7 @@
 	import { cn } from '$lib/utils';
 	import PhoneNumber from '$lib/components/reusable/inputs/PhoneNumber.svelte';
 	export let data: PageData;
-	$: ({ profile } = data);
+	let { profile } = data;
 	$: loadingProfile = data?.loadingProfile ?? true;
 	let updatingProfile = false;
 	let phoneNumber: E164Number | null;
@@ -68,14 +68,11 @@
 			<h3 class="text-lg font-medium">Profile</h3>
 			<p class="text-muted-foreground text-sm">This is how others will see you on the site.</p>
 		</div>
-		<!-- <EditProfileSheet bind:profile /> -->
 	</div>
 	<Separator />
-	<!-- <ProfileForm data={data.form} /> -->
 	{#if loadingProfile}
 		<LoadingSpinner />
 	{:else if profile}
-		<!-- {JSON.stringify(profile)} -->
 		<div class="space-y-6">
 			<div class="flex w-full flex-col justify-between gap-x-4 gap-y-3 md:flex-row md:items-start">
 				<div class="flex-1 space-y-1">
@@ -94,7 +91,6 @@
 				</div>
 				<div class="flex-1 space-y-1">
 					<Label>Phone number</Label>
-					<!-- <Input bind:value={profile.phoneNumber} placeholder="(702)-234-5566" /> -->
 					<PhoneNumber bind:phoneNumber={profile.phoneNumber} />
 				</div>
 			</div>

@@ -28,18 +28,9 @@ const knownSendOptionsKeys = [
 	'window'
 ];
 
-export interface BeforeSendResult {
-	[key: string]: any; // for backward compatibility
-	url?: string;
-	options?: { [key: string]: any };
-}
-
 export default class Client {
 	fetchFunc: (url: RequestInfo | URL, config?: RequestInit) => Promise<Response>;
 	baseUrl: string;
-	beforeSend?: (url: string, options: SendOptions) => BeforeSendResult | Promise<BeforeSendResult>;
-
-	afterSend?: (response: Response, data: any) => any;
 
 	users: UserService;
 	teams: TeamService;
@@ -140,17 +131,6 @@ export default class Client {
 		// build url + path
 		let url = this.buildUrl(path);
 
-		if (this.beforeSend) {
-			const result = Object.assign({}, await this.beforeSend(url, options));
-			if (typeof result.url !== 'undefined' || typeof result.options !== 'undefined') {
-				url = result.url || url;
-				options = result.options || options;
-			} else if (Object.keys(result).length) {
-				// legacy behavior
-				options = result as SendOptions;
-			}
-		}
-
 		// serialize the query parameters
 		if (typeof options.query !== 'undefined') {
 			const query = this.serializeQueryParams(options.query);
@@ -180,10 +160,6 @@ export default class Client {
 				} catch (_) {
 					// all api responses are expected to return json
 					// with the exception of the realtime event and 204
-				}
-
-				if (this.afterSend) {
-					data = structuredClone(await this.afterSend(response, data));
 				}
 
 				if (response.status >= 400) {

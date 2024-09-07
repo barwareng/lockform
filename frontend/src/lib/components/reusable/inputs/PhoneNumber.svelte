@@ -13,7 +13,7 @@
 	} from 'svelte-tel-input/types';
 	import { cn } from '$lib/utils';
 	import { closeAndRefocusTrigger } from '$utils';
-	export let phoneNumber: E164Number | undefined;
+	export let phoneNumber: string | E164Number | null | undefined = null;
 
 	// Selected country
 	let country: CountryCode | null = 'US';

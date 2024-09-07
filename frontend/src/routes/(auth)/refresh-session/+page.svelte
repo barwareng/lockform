@@ -1,11 +1,12 @@
 <script lang="ts">
+	import ButtonLoadingSpinner from '$lib/components/reusable/loading-spinners/ButtonLoadingSpinner.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { TriangleAlertIcon } from 'lucide-svelte';
 </script>
 
 <div class="min-w-screen flex min-h-screen items-center justify-center">
 	<Alert.Root variant="destructive" class="max-w-xs">
-		<TriangleAlertIcon class="h-4 w-4" />
+		<ButtonLoadingSpinner state />
 		<Alert.Title>Session</Alert.Title>
 		<Alert.Description class="mt-2 text-sm"
 			>Your session is invalid or has expired. We're refreshing it.</Alert.Description

@@ -37,7 +37,7 @@ func ValidateRoles(roles []string) fiber.Handler {
 func verifyRoles(userRoles []string, c *fiber.Ctx) (bool, error) {
 	teamId := c.Locals("teamId").(string)
 
-	var formattedUserRoles []interface{}
+	var formattedUserRoles []interface{} //Roles are formatted as teamId_role
 	for _, role := range userRoles {
 		formattedUserRoles = append(formattedUserRoles, teamId+"_"+role)
 	}

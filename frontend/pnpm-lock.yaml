@@ -36,8 +36,8 @@ dependencies:
     specifier: ^0.3.0
     version: 0.3.0(svelte@4.2.12)
   supertokens-web-js:
-    specifier: ^0.10.0
-    version: 0.10.0
+    specifier: ^0.13.0
+    version: 0.13.0
   svelte-legos:
     specifier: ^0.2.2
     version: 0.2.2(svelte@4.2.12)
@@ -3193,15 +3193,15 @@ packages:
     resolution: {integrity: sha512-r0JFBjkMIdep3Lbk3JA+MpnpuOtw4RSyrlRAbrzMcxwiYco3GFWl/daimQZ5b1forOiUODpOlXbSOljP/oyurg==}
     dev: false
 
-  /supertokens-web-js@0.10.0:
-    resolution: {integrity: sha512-Osqqcjx8Y4mHmUfw5hbDAmtkZDFHwU/oiNXfpQeLdsmrmKFZk+8pVuFSv7i4yDGdEvJ9TIc+yiiyq4vY3XRpkQ==}
+  /supertokens-web-js@0.13.0:
+    resolution: {integrity: sha512-I0o8Pblu4G1Bopm6c0YI2bZQ/22k5qrjdPFV7etNJ+ydOmNoQPBCo1iY9QbmLANcokyLOaWS5k8jEuwoVh/FYQ==}
     dependencies:
       supertokens-js-override: 0.0.4
-      supertokens-website: 19.0.1
+      supertokens-website: 20.1.4
     dev: false
 
-  /supertokens-website@19.0.1:
-    resolution: {integrity: sha512-ZXaKIo260LLEpIX8NB6Nv4CRM+lchwgIXESwkMXIQ1XSpF8zt5CDh2CBI+1b4DsGTU99q3vyaR5B+fbWc9xFqQ==}
+  /supertokens-website@20.1.4:
+    resolution: {integrity: sha512-2hbB/MWJew4W8bq5q0M75tjUnniahLzXVOnu+535j3HB4wworwMJ1ZGfg25OL9q1fm4g+ITNKVjJeJgJqEDlmA==}
     dependencies:
       browser-tabs-lock: 1.3.0
       supertokens-js-override: 0.0.4

@@ -10,8 +10,8 @@ import (
 	"github.com/lockform/app/services"
 	"github.com/lockform/pkg/database"
 	"github.com/rs/xid"
+	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
 	"github.com/supertokens/supertokens-golang/recipe/session"
-	"github.com/supertokens/supertokens-golang/recipe/thirdpartyemailpassword"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/recipe/userroles/userrolesclaims"
 	"gorm.io/gorm"
@@ -43,19 +43,24 @@ func AddMember(c *fiber.Ctx) error {
 	user.Email = params.Email
 	if err := database.DB.Transaction(func(tx *gorm.DB) error {
 		// Check if user already exists
-		getUsersResult, err := thirdpartyemailpassword.GetUsersByEmail("public", params.Email)
+		signedUpUser, err := emailpassword.GetUserByEmail("public", params.Email)
 		if err != nil {
 			return err
 		}
+
 		var invitationLink string
-		// Save the user in the DB
-		if len(getUsersResult) == 0 {
-			signUpResult, err := thirdpartyemailpassword.EmailPasswordSignUp("public", params.Email, xid.New().String())
+		if signedUpUser != nil {
+			// If user already exists, we don't need to create a new user
+			user.ID = signedUpUser.ID
+			invitationLink = os.Getenv("SUPERTOKENS_FRONTEND_DOMAIN")
+		} else {
+			// If user does not exist, create a new user
+			signUpResult, err := emailpassword.SignUp("public", params.Email, xid.New().String())
 			if err != nil {
 				return err
 			}
 			// we successfully created the user. Create a password reset link to send as an invitation link
-			link, err := thirdpartyemailpassword.CreateResetPasswordLink("public", signUpResult.OK.User.ID)
+			link, err := emailpassword.CreateResetPasswordLink("public", signUpResult.OK.User.ID)
 			if err != nil {
 				return err
 			}
@@ -73,9 +78,6 @@ func AddMember(c *fiber.Ctx) error {
 			if err := tx.Save(&user).Error; err != nil {
 				return err
 			}
-		} else {
-			user.ID = getUsersResult[0].ID
-			invitationLink = os.Getenv("SUPERTOKENS_FRONTEND_DOMAIN")
 		}
 		// Get the team being added to
 		team := models.Team{}

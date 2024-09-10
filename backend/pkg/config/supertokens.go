@@ -8,15 +8,13 @@ import (
 	"github.com/lockform/app/models"
 	"github.com/lockform/app/services"
 	"github.com/lockform/pkg/database"
-	"github.com/rs/xid"
 	"github.com/supertokens/supertokens-golang/ingredients/emaildelivery"
+	"github.com/supertokens/supertokens-golang/recipe/emailpassword"
+	"github.com/supertokens/supertokens-golang/recipe/emailpassword/epmodels"
 	"github.com/supertokens/supertokens-golang/recipe/emailverification"
 	"github.com/supertokens/supertokens-golang/recipe/emailverification/evmodels"
 	"github.com/supertokens/supertokens-golang/recipe/session"
 	"github.com/supertokens/supertokens-golang/recipe/session/sessmodels"
-	"github.com/supertokens/supertokens-golang/recipe/thirdparty/tpmodels"
-	"github.com/supertokens/supertokens-golang/recipe/thirdpartyemailpassword"
-	"github.com/supertokens/supertokens-golang/recipe/thirdpartyemailpassword/tpepmodels"
 	"github.com/supertokens/supertokens-golang/recipe/userroles"
 	"github.com/supertokens/supertokens-golang/supertokens"
 )
@@ -94,60 +92,90 @@ func SupertokensInit() {
 					},
 				},
 			}),
-			thirdpartyemailpassword.Init(&tpepmodels.TypeInput{
-				Override: &tpepmodels.OverrideStruct{
-					Functions: func(originalImplementation tpepmodels.RecipeInterface) tpepmodels.RecipeInterface {
-						// create a copy of the originalImplementation
-						originalEmailPasswordSignUp := *originalImplementation.EmailPasswordSignUp
-						originalThirdPartySignInUp := *originalImplementation.ThirdPartySignInUp
+			// thirdpartyemailpassword.Init(&tpepmodels.TypeInput{
+			// 	Override: &tpepmodels.OverrideStruct{
+			// 		Functions: func(originalImplementation tpepmodels.RecipeInterface) tpepmodels.RecipeInterface {
+			// 			// create a copy of the originalImplementation
+			// 			originalEmailPasswordSignUp := *originalImplementation.EmailPasswordSignUp
+			// 			originalThirdPartySignInUp := *originalImplementation.ThirdPartySignInUp
 
-						// override the email password sign up function
-						(*originalImplementation.EmailPasswordSignUp) = func(email, password string, tenantId string, userContext supertokens.UserContext) (tpepmodels.SignUpResponse, error) {
+			// 			// override the email password sign up function
+			// 			(*originalImplementation.EmailPasswordSignUp) = func(email, password string, tenantId string, userContext supertokens.UserContext) (tpepmodels.SignUpResponse, error) {
 
-							resp, err := originalEmailPasswordSignUp(email, password, tenantId, userContext)
-							if err != nil {
-								return tpepmodels.SignUpResponse{}, err
-							}
+			// 				resp, err := originalEmailPasswordSignUp(email, password, tenantId, userContext)
+			// 				if err != nil {
+			// 					return tpepmodels.SignUpResponse{}, err
+			// 				}
 
-							if resp.OK != nil {
-								externalUserId := xid.New().String()
-								_, err := supertokens.CreateUserIdMapping(resp.OK.User.ID, externalUserId, nil, nil)
-								if err != nil {
-									return tpepmodels.SignUpResponse{}, err
-								}
-								resp.OK.User.ID = externalUserId
-							}
+			// 				if resp.OK != nil {
+			// 					externalUserId := xid.New().String()
+			// 					_, err := supertokens.CreateUserIdMapping(resp.OK.User.ID, externalUserId, nil, nil)
+			// 					if err != nil {
+			// 						return tpepmodels.SignUpResponse{}, err
+			// 					}
+			// 					resp.OK.User.ID = externalUserId
+			// 				}
 
-							return resp, err
-						}
+			// 				return resp, err
+			// 			}
 
-						// override the thirdparty sign in / up function
-						(*originalImplementation.ThirdPartySignInUp) = func(thirdPartyID, thirdPartyUserID, email string, oAuthTokens tpmodels.TypeOAuthTokens, rawUserInfoFromProvider tpmodels.TypeRawUserInfoFromProvider, tenantId string, userContext supertokens.UserContext) (tpepmodels.SignInUpResponse, error) {
+			// 			// override the thirdparty sign in / up function
+			// 			(*originalImplementation.ThirdPartySignInUp) = func(thirdPartyID, thirdPartyUserID, email string, oAuthTokens tpmodels.TypeOAuthTokens, rawUserInfoFromProvider tpmodels.TypeRawUserInfoFromProvider, tenantId string, userContext supertokens.UserContext) (tpepmodels.SignInUpResponse, error) {
 
-							resp, err := originalThirdPartySignInUp(thirdPartyID, thirdPartyUserID, email, oAuthTokens, rawUserInfoFromProvider, tenantId, userContext)
-							if err != nil {
-								return tpepmodels.SignInUpResponse{}, err
-							}
+			// 				resp, err := originalThirdPartySignInUp(thirdPartyID, thirdPartyUserID, email, oAuthTokens, rawUserInfoFromProvider, tenantId, userContext)
+			// 				if err != nil {
+			// 					return tpepmodels.SignInUpResponse{}, err
+			// 				}
 
-							if resp.OK != nil {
-								if resp.OK.CreatedNewUser {
-									externalUserId := xid.New().String()
-									_, err := supertokens.CreateUserIdMapping(resp.OK.User.ID, externalUserId, nil, nil)
-									if err != nil {
-										return tpepmodels.SignInUpResponse{}, err
-									}
-									resp.OK.User.ID = externalUserId
-									user := models.User{ID: externalUserId, Email: email}
-									database.DB.Create(&user)
-								}
-							}
+			// 				if resp.OK != nil {
+			// 					if resp.OK.CreatedNewUser {
+			// 						externalUserId := xid.New().String()
+			// 						_, err := supertokens.CreateUserIdMapping(resp.OK.User.ID, externalUserId, nil, nil)
+			// 						if err != nil {
+			// 							return tpepmodels.SignInUpResponse{}, err
+			// 						}
+			// 						resp.OK.User.ID = externalUserId
+			// 						user := models.User{ID: externalUserId, Email: email}
+			// 						database.DB.Create(&user)
+			// 					}
+			// 				}
 
-							return resp, err
-						}
+			// 				return resp, err
+			// 			}
 
-						return originalImplementation
-					},
-				},
+			// 			return originalImplementation
+			// 		},
+			// 	},
+			// 	EmailDelivery: &emaildelivery.TypeInput{
+			// 		Override: func(originalImplementation emaildelivery.EmailDeliveryInterface) emaildelivery.EmailDeliveryInterface {
+
+			// 			(*originalImplementation.SendEmail) = func(input emaildelivery.EmailType, userContext supertokens.UserContext) error {
+			// 				input.PasswordReset.PasswordResetLink = strings.Replace(
+			// 					input.PasswordReset.PasswordResetLink,
+			// 					"auth/reset-password",
+			// 					"reset-password/new", 1,
+			// 				)
+			// 				return services.SendPasswordResetLink(input.PasswordReset.User.Email, input.PasswordReset.PasswordResetLink)
+			// 			}
+			// 			return originalImplementation
+			// 		},
+			// 	},
+			// 	Providers: []tpmodels.ProviderInput{
+			// 		{
+			// 			Config: tpmodels.ProviderConfig{
+			// 				ThirdPartyId: "google",
+			// 				Clients: []tpmodels.ProviderClientConfig{
+			// 					{
+			// 						ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+			// 						ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+			// 					},
+			// 				},
+			// 			},
+			// 		},
+			// 	},
+			// }),
+			// thirdparty.Init(&tpmodels.TypeInput{}),
+			emailpassword.Init(&epmodels.TypeInput{
 				EmailDelivery: &emaildelivery.TypeInput{
 					Override: func(originalImplementation emaildelivery.EmailDeliveryInterface) emaildelivery.EmailDeliveryInterface {
 
@@ -160,19 +188,6 @@ func SupertokensInit() {
 							return services.SendPasswordResetLink(input.PasswordReset.User.Email, input.PasswordReset.PasswordResetLink)
 						}
 						return originalImplementation
-					},
-				},
-				Providers: []tpmodels.ProviderInput{
-					{
-						Config: tpmodels.ProviderConfig{
-							ThirdPartyId: "google",
-							Clients: []tpmodels.ProviderClientConfig{
-								{
-									ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-									ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-								},
-							},
-						},
 					},
 				},
 			}),

@@ -5,14 +5,24 @@ import EmailVerification, {
 } from 'supertokens-web-js/recipe/emailverification';
 
 import Session from 'supertokens-web-js/recipe/session';
-import ThirdPartyEmailPassword, {
-	emailPasswordSignIn,
-	emailPasswordSignUp,
+// import ThirdPartyEmailPassword, {
+// 	emailPasswordSignIn,
+// 	emailPasswordSignUp,
+// 	getAuthorisationURLWithQueryParamsAndSetState,
+// 	sendPasswordResetEmail,
+// 	submitNewPassword,
+// 	thirdPartySignInAndUp
+// } from 'supertokens-web-js/recipe/thirdpartyemailpassword';
+import ThirdParty, {
 	getAuthorisationURLWithQueryParamsAndSetState,
+	signInAndUp
+} from 'supertokens-web-js/recipe/thirdparty';
+import EmailPassword, {
 	sendPasswordResetEmail,
-	submitNewPassword,
-	thirdPartySignInAndUp
-} from 'supertokens-web-js/recipe/thirdpartyemailpassword';
+	signIn,
+	signUp,
+	submitNewPassword
+} from 'supertokens-web-js/recipe/emailpassword';
 import {
 	VITE_SUPERTOKENS_COOKIE_DOMAIN,
 	VITE_API_BASE_URL,
@@ -37,7 +47,8 @@ export const supertokensInit = () => {
 				// sessionTokenBackendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined,
 				// sessionTokenFrontendDomain: (VITE_SUPERTOKENS_COOKIE_DOMAIN as string) ?? undefined,
 			}),
-			ThirdPartyEmailPassword.init()
+			EmailPassword.init(),
+			ThirdParty.init()
 		]
 	});
 };
@@ -47,7 +58,7 @@ export const signupWithEmailAndPassword = async (email: string, password: string
 	let passwordErrors: string[] = [];
 
 	try {
-		const response = await emailPasswordSignUp({
+		const response = await signUp({
 			formFields: [
 				{
 					id: 'email',
@@ -84,7 +95,7 @@ export const signupWithEmailAndPassword = async (email: string, password: string
 
 export const signinWithEmailAndPassword = async (email: string, password: string) => {
 	try {
-		const response = await emailPasswordSignIn({
+		const response = await signIn({
 			formFields: [
 				{
 					id: 'email',
@@ -111,6 +122,9 @@ export const signinWithEmailAndPassword = async (email: string, password: string
 		} else if (response.status === 'WRONG_CREDENTIALS_ERROR') {
 			// TODO display error
 			passwordErrors = passwordErrors.concat('Email password combination is incorrect.');
+		} else if (response.status === 'SIGN_IN_NOT_ALLOWED') {
+			// TODO display error
+			passwordErrors = passwordErrors.concat(response.reason);
 		} else {
 			goto('/', { invalidateAll: true });
 		}
@@ -135,7 +149,7 @@ export const oauthLogin = async (thirdPartyId: 'google' | 'github') => {
 
 export const handleOauthCallback = async () => {
 	try {
-		const response = await thirdPartySignInAndUp();
+		const response = await signInAndUp();
 
 		if (response.status === 'OK') {
 			if (response.createdNewRecipeUser) {
@@ -145,6 +159,11 @@ export const handleOauthCallback = async () => {
 				// Go to onboarding if not onboarded, otherwise go to home page
 				goto('/', { invalidateAll: true });
 			}
+		} else if (response.status === 'SIGN_IN_UP_NOT_ALLOWED') {
+			// the reason string is a user friendly message
+			// about what went wrong. It can also contain a support code which users
+			// can tell you so you know why their sign in / up was not allowed.
+			toastError(response.reason);
 		} else {
 			// SuperTokens requires that the third party provider
 			// gives an email for the user. If that's not the case, sign up / in
@@ -205,6 +224,8 @@ export const sendResetPasswordLink = async (email: string) => {
 				}
 			});
 			return emailErrors;
+		} else if (response.status === 'PASSWORD_RESET_NOT_ALLOWED') {
+			toastError(response.reason);
 		} else {
 			goto('/reset-password/link-sent');
 		}

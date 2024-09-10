@@ -65,6 +65,8 @@ github.com/stretchr/testify v1.8.2 h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ
 github.com/stretchr/testify v1.8.2/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/supertokens/supertokens-golang v0.17.5 h1:s++YG+9jdZ5QuLpUyRRB9IA0vdgfhxCDGT5i2nbmu6Y=
 github.com/supertokens/supertokens-golang v0.17.5/go.mod h1:/n6zQ9461RscnnWB4Y4bWwzhPivnj8w79j/doqkLOs8=
+github.com/supertokens/supertokens-golang v0.24.1 h1:BZcobffJVPXkrgcQa/KHfRTpRJLmGEWBf2ufMQDcphY=
+github.com/supertokens/supertokens-golang v0.24.1/go.mod h1:/n6zQ9461RscnnWB4Y4bWwzhPivnj8w79j/doqkLOs8=
 github.com/tinylib/msgp v1.1.8 h1:FCXC1xanKO4I8plpHGH2P7koL/RzZs12l/+r7vakfm0=
 github.com/tinylib/msgp v1.1.8/go.mod h1:qkpG+2ldGg4xRFmx+jfTvZPxfGFhi64BcnL9vkCm/Tw=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=

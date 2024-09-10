@@ -7,7 +7,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/resend/resend-go/v2 v2.6.0
 	github.com/rs/xid v1.5.0
-	github.com/supertokens/supertokens-golang v0.17.5
+	github.com/supertokens/supertokens-golang v0.24.1
 	gorm.io/driver/postgres v1.5.7
 	gorm.io/gorm v1.25.9
 )

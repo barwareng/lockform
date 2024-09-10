@@ -13,7 +13,7 @@ services:
     networks:
       - lockform
   supertokens:
-    image: registry.supertokens.io/supertokens/supertokens-postgresql:9.0
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:9.2.2
     container_name: lockform-supertokens
     depends_on:
       - postgres

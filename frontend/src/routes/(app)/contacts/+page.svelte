@@ -22,12 +22,12 @@
 	import parsePhoneNumber from 'libphonenumber-js';
 	import ListContactOptionsDialog from './(components)/list-contact-options-dialog.svelte';
 	import { CONTACT } from '$utils/interfaces/contacts.interface';
-	import { contactDialogs } from './(components)/contact-dialogs/dialogs';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import UpdateTrustworthiness from './(components)/contact-dialogs/update-trustworthiness.svelte';
+	import Pagination from '$lib/components/reusable/navigation/Pagination.svelte';
 
 	export let data: PageData;
-	let { contacts } = data;
+	$: ({ contacts } = data);
 	$: loadingContacts = data.loading ?? true;
 	const getIcon = (type: CONTACT) => {
 		let icon: any;
@@ -85,7 +85,6 @@
 			<Table.Body>
 				{#each contacts as contact}
 					{@const icon = getIcon(contact.type)}
-					{@const dialog = contactDialogs.find((d) => d.type == contact.type)}
 					<Table.Row>
 						<Table.Cell class="flex items-center gap-x-2">
 							<div>
@@ -160,6 +159,7 @@
 				{/each}
 			</Table.Body>
 		</Table.Root>
+		<Pagination />
 	{:else}
 		<EmptyState
 			title="No contacts yet"

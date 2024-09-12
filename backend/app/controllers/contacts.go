@@ -57,6 +57,7 @@ func GetTeamContacts(c *fiber.Ctx) error {
 		Joins("JOIN team_contacts ON team_contacts.contact_id = contacts.id").
 		Joins("JOIN users ON users.id = team_contacts.added_by_id").
 		Where("team_contacts.team_id = ?", teamId).
+		Scopes(Paginate(c)).
 		Scan(&contacts).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": true,

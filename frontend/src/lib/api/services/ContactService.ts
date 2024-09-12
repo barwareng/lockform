@@ -5,6 +5,7 @@ import type {
 	ISaveContactBody,
 	ITeamContact
 } from '$utils/interfaces/contacts.interface';
+import type { IPagination } from '$utils/interfaces/pagination';
 
 export class ContactService extends BaseService {
 	create(body: Partial<ISaveContactBody>) {
@@ -25,9 +26,10 @@ export class ContactService extends BaseService {
 			body
 		});
 	}
-	getAll(): Promise<IContactList[]> {
+	getAll(query?: IPagination): Promise<IContactList[]> {
 		return this.client.send('/api/contacts', {
-			method: 'GET'
+			method: 'GET',
+			query
 		});
 	}
 	delete(query: { id: number }) {

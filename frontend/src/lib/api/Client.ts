@@ -126,7 +126,7 @@ export default class Client {
 	/**
 	 * Sends an api http request.
 	 */
-	async send<T = any>(path: string, options: SendOptions): Promise<void | T> {
+	async send<T = any>(path: string, options: SendOptions): Promise<T> {
 		options = this.initSendOptions(path, options);
 
 		// build url + path
@@ -175,16 +175,7 @@ export default class Client {
 			})
 			.catch((err) => {
 				console.log('Error:', err);
-				// Hack to handle the DOMException error supertokens throws
-				if (
-					typeof err === 'string' &&
-					err
-						.toLowerCase()
-						.includes('DOMException: String contains an invalid character'.toLowerCase())
-				) {
-					invalidateAll();
-					return;
-				} else throw new ClientResponseError(err);
+				throw new ClientResponseError(err);
 			});
 	}
 

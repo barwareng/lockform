@@ -69,97 +69,99 @@
 	{#if loadingContacts}
 		<LoadingSpinner />
 	{:else if contacts?.length}
-		<Table.Root>
-			<Table.Header>
-				<Table.Row>
-					<Table.Head>Contact</Table.Head>
-					<Table.Head>Trusted</Table.Head>
-					<Table.Head class="hidden sm:table-cell">Added By</Table.Head>
-					<Table.Head class="hidden md:table-cell">Domain</Table.Head>
-					<Table.Head class="hidden md:table-cell">URL</Table.Head>
-					{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
-						<Table.Head class="sr-only">Action</Table.Head>
-					{/if}
-				</Table.Row>
-			</Table.Header>
-			<Table.Body>
-				{#each contacts as contact}
-					{@const icon = getIcon(contact.type)}
+		<div class="space-y-4">
+			<Table.Root>
+				<Table.Header>
 					<Table.Row>
-						<Table.Cell class="flex items-center gap-x-2">
-							<div>
-								<svelte:component this={icon} class="h-6 !w-6" />
-							</div>
-							<div>
-								<p class="whitespace-nowrap">
-									{contact.label || ''}
-								</p>
-								<p class="text-xs opacity-75">
-									{#if contact.type == CONTACT.PHONE}
-										{parsePhoneNumber(contact.value)?.formatInternational()}
-									{:else}
-										{contact.value}
-									{/if}
-								</p>
-							</div>
-						</Table.Cell>
-
-						<Table.Cell>
-							{#if contact.isTrusted}
-								<Badge>Yes</Badge>
-							{:else if !contact.isTrusted && contact.reasonForUntrusting}
-								<div class="flex items-center gap-x-1">
-									<Tooltip.Root>
-										<Tooltip.Trigger><Badge variant="destructive">No</Badge></Tooltip.Trigger>
-										<Tooltip.Content>
-											<p class="text-xs">{contact.reasonForUntrusting}</p>
-										</Tooltip.Content>
-									</Tooltip.Root>
-								</div>
-							{:else}
-								<Badge variant="destructive">No</Badge>
-							{/if}
-						</Table.Cell>
-						<Table.Cell class="hidden sm:table-cell">
-							<div>
-								<p class="whitespace-nowrap">
-									{contact.addedBy?.name || ''}
-								</p>
-								<p class="text-xs opacity-75">
-									{contact.addedBy?.email}
-								</p>
-							</div>
-						</Table.Cell>
-						<Table.Cell class="hidden md:table-cell">{contact.domain || '--'}</Table.Cell>
-						<Table.Cell class="hidden md:table-cell">{contact.url || '--'}</Table.Cell>
+						<Table.Head>Contact</Table.Head>
+						<Table.Head>Trusted</Table.Head>
+						<Table.Head class="hidden sm:table-cell">Added By</Table.Head>
+						<Table.Head class="hidden md:table-cell">Domain</Table.Head>
+						<Table.Head class="hidden md:table-cell">URL</Table.Head>
 						{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
-							<Table.Cell class="text-right">
-								<DropdownMenu.Root>
-									<DropdownMenu.Trigger asChild let:builder>
-										<Button aria-haspopup="true" size="icon" variant="ghost" builders={[builder]}>
-											<EllipsisIcon class="h-4 w-4" />
-											<span class="sr-only">Toggle menu</span>
-										</Button>
-									</DropdownMenu.Trigger>
-									<DropdownMenu.Content align="end">
-										<DropdownMenu.Label>Actions</DropdownMenu.Label>
-										<UpdateTrustworthiness
-											id={contact.id}
-											bind:trustworthiness={contact.isTrusted}
-										/>
-										<!-- {#if dialog?.component && contact}
-											<svelte:component this={dialog.component} {contact} isEditing />
-										{/if} -->
-										<!-- <RemoveContact id={contact.id} /> -->
-									</DropdownMenu.Content>
-								</DropdownMenu.Root>
-							</Table.Cell>
+							<Table.Head class="sr-only">Action</Table.Head>
 						{/if}
 					</Table.Row>
-				{/each}
-			</Table.Body>
-		</Table.Root>
-		<Pagination />
+				</Table.Header>
+				<Table.Body>
+					{#each contacts as contact}
+						{@const icon = getIcon(contact.type)}
+						<Table.Row>
+							<Table.Cell class="flex items-center gap-x-2">
+								<div>
+									<svelte:component this={icon} class="h-6 !w-6" />
+								</div>
+								<div>
+									<p class="whitespace-nowrap">
+										{contact.label || ''}
+									</p>
+									<p class="text-xs opacity-75">
+										{#if contact.type == CONTACT.PHONE}
+											{parsePhoneNumber(contact.value)?.formatInternational()}
+										{:else}
+											{contact.value}
+										{/if}
+									</p>
+								</div>
+							</Table.Cell>
+
+							<Table.Cell>
+								{#if contact.isTrusted}
+									<Badge>Yes</Badge>
+								{:else if !contact.isTrusted && contact.reasonForUntrusting}
+									<div class="flex items-center gap-x-1">
+										<Tooltip.Root>
+											<Tooltip.Trigger><Badge variant="destructive">No</Badge></Tooltip.Trigger>
+											<Tooltip.Content>
+												<p class="text-xs">{contact.reasonForUntrusting}</p>
+											</Tooltip.Content>
+										</Tooltip.Root>
+									</div>
+								{:else}
+									<Badge variant="destructive">No</Badge>
+								{/if}
+							</Table.Cell>
+							<Table.Cell class="hidden sm:table-cell">
+								<div>
+									<p class="whitespace-nowrap">
+										{contact.addedBy?.name || ''}
+									</p>
+									<p class="text-xs opacity-75">
+										{contact.addedBy?.email}
+									</p>
+								</div>
+							</Table.Cell>
+							<Table.Cell class="hidden md:table-cell">{contact.domain || '--'}</Table.Cell>
+							<Table.Cell class="hidden md:table-cell">{contact.url || '--'}</Table.Cell>
+							{#if requireRoles([ROLE_VALUES.OWNER, ROLE_VALUES.ADMIN])}
+								<Table.Cell class="text-right">
+									<DropdownMenu.Root>
+										<DropdownMenu.Trigger asChild let:builder>
+											<Button aria-haspopup="true" size="icon" variant="ghost" builders={[builder]}>
+												<EllipsisIcon class="h-4 w-4" />
+												<span class="sr-only">Toggle menu</span>
+											</Button>
+										</DropdownMenu.Trigger>
+										<DropdownMenu.Content align="end">
+											<DropdownMenu.Label>Actions</DropdownMenu.Label>
+											<UpdateTrustworthiness
+												id={contact.id}
+												bind:trustworthiness={contact.isTrusted}
+											/>
+											<!-- {#if dialog?.component && contact}
+											<svelte:component this={dialog.component} {contact} isEditing />
+										{/if} -->
+											<!-- <RemoveContact id={contact.id} /> -->
+										</DropdownMenu.Content>
+									</DropdownMenu.Root>
+								</Table.Cell>
+							{/if}
+						</Table.Row>
+					{/each}
+				</Table.Body>
+			</Table.Root>
+			<Pagination />
+		</div>
 	{:else}
 		<EmptyState
 			title="No contacts yet"

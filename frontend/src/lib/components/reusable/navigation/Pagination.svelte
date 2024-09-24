@@ -24,11 +24,15 @@
 					<Pagination.Ellipsis />
 				</Pagination.Item>
 			{:else}
-				<Pagination.Item
-					isVisible={currentPage == page.value}
-					on:click={() => goToPage(page.value)}
-				>
-					<Pagination.Link {page} isActive={currentPage == page.value}>
+				<Pagination.Item isVisible={currentPage == page.value}>
+					<Pagination.Link
+						on:click={() => {
+							console.log(page.value, 'page.value');
+							goToPage(page.value);
+						}}
+						{page}
+						isActive={currentPage == page.value}
+					>
 						{page.value}
 					</Pagination.Link>
 				</Pagination.Item>

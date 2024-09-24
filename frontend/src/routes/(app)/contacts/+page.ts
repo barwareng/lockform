@@ -9,8 +9,8 @@ export const load = (async ({ url }) => {
 		return {
 			loading: false,
 			contacts: await client.contacts.getAll({
-				page: Number(page),
-				pageSize: Number(pageSize)
+				page: page ? Number(page) : 0,
+				pageSize: pageSize ? Number(pageSize) : 0
 			})
 		};
 	} catch (error) {

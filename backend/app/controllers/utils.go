@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"gorm.io/gorm"
 )
 
@@ -25,7 +24,6 @@ func Paginate(c *fiber.Ctx) func(db *gorm.DB) *gorm.DB {
 		case pagination.PageSize <= 0:
 			pagination.PageSize = 2
 		}
-		log.Info("pagination", pagination)
 		offset := (pagination.Page - 1) * pagination.PageSize
 		return db.Offset(offset).Limit(pagination.PageSize)
 	}

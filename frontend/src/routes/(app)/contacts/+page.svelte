@@ -25,7 +25,6 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import UpdateTrustworthiness from './(components)/contact-dialogs/update-trustworthiness.svelte';
 	import Pagination from '$lib/components/reusable/navigation/Pagination.svelte';
-	import Pagination from '$lib/components/reusable/navigation/Pagination.svelte';
 
 	export let data: PageData;
 	$: ({ contacts } = data);

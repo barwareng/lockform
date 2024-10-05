@@ -62,13 +62,13 @@ func VerifyEmailsFromAddon(c *fiber.Ctx) error {
 // Returns the remaining emails, emails found in team members, and err
 func populateTeamMember(emails []string, teamId string) ([]string, []string, error) {
 	var members []models.User
-	var teamMemberEmails []string
+	teamMemberEmails := []string{}
 	if err := database.DB.
 		Joins("JOIN user_teams ON user_teams.user_id = users.id").
 		Where("user_teams.team_id = ? AND users.email IN ?", teamId, emails).
 		Find(&members).
 		Error; err != nil {
-		return nil, nil, err
+		return []string{}, []string{}, err
 	}
 	for _, member := range members {
 		teamMemberEmails = append(teamMemberEmails, member.Email)
@@ -85,15 +85,15 @@ func populateContacts(values []string, teamId string) ([]string, []string, []str
 	}
 
 	var contacts []ContactWithTrust
-	var trustedValues []string
-	var untrustedValues []string
+	trustedValues := []string{}
+	untrustedValues := []string{}
 	if err := database.DB.Table("contacts").
 		Select("contacts.*, team_contacts.is_trusted").
 		Joins("JOIN team_contacts ON team_contacts.contact_id = contacts.id").
 		Where("contacts.value IN ? AND team_contacts.team_id =?", values, teamId).
 		Find(&contacts).
 		Error; err != nil {
-		return nil, nil, nil, err
+		return []string{}, []string{}, nil, err
 	}
 	for _, contact := range contacts {
 		if contact.IsTrusted {
@@ -110,9 +110,9 @@ func populateContacts(values []string, teamId string) ([]string, []string, []str
 // Returns the remaining emails, emails found to be verified, and err
 func populateVerifiedContacts(searchValues []string) ([]string, []string, error) {
 	var channels []models.Channel
-	var verifiedEmails []string
+	verifiedEmails := []string{}
 	if err := database.DB.Where("value IN ?", searchValues).Find(&channels).Error; err != nil {
-		return nil, nil, err
+		return []string{}, []string{}, err
 	}
 	for _, contact := range channels {
 		verifiedEmails = append(verifiedEmails, contact.Value)

@@ -25,6 +25,7 @@
 	import { contactDialogs } from './(components)/contact-dialogs/dialogs';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import UpdateTrustworthiness from './(components)/contact-dialogs/update-trustworthiness.svelte';
+	import Pagination from '$lib/components/reusable/navigation/Pagination.svelte';
 
 	export let data: PageData;
 	let { contacts } = data;
@@ -160,6 +161,7 @@
 				{/each}
 			</Table.Body>
 		</Table.Root>
+		<Pagination />
 	{:else}
 		<EmptyState
 			title="No contacts yet"

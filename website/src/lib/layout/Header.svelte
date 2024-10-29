@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { PUBLIC_PLATFORM_BASE_URL } from '$env/static/public';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import LockformLogo from '$lib/icons/LockformLogo.svelte';
 	import { cn } from '$lib/utils';
 	import { AlignJustify, XIcon } from 'lucide-svelte';
 	import { fly } from 'svelte/transition';
@@ -47,25 +49,33 @@
 
 <svelte:window bind:innerWidth />
 <header
-	class="fixed left-0 top-0 z-50 w-full -translate-y-4 animate-fade-in border-b opacity-0 backdrop-blur-md"
+	class="animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-b opacity-0 backdrop-blur-md"
 >
 	<!-- {#if innerWidth < 768} -->
-		<div class="container flex h-14 items-center justify-between">
-			<a class="text-md flex items-center" href="/"> Svee UI </a>
+	<div class="container flex h-14 items-center justify-between">
+		<a class="flex items-center gap-x-2 text-lg font-black" href="/">
+			<LockformLogo class="h-6 w-6" />
+			lockform
+		</a>
 
-			<div class="ml-auto flex h-full items-center">
-				<a class="mr-6 text-sm" href="/signin"> Log in </a>
-				<Button variant="secondary" class="mr-6 text-sm" href="/signup">Sign up</Button>
-			</div>
-			<button class="ml-6 md:hidden" use:toggleOverflowHidden>
-				<span class="sr-only">Toggle menu</span>
-				{#if hamburgerMenuIsOpen}
-					<XIcon  strokeWidth={1.4} class='text-gray-300'/>
-				{:else}
-					<AlignJustify strokeWidth={1.4} class='text-gray-300' />
-				{/if}
-			</button>
+		<div class="ml-auto flex h-full items-center">
+			<a class="mr-6 text-sm" href="{PUBLIC_PLATFORM_BASE_URL}/signin" target="_blank"> Log in </a>
+			<Button
+				variant="secondary"
+				class="mr-6 text-sm"
+				href="{PUBLIC_PLATFORM_BASE_URL}/signup"
+				target="_blank">Sign up</Button
+			>
 		</div>
+		<button class="ml-6 md:hidden" use:toggleOverflowHidden>
+			<span class="sr-only">Toggle menu</span>
+			{#if hamburgerMenuIsOpen}
+				<XIcon strokeWidth={1.4} class="text-gray-300" />
+			{:else}
+				<AlignJustify strokeWidth={1.4} class="text-gray-300" />
+			{/if}
+		</button>
+	</div>
 	<!-- {/if} -->
 </header>
 
@@ -87,9 +97,9 @@
 			<button class="md:hidden" use:toggleOverflowHidden>
 				<span class="sr-only">Toggle menu</span>
 				{#if hamburgerMenuIsOpen}
-					<XIcon strokeWidth={1.4} class='text-gray-300'/>
+					<XIcon strokeWidth={1.4} class="text-gray-300" />
 				{:else}
-					<AlignJustify strokeWidth={1.4} class='text-gray-300'/>
+					<AlignJustify strokeWidth={1.4} class="text-gray-300" />
 				{/if}
 			</button>
 		</div>
